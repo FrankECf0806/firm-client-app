@@ -1,16 +1,20 @@
+import { Box } from "@mui/material";
+import { Header } from "./Header";
+
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-zinc-50">
+    <Box className="flex min-h-screen w-full">
       {/* <Sidebar /> */}
-
-      <div className="flex flex-col flex-1">
-        {/* <Topbar /> */}
-        <main className="flex-1 p-6">{children}</main>
-      </div>
-    </div>
+      <Box className="flex flex-col flex-1 min-w-0">
+        <Header />
+        <Box component="main" className="flex-1 p-3 overflow-auto bg-primary/5">
+          {children}
+        </Box>
+      </Box>
+    </Box>
   );
 }
