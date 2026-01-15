@@ -13,17 +13,7 @@ import {
 } from "@/utils/time";
 import { Notifications } from "./Notifications";
 
-const user = {
-  firstName: "Fernando",
-  lastName: "Cruz",
-  role: "ATTORNEY",
-  src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face",
-};
-
-const firm = {
-  id: "firm_123",
-  name: "LawFirm",
-};
+import { user, firm } from "@/test_data";
 
 export function Header() {
   return (
@@ -32,23 +22,27 @@ export function Header() {
         className="bg-white border-b border-divider"
         position="sticky"
         elevation={2}
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
       >
         <Toolbar className="text-primary px-2 md:px-4 lg:px-6 py-4 min-h-18 gap-2 sm:gap-4">
           {/* Header content */}
           <Box className="flex flex-col flex-1">
             <Typography
-              className="py-1 font-semibold leading-none text-foreground"
-              variant="h5"
+              className="
+                py-1
+                font-semibold
+                leading-none
+                text-foreground 
+                text-xl
+                lg:text-2xl"
             >
               Good {getLocalTimeBasedGreeting()},{" "}
               <Box className="text-muted-foreground" component="span">
                 {user.firstName}
               </Box>
             </Typography>
-            <Typography variant="body2">{getCurrentDateFormatted()}</Typography>
+            <Typography className="text-xs lg:text-sm">
+              {getCurrentDateFormatted()}
+            </Typography>
           </Box>
 
           {/* Desktop Search */}
@@ -56,32 +50,31 @@ export function Header() {
             <Box className="relative hidden md:block">
               <Box
                 className="
-                                    absolute
-                                    left-3
-                                    top-1/2
-                                    -translate-y-1/2
-                                    pointer-events-none"
+                  absolute
+                  left-3
+                  top-1/2
+                  -translate-y-1/2
+                  pointer-events-none"
               >
                 <Search fontSize="small" />
               </Box>
               <InputBase
                 onClick={() => console.log("Open search modal")}
                 className="
-                                    rounded-lg
-                                    w-40
-                                    md:w-64
-                                    lg:w-80
-                                    border
-                                    border-transparent
-                                    cursor-pointer
-                                    pl-10
-                                    pr-3
-                                    py-1.5
-                                    bg-primary/10
-                                    hover:border
-                                    hover:border-primary/75
-                                    hover:bg-primary/2
-                                    focus:border-primary"
+                  rounded-lg
+                  md:w-40
+                  lg:w-64
+                  border
+                  border-transparent
+                  cursor-pointer
+                  pl-10
+                  pr-3
+                  py-1.5
+                  bg-primary/10
+                  hover:border
+                  hover:border-primary/75
+                  hover:bg-primary/2
+                  focus:border-primary"
                 placeholder="Search cases, clients… (⌘K)"
                 readOnly
               />
@@ -97,7 +90,7 @@ export function Header() {
           </Box>
 
           {/* Notifications */}
-          <Box className="flex items-center">
+          <Box className="flex items-center border-r-2">
             <Notifications />
           </Box>
 
