@@ -19,3 +19,81 @@
 body {
   font-family: var(--font-sans);
 }
+
+/* Animated helper text for form dialogs - Tailwind version */
+.MuiDialog-root .MuiFormHelperText-root {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.MuiDialog-root .MuiFormHelperText-root:not(.Mui-error) {
+  @apply opacity-0 h-0 min-h-0 mt-0 mb-0;
+}
+
+.MuiDialog-root .MuiFormHelperText-root.Mui-error {
+  @apply opacity-100 h-auto min-h-5 mb-0 pb-0;
+}
+
+/* Button styles */
+.button-firm {
+  @apply shadow-sm rounded-md;
+}
+
+/* TextField styles */
+.input-rounded-firm .MuiOutlinedInput-root {
+  @apply rounded-xl border-primary m-0;
+}
+
+/* Focus state - ONLY for input-rounded-firm */
+.input-rounded-firm
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  @apply border-primary border-2;
+}
+
+/* Hover state - ONLY for input-rounded-firm */
+.input-rounded-firm
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  @apply border-primary border-2 shadow-md;
+}
+
+/* Error state - ONLY for input-rounded-firm */
+.input-rounded-firm
+  .MuiOutlinedInput-root.Mui-error
+  .MuiOutlinedInput-notchedOutline {
+  @apply border-red-500 border-2;
+}
+
+/* Disabled state - ONLY for input-rounded-firm */
+.input-rounded-firm
+  .MuiOutlinedInput-root.Mui-disabled
+  .MuiOutlinedInput-notchedOutline {
+  @apply border-gray-300;
+}
+
+/* Input label - ONLY for input-rounded-firm */
+/* .input-rounded-firm .MuiInputLabel-root {
+  @apply text-gray-700;
+}
+
+.input-rounded-firm .MuiInputLabel-root.Mui-focused {
+  @apply text-primary;
+} */
+
+.input-rounded-firm .MuiInputLabel-root.Mui-error {
+  @apply text-red-500;
+}
+
+/* Input text - ONLY for input-rounded-firm */
+.input-rounded-firm .MuiOutlinedInput-input {
+  @apply text-gray-900 py-3 px-4;
+}
+
+/* Helper text - ONLY for input-rounded-firm */
+.input-rounded-firm .MuiFormHelperText-root {
+  @apply mr-1 text-sm;
+}
+
+.input-rounded-firm .MuiFormHelperText-root.Mui-error {
+  @apply text-red-500 text-[0.75rem] mb-0 pb-0;
+}

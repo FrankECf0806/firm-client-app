@@ -1,6 +1,6 @@
-export default function Dashboard() {
+export default function Billing() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
+    <div className="flex min-h-screen items-center justify-center">
       Billing Page
     </div>
   );

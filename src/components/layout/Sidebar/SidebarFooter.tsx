@@ -1,6 +1,6 @@
 import { People } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { user } from "@/test_data";
+import { user } from "@/mock_data";
 import { SidebarFooterProps } from "@/types/navbar";
 
 export default function SidebarFooter({

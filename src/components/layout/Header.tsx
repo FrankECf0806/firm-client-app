@@ -13,7 +13,7 @@ import {
 } from "@/utils/time";
 import { Notifications } from "./Notifications";
 
-import { user, firm } from "@/test_data";
+import { user, firm } from "@/mock_data";
 
 export function Header() {
   return (

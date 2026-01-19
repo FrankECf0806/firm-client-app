@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { MobileSidebar } from "./MobileSidebar";
+import { Box } from "@mui/material";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   return (
@@ -18,7 +19,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1 flex flex-col">
         <Header />
-        <div className="flex-1 p-2">{children}</div>
+        <Box
+          className="
+          flex-1
+          p-2 md:p-4
+          bg-primary-light/10 dark:bg-primary-dark/10
+          items-center justify-center"
+        >
+          {children}
+        </Box>
       </main>
       <div className="block md:hidden">
         <MobileSidebar />

@@ -15,6 +15,9 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: "var(--font-inter)",
+    button: {
+      textTransform: "capitalize" as const,
+    },
   },
 });
 
