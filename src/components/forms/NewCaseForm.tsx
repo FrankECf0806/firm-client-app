@@ -1,15 +1,15 @@
 "use client";
 
 import { Button, TextField, MenuItem, Box } from "@mui/material";
-import { GlobalDialog } from "@/components/dialogs/GlobalDialog";
-import { CaseTypes, mockClients, PriorityLevels } from "@/mock_data";
+import { mockClients } from "@/mock_data";
 import { PersonAddAltOutlined } from "@mui/icons-material";
-import { NewCaseFormProps, NewCaseFormValues } from "@/types/case";
+import { NewCaseFormValues } from "@/types/case";
 import { useForm, Controller } from "react-hook-form";
-import { useRef } from "react";
+import { QuickAcessFormProps } from "@/types/form";
+import { DialogForm } from "@/components/dialogs/DialogForm";
+import { CaseType, PriorityLevel } from "@/enums/case";
 
-export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
-  const formRef = useRef<HTMLFormElement>(null);
+export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
   const {
     control,
     handleSubmit,
@@ -40,46 +40,16 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
     onClose();
   };
 
-  const title = "Create New Case";
-  const subtitle = "Fill in the details below to create a new legal case.";
-
-  // Actions with submit button - now inside the form!
-  const actions = (
-    <>
-      <Button
-        type="button"
-        variant="outlined"
-        className="button-firm"
-        onClick={handleCancel}
-      >
-        Cancel
-      </Button>
-      <Button
-        type="submit"
-        className="button-firm"
-        variant="contained"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Creating..." : "Create Case"}
-      </Button>
-    </>
-  );
-
   return (
-    <GlobalDialog
+    <DialogForm
       open={open}
       onClose={handleCancel}
-      title={title}
-      subtitle={subtitle}
-      actions={actions}
-      formProps={{
-        ref: formRef, // ref is passed inside formProps
-        onSubmit: handleSubmit(onSubmit),
-        noValidate: true,
-      }}
-      disableBackdropClose={true}
+      title="Create New Case"
+      subtitle="Fill in the details below to create a new legal case."
+      submitLabel="Create Case"
+      isSubmitting={isSubmitting}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      {/* Form content */}
       {/* Case Title */}
       <Controller
         name="caseTitle"
@@ -91,6 +61,7 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
             className="input-rounded-firm"
             size="small"
             label="Case Title"
+            placeholder="e.g. Smith v. Johnson Contract Dispute"
             fullWidth
             required
             error={!!fieldState.error}
@@ -99,8 +70,8 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
         )}
       />
 
-      {/* Client & Case Type */}
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Client */}
         <Controller
           name="client"
           control={control}
@@ -139,6 +110,7 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
           )}
         />
 
+        {/* Case Type */}
         <Controller
           name="caseType"
           control={control}
@@ -155,9 +127,9 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
               error={!!fieldState.error}
               helperText={fieldState.error?.message || " "}
             >
-              {Object.values(CaseTypes).map((type) => (
+              {Object.keys(CaseType).map((type) => (
                 <MenuItem key={type} value={type}>
-                  {type}
+                  {CaseType[type as keyof typeof CaseType]}
                 </MenuItem>
               ))}
             </TextField>
@@ -174,6 +146,7 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
             {...field}
             className="input-rounded-firm"
             label="Description"
+            placeholder="e.g. Breach of contract case involving non-payment for services rendered..."
             multiline
             rows={3}
             fullWidth
@@ -224,7 +197,7 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
       <Controller
         name="priority"
         control={control}
-        rules={{ required: "Priority is required" }}
+        rules={{ required: "Case priority is required" }}
         render={({ field, fieldState }) => (
           <TextField
             {...field}
@@ -237,14 +210,14 @@ export default function NewCaseForm({ open, onClose }: NewCaseFormProps) {
             error={!!fieldState.error}
             helperText={fieldState.error?.message || " "}
           >
-            {Object.values(PriorityLevels).map((p) => (
+            {Object.keys(PriorityLevel).map((p) => (
               <MenuItem key={p} value={p}>
-                {p}
+                {PriorityLevel[p as keyof typeof PriorityLevel]}
               </MenuItem>
             ))}
           </TextField>
         )}
       />
-    </GlobalDialog>
+    </DialogForm>
   );
 }

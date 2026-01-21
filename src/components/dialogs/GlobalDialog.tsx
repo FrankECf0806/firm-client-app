@@ -33,6 +33,8 @@ export function GlobalDialog({
     onClose();
   };
 
+  const wrapperProps = formProps ? { component: "form", ...formProps } : {};
+
   return (
     <Dialog
       className="shadow-2xl"
@@ -48,89 +50,49 @@ export function GlobalDialog({
       }}
     >
       {/* Wrap the entire dialog paper in form if formProps provided */}
-      {formProps ? (
-        <Box component="form" {...formProps} className="h-full flex flex-col">
-          <Box className="text-primary rounded-xl overflow-hidden flex flex-col h-full">
-            {/* Header */}
-            <DialogTitle className="relative shrink-0">
-              <Box className="flex flex-col pr-10">
-                {title && (
-                  <Typography variant="h6" className="font-semibold">
-                    {title}
-                  </Typography>
-                )}
-                {subtitle && (
-                  <Typography
-                    className="leading-none"
-                    variant="caption"
-                    color="text.secondary"
-                  >
-                    {subtitle}
-                  </Typography>
-                )}
-              </Box>
-              {/* Close Button */}
-              <IconButton
-                onClick={onClose}
-                className="hover:bg-primary/10 absolute top-3 right-3"
+      <Box
+        {...wrapperProps}
+        className="h-full flex flex-col text-primary rounded-xl overflow-hidden "
+      >
+        {/* Header */}
+        <DialogTitle className="relative shrink-0">
+          <Box className="flex flex-col pr-10">
+            {title && (
+              <Typography variant="h6" className="font-semibold">
+                {title}
+              </Typography>
+            )}
+            {subtitle && (
+              <Typography
+                className="leading-none"
+                variant="caption"
+                color="text.secondary"
               >
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
-
-            {/* Body */}
-            <DialogContent className="px-6 py-5 overflow-y-auto grow" dividers>
-              <Box className="flex flex-col gap-3.5 h-full">{children}</Box>
-            </DialogContent>
-
-            {/* Actions */}
-            {actions && (
-              <DialogActions className="px-6 py-4 shrink-0">
-                {actions}
-              </DialogActions>
+                {subtitle}
+              </Typography>
             )}
           </Box>
-        </Box>
-      ) : (
-        <Box className="text-primary rounded-xl overflow-hidden">
-          {/* Header */}
-          <DialogTitle className="relative">
-            <Box className="flex flex-col pr-10">
-              {title && (
-                <Typography variant="h6" className="font-semibold">
-                  {title}
-                </Typography>
-              )}
-              {subtitle && (
-                <Typography
-                  className="leading-none"
-                  variant="caption"
-                  color="text.secondary"
-                >
-                  {subtitle}
-                </Typography>
-              )}
-            </Box>
-            {/* Close Button */}
-            <IconButton
-              onClick={onClose}
-              className="hover:bg-primary/10 absolute top-3 right-3"
-            >
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
+          {/* Close Button */}
+          <IconButton
+            onClick={onClose}
+            className="hover:bg-primary/10 absolute top-3 right-3"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
-          {/* Body */}
-          <DialogContent className="px-6 py-5 overflow-y-auto" dividers>
-            {children}
-          </DialogContent>
+        {/* Body */}
+        <DialogContent className="px-6 py-5 overflow-y-auto grow" dividers>
+          <Box className="flex flex-col gap-3.5 h-full">{children}</Box>
+        </DialogContent>
 
-          {/* Actions */}
-          {actions && (
-            <DialogActions className="px-6 py-4">{actions}</DialogActions>
-          )}
-        </Box>
-      )}
+        {/* Actions */}
+        {actions && (
+          <DialogActions className="px-6 py-4 shrink-0">
+            {actions}
+          </DialogActions>
+        )}
+      </Box>
     </Dialog>
   );
 }

@@ -95,5 +95,5 @@ body {
 }
 
 .input-rounded-firm .MuiFormHelperText-root.Mui-error {
-  @apply text-red-500 text-[0.75rem] mb-0 pb-0;
+  @apply text-red-500 text-[0.75rem] mb-0 pb-0 mt-0;
 }

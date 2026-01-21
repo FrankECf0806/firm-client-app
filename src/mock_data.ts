@@ -28,23 +28,6 @@ export const companyData = {
   phone: "+1 (555) 123-4567",
   email: "info@techcorp.com",
 };
-export enum CaseTypes {
-  CIVIL_LITIGATION = "Civil Litigation",
-  CORPORATE = "Corporate",
-  CRIMINAL_DEFENSE = "Criminal Defense",
-  ESTATE_PLANNING = "Estate Planning",
-  FAMILY_LAW = "Family Law",
-  INMIGRATION = "Immigration",
-  INTELLECTUAL_PROPERTY = "Intellectual Property",
-  REAL_ESTATE = "Real Estate",
-}
-
-export enum PriorityLevels {
-  LOW = "low",
-  MEDIUM = "medium",
-  HIGH = "high",
-  URGENT = "urgent",
-}
 
 export const mockCases: Case[] = [
   {

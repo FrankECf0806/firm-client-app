@@ -18,11 +18,6 @@ export interface Note {
   author: string;
 }
 
-export interface NewCaseFormProps {
-  open: boolean;
-  onClose: () => void;
-}
-
 export type NewCaseFormValues = {
   caseTitle: string;
   client: string;
