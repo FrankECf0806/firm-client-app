@@ -65,7 +65,7 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
               fullWidth
               required
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             />
           )}
         />
@@ -85,7 +85,7 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
               fullWidth
               required
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             />
           )}
         />
@@ -112,7 +112,7 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
               placeholder="e.g. jhonsmith@gmail.com"
               fullWidth
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             />
           )}
         />
@@ -138,7 +138,7 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
               placeholder="e.g. 07720123456"
               fullWidth
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             />
           )}
         />

@@ -65,7 +65,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
             fullWidth
             required
             error={!!fieldState.error}
-            helperText={fieldState.error?.message || " "}
+            helperText={fieldState.error?.message}
           />
         )}
       />
@@ -86,7 +86,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               fullWidth
               required
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             >
               <MenuItem
                 className="place-content-center hover:bg-primary p-0 min-h-0.5"
@@ -125,7 +125,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               fullWidth
               required
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
             >
               {Object.keys(CaseType).map((type) => (
                 <MenuItem key={type} value={type}>
@@ -169,7 +169,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               size="small"
               required
               error={!!fieldState.error}
-              helperText={fieldState.error?.message || " "}
+              helperText={fieldState.error?.message}
               slotProps={{ inputLabel: { shrink: true } }}
               fullWidth
             />
@@ -208,7 +208,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
             fullWidth
             required
             error={!!fieldState.error}
-            helperText={fieldState.error?.message || " "}
+            helperText={fieldState.error?.message}
           >
             {Object.keys(PriorityLevel).map((p) => (
               <MenuItem key={p} value={p}>

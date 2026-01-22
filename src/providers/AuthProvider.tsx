@@ -1,15 +1,22 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import type { AuthContextType } from "@/types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setAuthenticated] = useState(true); // Default to true for testing
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setAuthenticated] = useState(false); // Default to true for testing
+
+  const setTempAuthToken = () => {
+    const token = `test_token_${Date.now()}`;
+    document.cookie = `auth_token=${token}; path=/; max-age=86400; samesite=lax`;
+  };
 
   return (
-    <AuthContext value={{ isAuthenticated, setAuthenticated }}>
+    <AuthContext
+      value={{ isAuthenticated, setAuthenticated, setTempAuthToken }}
+    >
       {children}
     </AuthContext>
   );
