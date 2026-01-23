@@ -28,7 +28,7 @@ export default function Signin() {
     console.log(data);
     setTempAuthToken();
     setAuthenticated(true);
-    router.push("/");
+    router.replace("/");
   };
 
   return (

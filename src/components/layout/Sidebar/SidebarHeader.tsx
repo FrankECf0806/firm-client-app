@@ -1,6 +1,8 @@
+"use client";
 import { Balance, ChevronLeft, Menu } from "@mui/icons-material";
-import { Box, IconButton, Link, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { SidebarProps } from "@/types/navbar";
+import Link from "next/link";
 
 export default function SidebarHeader({
   sidebarExpanded = false,

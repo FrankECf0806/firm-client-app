@@ -8,6 +8,7 @@ import {
   LocalAtmOutlined,
 } from "@mui/icons-material";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import NewCaseForm from "../forms/NewCaseForm";
 import AddClientForm from "../forms/AddClientForm";
 
@@ -16,8 +17,10 @@ export default function QuickActions() {
   const [addClientOpen, setAddClientOpen] = useState(false);
   // const [uploadDocOpen, setUploadDocOpen] = useState(false);
 
+  const router = useRouter();
+
   const navigate = (path: string) => {
-    window.location.href = path;
+    router.push(path);
   };
 
   const actions = [
