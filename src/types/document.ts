@@ -6,4 +6,5 @@ export interface Document {
   uploadDate: string;
   size: string;
   type: string;
+  description: string;
 }

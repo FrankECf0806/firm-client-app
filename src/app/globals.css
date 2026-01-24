@@ -1,18 +1,18 @@
 @layer theme, base, mui, components, utilities;
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------
+   THEME
+--------------------------------------------------------------------- */
 @theme inline {
-  /* Your custom Element UI color scale */
   --color-primary-light: #79bbff;
   --color-primary: #409eff;
   --color-primary-dark: #337ecc;
 
-  /* Optional: Map to Tailwind's color naming if you want */
   --color-blue-100: var(--color-primary-light);
   --color-blue-500: var(--color-primary);
   --color-blue-700: var(--color-primary-dark);
 
-  /* Font configuration */
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
@@ -20,7 +20,9 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Animated helper text for form dialogs - Tailwind version */
+/* ---------------------------------------------------------------------
+   MUI DIALOG HELPER TEXT (animated, no layout jump)
+--------------------------------------------------------------------- */
 .MuiDialog-root .MuiFormHelperText-root {
   @apply transition-all duration-300 ease-in-out;
 }
@@ -30,70 +32,118 @@ body {
 }
 
 .MuiDialog-root .MuiFormHelperText-root.Mui-error {
-  @apply opacity-100 h-auto min-h-5 mb-0 pb-0;
+  @apply opacity-100 h-auto min-h-5 mt-0 mb-0;
 }
 
-/* Button styles */
+/* ---------------------------------------------------------------------
+   BUTTONS
+--------------------------------------------------------------------- */
 .button-firm {
   @apply shadow-sm rounded-md;
 }
 
-/* TextField styles */
+/* ---------------------------------------------------------------------
+   BASE FORM INPUT (FORM FIELDS)
+   Use for: dialogs, full-width selects, textareas
+--------------------------------------------------------------------- */
 .input-rounded-firm .MuiOutlinedInput-root {
-  @apply rounded-xl border-primary m-0;
+  @apply rounded-xl m-0;
 }
 
-/* Focus state - ONLY for input-rounded-firm */
+/* Border states */
 .input-rounded-firm
   .MuiOutlinedInput-root.Mui-focused
   .MuiOutlinedInput-notchedOutline {
   @apply border-primary border-2;
 }
 
-/* Hover state - ONLY for input-rounded-firm */
 .input-rounded-firm
   .MuiOutlinedInput-root:hover
   .MuiOutlinedInput-notchedOutline {
   @apply border-primary border-2 shadow-md;
 }
 
-/* Error state - ONLY for input-rounded-firm */
 .input-rounded-firm
   .MuiOutlinedInput-root.Mui-error
   .MuiOutlinedInput-notchedOutline {
   @apply border-red-500 border-2;
 }
 
-/* Disabled state - ONLY for input-rounded-firm */
 .input-rounded-firm
   .MuiOutlinedInput-root.Mui-disabled
   .MuiOutlinedInput-notchedOutline {
   @apply border-gray-300;
 }
 
-/* Input label - ONLY for input-rounded-firm */
-/* .input-rounded-firm .MuiInputLabel-root {
-  @apply text-gray-700;
+/* Label styling (form fields only) */
+.input-rounded-firm .MuiInputLabel-root {
+  @apply text-gray-700 text-sm;
 }
 
 .input-rounded-firm .MuiInputLabel-root.Mui-focused {
   @apply text-primary;
-} */
+}
 
 .input-rounded-firm .MuiInputLabel-root.Mui-error {
   @apply text-red-500;
 }
 
-/* Input text - ONLY for input-rounded-firm */
-.input-rounded-firm .MuiOutlinedInput-input {
-  @apply text-gray-900 py-3 px-4;
+/* Label transform tuning (fixes oversized feel) */
+.input-rounded-firm .MuiInputLabel-shrink {
+  transform: translate(14px, -6px) scale(0.85);
 }
 
-/* Helper text - ONLY for input-rounded-firm */
+/* Input text — IMPORTANT: reduced padding */
+.input-rounded-firm .MuiOutlinedInput-input {
+  @apply text-gray-900 py-2.5 px-3;
+}
+
+/* Helper text */
 .input-rounded-firm .MuiFormHelperText-root {
   @apply mr-1 text-sm;
 }
 
 .input-rounded-firm .MuiFormHelperText-root.Mui-error {
-  @apply text-red-500 text-[0.75rem] mb-0 pb-0 mt-0;
+  @apply text-red-500 text-[0.75rem] mt-0;
+}
+
+/* ---------------------------------------------------------------------
+   COMPACT INPUT VARIANT (LIST / ROW INPUTS)
+   Use for: file rows, tables, dense UIs
+--------------------------------------------------------------------- */
+.input-compact .MuiOutlinedInput-root {
+  height: 32px;
+  @apply rounded-lg;
+}
+
+/* Kill label entirely for compact inputs */
+.input-compact .MuiInputLabel-root {
+  @apply hidden;
+}
+
+/* Compact padding & font */
+.input-compact .MuiOutlinedInput-input {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* Prevent notch spacing */
+.input-compact .MuiOutlinedInput-notchedOutline {
+  legend {
+    display: none;
+  }
+}
+
+/* Error state (compact) */
+.input-compact
+  .MuiOutlinedInput-root.Mui-error
+  .MuiOutlinedInput-notchedOutline {
+  @apply border-red-500 border-2;
+}
+
+/* ---------------------------------------------------------------------
+   SELECT MENU ITEMS
+--------------------------------------------------------------------- */
+.MuiMenuItem-root {
+  @apply text-sm;
 }

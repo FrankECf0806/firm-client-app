@@ -4,18 +4,19 @@ import { Box, Button, Grid } from "@mui/material";
 import {
   AddOutlined,
   PersonAddAltOutlined,
-  // UploadFileOutlined,
+  UploadFileOutlined,
   LocalAtmOutlined,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NewCaseForm from "../forms/NewCaseForm";
-import AddClientForm from "../forms/AddClientForm";
+import NewCaseForm from "@/components/forms/NewCaseForm";
+import AddClientForm from "@/components/forms/AddClientForm";
+import UploadFileForm from "@/components/forms/UploadFileForm";
 
 export default function QuickActions() {
   const [newCaseOpen, setNewCaseOpen] = useState(false);
   const [addClientOpen, setAddClientOpen] = useState(false);
-  // const [uploadDocOpen, setUploadDocOpen] = useState(false);
+  const [uploadDocOpen, setUploadDocOpen] = useState(false);
 
   const router = useRouter();
 
@@ -36,7 +37,12 @@ export default function QuickActions() {
       icon: PersonAddAltOutlined,
       onClick: () => setAddClientOpen(true),
     },
-    // { title: "Upload Document", variant: "outlined", icon: UploadFileOutlined, onClick: () => setUploadDocOpen(true) },
+    {
+      title: "Upload Document",
+      variant: "outlined",
+      icon: UploadFileOutlined,
+      onClick: () => setUploadDocOpen(true),
+    },
     {
       title: "Generate Invoice",
       variant: "outlined",
@@ -88,6 +94,10 @@ export default function QuickActions() {
       <AddClientForm
         open={addClientOpen}
         onClose={() => setAddClientOpen(false)}
+      />
+      <UploadFileForm
+        open={uploadDocOpen}
+        onClose={() => setUploadDocOpen(false)}
       />
     </Box>
   );

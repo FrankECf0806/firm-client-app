@@ -309,6 +309,7 @@ export const mockDocuments: Document[] = [
     uploadDate: "2024-08-20",
     size: "2.4 MB",
     type: "Legal Filing",
+    description: "",
   },
   {
     id: "d2",
@@ -318,6 +319,7 @@ export const mockDocuments: Document[] = [
     uploadDate: "2024-08-22",
     size: "1.2 MB",
     type: "Evidence",
+    description: "",
   },
   {
     id: "d3",
@@ -327,6 +329,7 @@ export const mockDocuments: Document[] = [
     uploadDate: "2024-09-05",
     size: "456 KB",
     type: "Draft",
+    description: "",
   },
   {
     id: "d4",
@@ -336,6 +339,7 @@ export const mockDocuments: Document[] = [
     uploadDate: "2024-07-15",
     size: "5.8 MB",
     type: "Contract",
+    description: "",
   },
 ];
 
