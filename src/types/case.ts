@@ -1,13 +1,15 @@
+import { CaseStatus, CaseType } from "../enums/case";
+
 export interface Case {
   id: string;
   title: string;
   client: string;
   clientId: string;
-  status: "active" | "pending" | "closed";
-  practiceArea: string;
+  status: CaseStatus;
+  type: CaseType;
   openDate: string;
-  nextDeadline: string;
-  description: string;
+  nextDeadline?: string;
+  description?: string;
   notes: Note[];
 }
 

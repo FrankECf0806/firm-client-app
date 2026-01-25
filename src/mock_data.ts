@@ -3,6 +3,7 @@ import { Client } from "./types/client";
 import { Invoice } from "./types/invoice";
 import { Meeting } from "./types/meeting";
 import { Document } from "./types/document";
+import { CaseStatus, CaseType } from "@/enums/case";
 
 export const user = {
   firstName: "Fernando",
@@ -35,8 +36,8 @@ export const mockCases: Case[] = [
     title: "Smith vs. Johnson Corp",
     client: "Robert Smith",
     clientId: "c1",
-    status: "active",
-    practiceArea: "Civil Litigation",
+    status: CaseStatus.ACTIVE,
+    type: CaseType.CIVIL_LITIGATION,
     openDate: "2024-08-15",
     nextDeadline: "2024-12-28",
     description:
@@ -62,8 +63,8 @@ export const mockCases: Case[] = [
     title: "Estate of Williams",
     client: "Sarah Williams",
     clientId: "c2",
-    status: "pending",
-    practiceArea: "Estate Planning",
+    status: CaseStatus.PENDING,
+    type: CaseType.ESTATE_PLANNING,
     openDate: "2024-09-01",
     nextDeadline: "2024-12-30",
     description:
@@ -75,8 +76,8 @@ export const mockCases: Case[] = [
     title: "Davis Corp Merger",
     client: "Davis Corporation",
     clientId: "c3",
-    status: "active",
-    practiceArea: "Corporate Law",
+    status: CaseStatus.ACTIVE,
+    type: CaseType.CORPORATE,
     openDate: "2024-07-10",
     nextDeadline: "2025-01-15",
     description:
@@ -88,8 +89,8 @@ export const mockCases: Case[] = [
     title: "Thompson Divorce",
     client: "Michael Thompson",
     clientId: "c4",
-    status: "closed",
-    practiceArea: "Family Law",
+    status: CaseStatus.CLOSED,
+    type: CaseType.FAMILY_LAW,
     openDate: "2024-03-20",
     nextDeadline: "2024-11-30",
     description: "Divorce proceedings and asset division for Michael Thompson.",
@@ -100,8 +101,8 @@ export const mockCases: Case[] = [
     title: "Garcia Immigration",
     client: "Maria Garcia",
     clientId: "c5",
-    status: "active",
-    practiceArea: "Immigration",
+    status: CaseStatus.ACTIVE,
+    type: CaseType.INMIGRATION,
     openDate: "2024-10-05",
     nextDeadline: "2025-02-20",
     description: "Immigration visa application and documentation.",
@@ -112,8 +113,8 @@ export const mockCases: Case[] = [
     title: "Brown Property Sale",
     client: "Emily Brown",
     clientId: "c6",
-    status: "pending",
-    practiceArea: "Real Estate",
+    status: CaseStatus.PENDING,
+    type: CaseType.REAL_ESTATE,
     openDate: "2024-11-01",
     nextDeadline: "2025-01-10",
     description: "Commercial property sale documentation and closing.",
