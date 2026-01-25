@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { AddClientFormValues } from "@/types/client";
 import { DialogForm } from "@/components/dialogs/DialogForm";
 import { ClientType } from "@/enums/client";
+import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
 
 export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
   const {
@@ -166,21 +167,21 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
           name="clientType"
           control={control}
           render={({ field }) => (
-            <TextField
+            <ClearableSelect
               {...field}
               className="input-rounded-firm"
               size="small"
-              select
               label="Client Type"
               placeholder="Select client type"
               fullWidth
+              clearable
             >
               {Object.keys(ClientType).map((type) => (
                 <MenuItem key={type} value={type}>
                   {ClientType[type as keyof typeof ClientType]}
                 </MenuItem>
               ))}
-            </TextField>
+            </ClearableSelect>
           )}
         />
       </Box>

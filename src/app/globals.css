@@ -147,3 +147,13 @@ body {
 .MuiMenuItem-root {
   @apply text-sm;
 }
+/* ----------------------------------------------------
+   SELECT CLEAR BUTTON (GLOBAL)
+---------------------------------------------------- */
+.select-clear-btn {
+  @apply text-gray-400 hover:text-gray-600 cursor-pointer mr-3.5;
+}
+
+.select-clear-btn.Mui-disabled {
+  @apply hidden;
+}
