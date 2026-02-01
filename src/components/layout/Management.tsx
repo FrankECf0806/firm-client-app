@@ -25,7 +25,7 @@ export default function ManagementLayout({
     breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
 
   return (
-    <Box className="p-2 md:p-4">
+    <Box className="p-1 md:p-2">
       {/* Breadcrumbs */}
       {breadcrumbsList.length > 0 && (
         <Breadcrumbs
@@ -63,7 +63,7 @@ export default function ManagementLayout({
             <Box className="flex-1">
               <Typography
                 variant="h4"
-                className="font-bold mb-1 text-xl md:text-3xl"
+                className="font-bold mb-0.5 text-xl md:text-3xl"
               >
                 {title}
               </Typography>

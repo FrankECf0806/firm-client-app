@@ -1,6 +1,6 @@
 export enum CaseType {
   CIVIL_LITIGATION = "Civil Litigation",
-  CORPORATE = "Corporate",
+  CORPORATE = "Corporate Law",
   CRIMINAL_DEFENSE = "Criminal Defense",
   ESTATE_PLANNING = "Estate Planning",
   FAMILY_LAW = "Family Law",
@@ -10,10 +10,10 @@ export enum CaseType {
 }
 
 export enum CaseStatus {
-  ACTIVE = "active",
-  PENDING = "pending",
-  CLOSED = "closed",
-  ARCHIVED = "archived",
+  ACTIVE = "Active",
+  PENDING = "Pending",
+  CLOSED = "Closed",
+  ARCHIVED = "Archived",
 }
 
 export enum PriorityLevel {

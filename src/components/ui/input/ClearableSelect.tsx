@@ -8,9 +8,16 @@ export function ClearableSelect({
   clearable = false,
   required = false,
   disabled = false,
+  clearValue = "",
   ...props
 }: ClearableSelectProps) {
   const showClear = clearable && !required && !disabled && Boolean(value);
+
+  const handleClearClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onChange(clearValue);
+  };
 
   return (
     <TextField
@@ -26,10 +33,7 @@ export function ClearableSelect({
               <IconButton
                 size="small"
                 className="select-clear-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChange("");
-                }}
+                onClick={handleClearClick}
               >
                 <CloseOutlinedIcon fontSize="small" />
               </IconButton>

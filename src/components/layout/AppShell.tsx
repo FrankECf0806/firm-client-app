@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden md:block">
+      <aside className="hidden lg:block">
         <Sidebar
           sidebarExpanded={sidebarExpanded}
           onToggleSidebar={() => setSidebarExpanded(!sidebarExpanded)}
@@ -21,15 +21,17 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Header />
         <Box
           className="
-          flex-1
-          p-2 md:p-4
-          bg-primary-light/10 dark:bg-primary-dark/10
-          items-center justify-center"
+			flex-1
+			p-2 md:p-4
+			bg-primary-light/10 dark:bg-primary-dark/10
+			items-center justify-center
+			w-full overflow-x-hidden"
+          sx={{ maxWidth: "100%" }}
         >
           {children}
         </Box>
       </main>
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <MobileSidebar />
       </div>
     </div>

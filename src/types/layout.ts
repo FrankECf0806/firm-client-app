@@ -18,3 +18,8 @@ export interface ManagementProps {
   actions?: ReactNode;
   showHeader?: boolean;
 }
+
+export interface PageItem {
+  title: string;
+  subtitle?: string;
+}
