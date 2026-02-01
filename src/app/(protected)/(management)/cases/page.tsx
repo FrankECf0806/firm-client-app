@@ -9,27 +9,28 @@ import {
   InputAdornment,
   MenuItem,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
+  //   Table,
+  //   TableBody,
+  //   TableCell,
+  //   TableContainer,
+  //   TableHead,
+  //   TablePagination,
+  //   TableRow,
   TextField,
-  Tooltip,
-  Typography,
+  //   Tooltip,
+  //   Typography,
 } from "@mui/material";
 import {
   Search as SearchIcon,
   CloseOutlined as CloseOutlinedIcon,
   FilterList as FilterIcon,
   Add as AddIcon,
-  Edit as EditIcon,
-  Visibility as ViewIcon,
-  Schedule as ScheduleIcon,
+  //   Edit as EditIcon,
+  //   Visibility as ViewIcon,
+  //   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
-import { useMemo, useState, MouseEvent, ChangeEvent } from "react";
+// import { useMemo, useState, MouseEvent, ChangeEvent } from "react";
+import { useState } from "react";
 import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
 import { CaseStatus, CaseType } from "@/enums/case";
 import {
@@ -38,66 +39,65 @@ import {
 } from "@/utils/constant";
 import NewCaseForm from "@/components/forms/NewCaseForm";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
-import {
-  COLUMNS,
-  CURRENT_PAGE,
-  ROWS_PER_PAGE,
-  ROWS_PER_PAGE_OPTIONS,
-  TABLE_TOTAL_WIDTH,
-} from "@/utils/constant/case";
-import { mockCases } from "@/mock_data";
+import {} from //   COLUMNS,
+//   CURRENT_PAGE,
+//   ROWS_PER_PAGE,
+//   ROWS_PER_PAGE_OPTIONS,
+//   TABLE_TOTAL_WIDTH,
+"@/utils/constant/case";
+// import { mockCases } from "@/mock_data";
 
 export default function Cases() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("ALL_TYPES");
   const [statusFilter, setStatusFilter] = useState<string>("ALL_STATUS");
-  const [page, setPage] = useState(CURRENT_PAGE);
-  const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
+  //   const [page, setPage] = useState(CURRENT_PAGE);
+  //   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
   const [newCaseOpen, setNewCaseOpen] = useState(false);
 
   const showClear = Boolean(searchQuery);
 
   // Sort and filter cases
-  const filteredAndSortedCases = useMemo(() => {
-    const filtered = mockCases.filter((caseItem) => {
-      // Searchbar
-      const matchesSearch =
-        searchQuery === "" ||
-        caseItem.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        caseItem.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        caseItem.type.toLowerCase().includes(searchQuery.toLowerCase());
+  //   const filteredAndSortedCases = useMemo(() => {
+  //     const filtered = mockCases.filter((caseItem) => {
+  //       // Searchbar
+  //       const matchesSearch =
+  //         searchQuery === "" ||
+  //         caseItem.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //         caseItem.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //         caseItem.type.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // Status filter
-      const matchesStatus =
-        statusFilter === "ALL_STATUS" || caseItem.status === statusFilter;
+  //       // Status filter
+  //       const matchesStatus =
+  //         statusFilter === "ALL_STATUS" || caseItem.status === statusFilter;
 
-      // Type filter
-      const matchesType =
-        typeFilter === "ALL_TYPES" || caseItem.type === typeFilter;
+  //       // Type filter
+  //       const matchesType =
+  //         typeFilter === "ALL_TYPES" || caseItem.type === typeFilter;
 
-      return matchesSearch && matchesStatus && matchesType;
-    });
+  //       return matchesSearch && matchesStatus && matchesType;
+  //     });
 
-    return filtered;
-  }, [searchQuery, typeFilter, statusFilter]);
+  //     return filtered;
+  //   }, [searchQuery, typeFilter, statusFilter]);
 
-  const paginatedCases = useMemo(() => {
-    const start = page * rowsPerPage;
-    return filteredAndSortedCases.slice(start, start + rowsPerPage);
-  }, [filteredAndSortedCases, page, rowsPerPage]);
+  //   const paginatedCases = useMemo(() => {
+  //     const start = page * rowsPerPage;
+  //     return filteredAndSortedCases.slice(start, start + rowsPerPage);
+  //   }, [filteredAndSortedCases, page, rowsPerPage]);
 
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    setPage(newPage);
-  };
+  //   const handleChangePage = (
+  //     event: MouseEvent<HTMLButtonElement> | null,
+  //     newPage: number,
+  //   ) => {
+  //     setPage(newPage);
+  //   };
 
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  //   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+  //     setRowsPerPage(parseInt(event.target.value, 10));
+  //     setPage(0);
+  //   };
 
   return (
     <Box
@@ -239,7 +239,7 @@ export default function Cases() {
 
       {/* Cases Table */}
       <Paper className="p-4 mb-6 rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <Box
+        {/* <Box
           className="overflow-x-auto"
           sx={{
             maxWidth: "100%",
@@ -340,10 +340,10 @@ export default function Cases() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Box>
+        </Box> */}
 
         {/* Pagination */}
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
           component="div"
           count={filteredAndSortedCases.length}
@@ -352,7 +352,7 @@ export default function Cases() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           className="border-t border-primary-light/50"
-        />
+        /> */}
       </Paper>
     </Box>
   );
