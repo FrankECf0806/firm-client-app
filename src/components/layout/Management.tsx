@@ -4,7 +4,6 @@ import {
   Home as HomeIcon,
   NavigateNext as NavigateNextIcon,
 } from "@mui/icons-material";
-
 import Link from "next/link";
 
 export default function ManagementLayout({

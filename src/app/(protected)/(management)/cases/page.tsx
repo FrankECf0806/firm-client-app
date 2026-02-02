@@ -58,7 +58,7 @@ export default function Cases() {
 
   const showClear = Boolean(searchQuery);
 
-  // Sort and filter cases
+  //   Sort and filter cases
   //   const filteredAndSortedCases = useMemo(() => {
   //     const filtered = mockCases.filter((caseItem) => {
   //       // Searchbar
@@ -100,15 +100,9 @@ export default function Cases() {
   //   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        overflowX: "hidden",
-        maxWidth: "100vw", // Crucial for iPad
-      }}
-    >
+    <Box>
       <Paper className="p-4 mb-6 rounded-xl border border-gray-200 shadow-sm">
-        <Grid container spacing={1} alignItems="center">
+        <Grid container spacing={2} alignItems="center">
           {/* Search Field */}
           <Grid size={{ xs: 12, md: 5, lg: 5 }}>
             <TextField
@@ -142,20 +136,25 @@ export default function Cases() {
             />
           </Grid>
 
-          {/* Filters Section */}
-          <Grid size={{ xs: 12, md: 7, lg: 7 }} justifyItems="center">
-            <Box
-              className="
-                flex flex-col gap-2 w-full
-                sm:flex-row sm:items-center sm:justify-end
-                items-start
-              "
+          {/* Filters and Actions Section */}
+          <Grid size={{ xs: 12, md: 7, lg: 7 }}>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              justifyContent={{ xs: "flex-start", md: "flex-end" }}
             >
-              <Box className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                <FilterIcon className="text-gray-400 hidden lg:block" />
+              {/* Filter Icon - Only visible on larger screens */}
+              <Grid size="auto" className="hidden lg:block">
+                <Box className="flex items-end justify-center h-full pr-1">
+                  <FilterIcon className="text-gray-400" />
+                </Box>
+              </Grid>
 
+              {/* Status Filter */}
+              <Grid size={{ xs: 6, sm: 5, md: 5, lg: 3 }}>
                 <ClearableSelect
-                  className="input-rounded-firm w-full sm:w-32 md:w-36"
+                  className="input-rounded-firm w-full"
                   size="small"
                   label="Case Status"
                   value={statusFilter}
@@ -171,9 +170,12 @@ export default function Cases() {
                     </MenuItem>
                   ))}
                 </ClearableSelect>
+              </Grid>
 
+              {/* Type Filter */}
+              <Grid size={{ xs: 6, sm: 5, md: 5, lg: 3 }}>
                 <ClearableSelect
-                  className="input-rounded-firm w-full sm:w-40 md:w-48"
+                  className="input-rounded-firm w-full"
                   size="small"
                   label="Case Type"
                   value={typeFilter}
@@ -189,22 +191,25 @@ export default function Cases() {
                     </MenuItem>
                   ))}
                 </ClearableSelect>
-              </Box>
+              </Grid>
 
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                className="
-                  button-firm bg-primary
-                  hover:bg-primary-dark shadow-sm
-                  w-full sm:w-auto shrink-0
-                "
-                onClick={() => setNewCaseOpen(true)}
-              >
-                <span className="hidden sm:inline">New Case</span>
-                <span className="sm:hidden">Add Case</span>
-              </Button>
-            </Box>
+              {/* New Case Button */}
+              <Grid size={{ xs: 12, sm: 2, md: 2, lg: 3 }}>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  className="
+                    button-firm bg-primary
+                    hover:bg-primary-dark shadow-sm
+                    w-full
+				"
+                  onClick={() => setNewCaseOpen(true)}
+                >
+                  <span className="hidden sm:inline">New</span>
+                  <span className="sm:hidden">New Case</span>
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 

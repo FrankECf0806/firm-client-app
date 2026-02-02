@@ -47,6 +47,15 @@ const theme = createTheme({
       textTransform: "capitalize" as const,
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600, // Tailwind sm
+      md: 900, // Tailwind md
+      lg: 1200, // Tailwind lg
+      xl: 1536, // Tailwind xl
+    },
+  },
   components: {
     MuiChip: {
       styleOverrides: {
