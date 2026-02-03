@@ -3,6 +3,7 @@
 import {
   Box,
   Button,
+  Chip,
   Divider,
   Grid,
   IconButton,
@@ -26,13 +27,14 @@ import {
   FilterList as FilterIcon,
   Add as AddIcon,
   Edit as EditIcon,
-  Visibility as ViewIcon,
+  Description as FileTextIcon,
   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
 import { useMemo, useState, MouseEvent, ChangeEvent } from "react";
 import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
 import { CaseStatus, PracticeArea, SortKey } from "@/enums/case";
 import {
+  CASE_STATUS_CONFIG,
   QUICK_FILTER_CASE_STATUS,
   QUICK_FILTER_CASE_TYPE,
 } from "@/utils/constant";
@@ -94,14 +96,14 @@ export default function Cases() {
       const aVal = a[sortKey];
       const bVal = b[sortKey];
 
-      // 🔢 NUMERIC SORT (ID)
+      // NUMERIC SORT (ID)
       if (sortKey === "id") {
         return sortOrder === "asc"
           ? Number(aVal) - Number(bVal)
           : Number(bVal) - Number(aVal);
       }
 
-      // 🔤 STRING SORT
+      // STRING SORT
       if (typeof aVal === "string" && typeof bVal === "string") {
         return sortOrder === "asc"
           ? aVal.localeCompare(bVal)
@@ -342,7 +344,11 @@ export default function Cases() {
                     </Box>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
-                    <Typography>{caseItem.status}</Typography>
+                    <Chip
+                      label={caseItem.status}
+                      variant="filled"
+                      color={CASE_STATUS_CONFIG[caseItem.status].styling?.color}
+                    />
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Box className="flex gap-1">
@@ -352,7 +358,7 @@ export default function Cases() {
                           className="bg-primary/10 hover:bg-primary/20 text-primary"
                           // onClick={() => handleViewCase(caseItem)}
                         >
-                          <ViewIcon fontSize="small" />
+                          <FileTextIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Edit Case">
