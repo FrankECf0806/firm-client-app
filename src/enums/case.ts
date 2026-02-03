@@ -1,4 +1,4 @@
-export enum CaseType {
+export enum PracticeArea {
   CIVIL_LITIGATION = "Civil Litigation",
   CORPORATE = "Corporate Law",
   CRIMINAL_DEFENSE = "Criminal Defense",
@@ -22,3 +22,11 @@ export enum PriorityLevel {
   HIGH = "High",
   URGENT = "Urgent",
 }
+
+export type SortKey =
+  | "id"
+  | "title"
+  | "client"
+  | "practiceArea"
+  | "openDate"
+  | "status";

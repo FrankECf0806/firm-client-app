@@ -7,9 +7,9 @@ import { NewCaseFormValues } from "@/types/case";
 import { useForm, Controller } from "react-hook-form";
 import { QuickAcessFormProps } from "@/types/form";
 import { DialogForm } from "@/components/dialogs/DialogForm";
-import { CaseType, PriorityLevel } from "@/enums/case";
+import { PracticeArea, PriorityLevel } from "@/enums/case";
 
-export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
+export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
   const {
     control,
     handleSubmit,
@@ -20,7 +20,7 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
     defaultValues: {
       caseTitle: "",
       client: "",
-      caseType: "",
+      practiceArea: "",
       priority: "",
       filingDate: "",
       deadline: "",
@@ -110,9 +110,9 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
           )}
         />
 
-        {/* Case Type */}
+        {/* Practice Area */}
         <Controller
-          name="caseType"
+          name="practiceArea"
           control={control}
           rules={{ required: "Case type is required" }}
           render={({ field, fieldState }) => (
@@ -121,15 +121,15 @@ export default function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               className="input-rounded-firm"
               select
               size="small"
-              label="Case Type"
+              label="Practice Area"
               fullWidth
               required
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
             >
-              {Object.keys(CaseType).map((type) => (
+              {Object.keys(PracticeArea).map((type) => (
                 <MenuItem key={type} value={type}>
-                  {CaseType[type as keyof typeof CaseType]}
+                  {PracticeArea[type as keyof typeof PracticeArea]}
                 </MenuItem>
               ))}
             </TextField>

@@ -9,7 +9,7 @@ import {
 } from "@mui/icons-material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import NewCaseForm from "@/components/forms/NewCaseForm";
+import { NewCaseForm } from "@/components/forms/NewCaseForm";
 import AddClientForm from "@/components/forms/AddClientForm";
 import UploadFileForm from "@/components/forms/UploadFileForm";
 

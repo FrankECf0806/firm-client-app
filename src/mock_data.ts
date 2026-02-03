@@ -3,7 +3,7 @@ import { Client } from "./types/client";
 import { Invoice } from "./types/invoice";
 import { Meeting } from "./types/meeting";
 import { Document } from "./types/document";
-import { CaseStatus, CaseType } from "@/enums/case";
+import { CaseStatus, PracticeArea } from "@/enums/case";
 
 export const user = {
   firstName: "Fernando",
@@ -38,7 +38,7 @@ export const mockCases: Case[] = [
     client: "Robert Smith",
     clientId: "c1",
     status: CaseStatus.ACTIVE,
-    type: CaseType.CIVIL_LITIGATION,
+    practiceArea: PracticeArea.CIVIL_LITIGATION,
     openDate: "2024-08-15",
     nextDeadline: "2024-12-28",
     description:
@@ -65,7 +65,7 @@ export const mockCases: Case[] = [
     client: "Sarah Williams",
     clientId: "c2",
     status: CaseStatus.PENDING,
-    type: CaseType.ESTATE_PLANNING,
+    practiceArea: PracticeArea.ESTATE_PLANNING,
     openDate: "2024-09-01",
     nextDeadline: "2024-12-30",
     description:
@@ -78,7 +78,7 @@ export const mockCases: Case[] = [
     client: "Davis Corporation",
     clientId: "c3",
     status: CaseStatus.ACTIVE,
-    type: CaseType.CORPORATE,
+    practiceArea: PracticeArea.CORPORATE,
     openDate: "2024-07-10",
     nextDeadline: "2025-01-15",
     description:
@@ -91,7 +91,7 @@ export const mockCases: Case[] = [
     client: "Michael Thompson",
     clientId: "c4",
     status: CaseStatus.CLOSED,
-    type: CaseType.FAMILY_LAW,
+    practiceArea: PracticeArea.FAMILY_LAW,
     openDate: "2024-03-20",
     nextDeadline: "2024-11-30",
     description: "Divorce proceedings and asset division for Michael Thompson.",
@@ -103,7 +103,7 @@ export const mockCases: Case[] = [
     client: "Maria Garcia",
     clientId: "c5",
     status: CaseStatus.ACTIVE,
-    type: CaseType.INMIGRATION,
+    practiceArea: PracticeArea.INMIGRATION,
     openDate: "2024-10-05",
     nextDeadline: "2025-02-20",
     description: "Immigration visa application and documentation.",
@@ -115,7 +115,7 @@ export const mockCases: Case[] = [
     client: "Emily Brown",
     clientId: "c6",
     status: CaseStatus.PENDING,
-    type: CaseType.REAL_ESTATE,
+    practiceArea: PracticeArea.REAL_ESTATE,
     openDate: "2024-11-01",
     nextDeadline: "2025-01-10",
     description: "Commercial property sale documentation and closing.",
@@ -128,7 +128,7 @@ export const mockCases: Case[] = [
     client: "Carlos Rodriguez",
     clientId: "c7",
     status: CaseStatus.ACTIVE,
-    type: CaseType.CRIMINAL_DEFENSE,
+    practiceArea: PracticeArea.CRIMINAL_DEFENSE,
     openDate: "2024-09-15",
     nextDeadline: "2025-03-15",
     description:
@@ -148,7 +148,7 @@ export const mockCases: Case[] = [
     client: "TechVibe Innovations",
     clientId: "c8",
     status: CaseStatus.PENDING,
-    type: CaseType.INTELLECTUAL_PROPERTY,
+    practiceArea: PracticeArea.INTELLECTUAL_PROPERTY,
     openDate: "2024-10-10",
     nextDeadline: "2025-04-10",
     description:
@@ -161,7 +161,7 @@ export const mockCases: Case[] = [
     client: "Jennifer Martin",
     clientId: "c9",
     status: CaseStatus.ACTIVE,
-    type: CaseType.FAMILY_LAW,
+    practiceArea: PracticeArea.FAMILY_LAW,
     openDate: "2024-08-30",
     nextDeadline: "2024-12-15",
     description: "Child custody and visitation rights modification case.",
@@ -180,7 +180,7 @@ export const mockCases: Case[] = [
     client: "James Greenwood",
     clientId: "c10",
     status: CaseStatus.ACTIVE,
-    type: CaseType.ESTATE_PLANNING,
+    practiceArea: PracticeArea.ESTATE_PLANNING,
     openDate: "2024-07-22",
     nextDeadline: "2024-12-20",
     description:
@@ -193,7 +193,7 @@ export const mockCases: Case[] = [
     client: "GlobalCorp Inc.",
     clientId: "c11",
     status: CaseStatus.PENDING,
-    type: CaseType.CORPORATE,
+    practiceArea: PracticeArea.CORPORATE,
     openDate: "2024-11-05",
     nextDeadline: "2025-05-30",
     description:
@@ -206,7 +206,7 @@ export const mockCases: Case[] = [
     client: "Alejandro Rivera",
     clientId: "c12",
     status: CaseStatus.ACTIVE,
-    type: CaseType.INMIGRATION,
+    practiceArea: PracticeArea.INMIGRATION,
     openDate: "2024-10-18",
     nextDeadline: "2025-01-31",
     description: "H-1B visa application for specialized engineer position.",
@@ -225,7 +225,7 @@ export const mockCases: Case[] = [
     client: "Metro Properties LLC",
     clientId: "c13",
     status: CaseStatus.ACTIVE,
-    type: CaseType.REAL_ESTATE,
+    practiceArea: PracticeArea.REAL_ESTATE,
     openDate: "2024-09-05",
     nextDeadline: "2025-01-25",
     description: "Commercial real estate acquisition of a shopping plaza.",
@@ -237,7 +237,7 @@ export const mockCases: Case[] = [
     client: "Thomas Anderson",
     clientId: "c14",
     status: CaseStatus.PENDING,
-    type: CaseType.CIVIL_LITIGATION,
+    practiceArea: PracticeArea.CIVIL_LITIGATION,
     openDate: "2024-11-12",
     nextDeadline: "2025-02-28",
     description:
@@ -250,7 +250,7 @@ export const mockCases: Case[] = [
     client: "CodeCraft Studios",
     clientId: "c15",
     status: CaseStatus.CLOSED,
-    type: CaseType.INTELLECTUAL_PROPERTY,
+    practiceArea: PracticeArea.INTELLECTUAL_PROPERTY,
     openDate: "2024-02-14",
     nextDeadline: "2024-06-30",
     description:
@@ -270,7 +270,7 @@ export const mockCases: Case[] = [
     client: "David & Emma Peterson",
     clientId: "c16",
     status: CaseStatus.ACTIVE,
-    type: CaseType.FAMILY_LAW,
+    practiceArea: PracticeArea.FAMILY_LAW,
     openDate: "2024-08-08",
     nextDeadline: "2025-01-15",
     description: "International adoption legal proceedings and documentation.",
@@ -282,7 +282,7 @@ export const mockCases: Case[] = [
     client: "Preservation Society",
     clientId: "c17",
     status: CaseStatus.ARCHIVED,
-    type: CaseType.REAL_ESTATE,
+    practiceArea: PracticeArea.REAL_ESTATE,
     openDate: "2023-05-10",
     nextDeadline: "2024-03-01",
     description:
@@ -302,7 +302,7 @@ export const mockCases: Case[] = [
     client: "NexTech Startup",
     clientId: "c18",
     status: CaseStatus.ACTIVE,
-    type: CaseType.CORPORATE,
+    practiceArea: PracticeArea.CORPORATE,
     openDate: "2024-10-01",
     nextDeadline: "2024-12-10",
     description:
@@ -315,7 +315,7 @@ export const mockCases: Case[] = [
     client: "Li Wei",
     clientId: "c19",
     status: CaseStatus.ACTIVE,
-    type: CaseType.INMIGRATION,
+    practiceArea: PracticeArea.INMIGRATION,
     openDate: "2024-09-28",
     nextDeadline: "2025-04-05",
     description:
@@ -335,7 +335,7 @@ export const mockCases: Case[] = [
     client: "Johnson Family Heirs",
     clientId: "c20",
     status: CaseStatus.PENDING,
-    type: CaseType.ESTATE_PLANNING,
+    practiceArea: PracticeArea.ESTATE_PLANNING,
     openDate: "2024-11-20",
     nextDeadline: "2025-03-20",
     description:
@@ -348,7 +348,7 @@ export const mockCases: Case[] = [
     client: "BrandSecure Inc.",
     clientId: "c21",
     status: CaseStatus.ACTIVE,
-    type: CaseType.INTELLECTUAL_PROPERTY,
+    practiceArea: PracticeArea.INTELLECTUAL_PROPERTY,
     openDate: "2024-07-18",
     nextDeadline: "2025-01-30",
     description:
@@ -361,7 +361,7 @@ export const mockCases: Case[] = [
     client: "Restaurant Owners Group",
     clientId: "c22",
     status: CaseStatus.CLOSED,
-    type: CaseType.CIVIL_LITIGATION,
+    practiceArea: PracticeArea.CIVIL_LITIGATION,
     openDate: "2024-01-15",
     nextDeadline: "2024-08-01",
     description: "Breach of commercial lease agreement and rent dispute.",
@@ -381,7 +381,7 @@ export const mockCases: Case[] = [
     client: "PharmaMerge Co.",
     clientId: "c23",
     status: CaseStatus.PENDING,
-    type: CaseType.CORPORATE,
+    practiceArea: PracticeArea.CORPORATE,
     openDate: "2024-10-30",
     nextDeadline: "2025-06-15",
     description:
@@ -394,7 +394,7 @@ export const mockCases: Case[] = [
     client: "Susan Carter",
     clientId: "c24",
     status: CaseStatus.ACTIVE,
-    type: CaseType.CIVIL_LITIGATION,
+    practiceArea: PracticeArea.CIVIL_LITIGATION,
     openDate: "2024-09-10",
     nextDeadline: "2025-02-14",
     description: "Personal injury lawsuit following automobile accident.",
@@ -414,7 +414,7 @@ export const mockCases: Case[] = [
     client: "Preston Gallery",
     clientId: "c25",
     status: CaseStatus.CLOSED,
-    type: CaseType.CIVIL_LITIGATION,
+    practiceArea: PracticeArea.CIVIL_LITIGATION,
     openDate: "2024-02-28",
     nextDeadline: "2024-09-15",
     description:
@@ -434,7 +434,7 @@ export const mockCases: Case[] = [
     client: "Enterprise Solutions Ltd.",
     clientId: "c26",
     status: CaseStatus.ARCHIVED,
-    type: CaseType.CORPORATE,
+    practiceArea: PracticeArea.CORPORATE,
     openDate: "2023-11-05",
     nextDeadline: "2024-05-20",
     description:

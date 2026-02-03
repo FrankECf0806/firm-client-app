@@ -1,4 +1,4 @@
-import { CaseStatus, CaseType } from "@/enums/case";
+import { CaseStatus, PracticeArea } from "@/enums/case";
 import { PageItem } from "@/types/layout";
 import { QuickFilterItem } from "@/types/ui";
 import { QuickFilterStatus } from "@/types/case";
@@ -32,62 +32,65 @@ export const pageConfig: Record<string, PageItem> = {
 /**
  * Case Type
  * */
-export const CASE_TYPE_CONFIG: Record<CaseType, QuickFilterItem<CaseType>> = {
-  [CaseType.CIVIL_LITIGATION]: {
-    label: CaseType.CIVIL_LITIGATION,
+export const CASE_TYPE_CONFIG: Record<
+  PracticeArea,
+  QuickFilterItem<PracticeArea>
+> = {
+  [PracticeArea.CIVIL_LITIGATION]: {
+    label: PracticeArea.CIVIL_LITIGATION,
     styling: {
       selectedClass: "bg-blue-600 text-white",
       unselectedClass: "bg-blue-50 text-blue-700 border border-blue-200",
     },
-    onClick: (setType) => setType(CaseType.CIVIL_LITIGATION),
+    onClick: (setType) => setType(PracticeArea.CIVIL_LITIGATION),
   },
-  [CaseType.ESTATE_PLANNING]: {
-    label: CaseType.ESTATE_PLANNING,
+  [PracticeArea.ESTATE_PLANNING]: {
+    label: PracticeArea.ESTATE_PLANNING,
     styling: {},
-    onClick: (setType) => setType(CaseType.ESTATE_PLANNING),
+    onClick: (setType) => setType(PracticeArea.ESTATE_PLANNING),
   },
-  [CaseType.CORPORATE]: {
-    label: CaseType.CORPORATE,
+  [PracticeArea.CORPORATE]: {
+    label: PracticeArea.CORPORATE,
     styling: {
       selectedClass: "bg-indigo-600 text-white",
       unselectedClass: "bg-indigo-50 text-indigo-700 border border-indigo-200",
     },
-    onClick: (setType) => setType(CaseType.CORPORATE),
+    onClick: (setType) => setType(PracticeArea.CORPORATE),
   },
-  [CaseType.FAMILY_LAW]: {
-    label: CaseType.FAMILY_LAW,
+  [PracticeArea.FAMILY_LAW]: {
+    label: PracticeArea.FAMILY_LAW,
     styling: {},
-    onClick: (setType) => setType(CaseType.FAMILY_LAW),
+    onClick: (setType) => setType(PracticeArea.FAMILY_LAW),
   },
-  [CaseType.INMIGRATION]: {
-    label: CaseType.INMIGRATION,
+  [PracticeArea.INMIGRATION]: {
+    label: PracticeArea.INMIGRATION,
     styling: {},
-    onClick: (setType) => setType(CaseType.INMIGRATION),
+    onClick: (setType) => setType(PracticeArea.INMIGRATION),
   },
-  [CaseType.REAL_ESTATE]: {
-    label: CaseType.REAL_ESTATE,
+  [PracticeArea.REAL_ESTATE]: {
+    label: PracticeArea.REAL_ESTATE,
     styling: {},
-    onClick: (setType) => setType(CaseType.REAL_ESTATE),
+    onClick: (setType) => setType(PracticeArea.REAL_ESTATE),
   },
-  [CaseType.CRIMINAL_DEFENSE]: {
-    label: CaseType.CRIMINAL_DEFENSE,
+  [PracticeArea.CRIMINAL_DEFENSE]: {
+    label: PracticeArea.CRIMINAL_DEFENSE,
     styling: {},
-    onClick: (setType) => setType(CaseType.CRIMINAL_DEFENSE),
+    onClick: (setType) => setType(PracticeArea.CRIMINAL_DEFENSE),
   },
-  [CaseType.INTELLECTUAL_PROPERTY]: {
-    label: CaseType.INTELLECTUAL_PROPERTY,
+  [PracticeArea.INTELLECTUAL_PROPERTY]: {
+    label: PracticeArea.INTELLECTUAL_PROPERTY,
     styling: {},
-    onClick: (setType) => setType(CaseType.INTELLECTUAL_PROPERTY),
+    onClick: (setType) => setType(PracticeArea.INTELLECTUAL_PROPERTY),
   },
 };
 
-export const QUICK_FILTER_CASE_TYPE_KEYS: CaseType[] = [
-  CaseType.CIVIL_LITIGATION,
-  CaseType.CORPORATE,
+export const QUICK_FILTER_CASE_TYPE_KEYS: PracticeArea[] = [
+  PracticeArea.CIVIL_LITIGATION,
+  PracticeArea.CORPORATE,
 ] as const;
 
 export const QUICK_FILTER_CASE_TYPE = Object.entries(CASE_TYPE_CONFIG).filter(
-  ([key]) => QUICK_FILTER_CASE_TYPE_KEYS.includes(key as CaseType),
+  ([key]) => QUICK_FILTER_CASE_TYPE_KEYS.includes(key as PracticeArea),
 );
 
 /**

@@ -1,5 +1,5 @@
 import { ChipProps } from "@mui/material";
-import { CaseStatus, CaseType } from "../enums/case";
+import { CaseStatus, PracticeArea, SortKey } from "@/enums/case";
 
 export interface Case {
   id: string;
@@ -7,7 +7,7 @@ export interface Case {
   client: string;
   clientId: string;
   status: CaseStatus;
-  type: CaseType;
+  practiceArea: PracticeArea;
   openDate: string;
   nextDeadline?: string;
   description?: string;
@@ -24,7 +24,7 @@ export interface Note {
 export type NewCaseFormValues = {
   caseTitle: string;
   client: string;
-  caseType: string;
+  practiceArea: string;
   priority: string;
   filingDate: string;
   deadline: string;
@@ -45,3 +45,15 @@ export type CaseStatusItem = {
 };
 
 export type QuickFilterStatus = CaseStatus | "ALL_STATUS";
+
+// Case Table
+export interface CaseColumnTable {
+  field: string;
+  label: string;
+  minWidth?: number;
+  sortable?: boolean;
+  sortKey?: SortKey;
+  align?: "left" | "right" | "center";
+}
+
+export type SortOrder = "asc" | "desc";
