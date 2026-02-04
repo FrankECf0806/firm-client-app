@@ -3,33 +3,64 @@
 import { Button, TextField, MenuItem, Box } from "@mui/material";
 import { mockClients } from "@/mock_data";
 import { PersonAddAltOutlined } from "@mui/icons-material";
-import { NewCaseFormValues } from "@/types/case";
+import { CaseFormValues } from "@/types/case";
 import { useForm, Controller } from "react-hook-form";
 import { QuickAcessFormProps } from "@/types/form";
 import { DialogForm } from "@/components/dialogs/DialogForm";
-import { PracticeArea, PriorityLevel } from "@/enums/case";
+import { CasePracticeArea, CasePriority } from "@/enums/case";
+import { useEffect } from "react";
 
-export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
+export function CaseForm({
+  mode,
+  open,
+  onClose,
+  formData,
+}: QuickAcessFormProps<CaseFormValues>) {
   const {
     control,
     handleSubmit,
     reset,
     formState: { isSubmitting },
-  } = useForm<NewCaseFormValues>({
+  } = useForm<CaseFormValues>({
     mode: "onBlur",
     defaultValues: {
-      caseTitle: "",
+      title: "",
       client: "",
-      practiceArea: "",
-      priority: "",
-      filingDate: "",
-      deadline: "",
+      practiceArea: undefined,
+      priority: undefined,
+      openedAt: "",
+      nextDeadline: "",
       description: "",
+      ...formData,
     },
   });
 
-  const onSubmit = async (data: NewCaseFormValues) => {
-    console.log("SUBMITTED", data);
+  useEffect(() => {
+    if (!open) return;
+
+    reset({
+      title: "",
+      client: "",
+      practiceArea: undefined,
+      priority: undefined,
+      openedAt: new Date().toISOString().split("T")[0],
+      nextDeadline: "",
+      description: "",
+      ...formData,
+    });
+  }, [open, formData, reset]);
+
+  const title = mode === "create" ? "Create New Case" : "Edit Case";
+
+  const subtitle =
+    mode === "create"
+      ? "Fill in the details below to create a new legal case."
+      : "Update the details of this case.";
+
+  const submitLabel = mode === "create" ? "Create Case" : "Save Changes";
+
+  const onSubmit = async (data: CaseFormValues) => {
+    console.log(`SUBMIT - ${mode}`, data);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     reset();
     onClose();
@@ -44,15 +75,15 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
     <DialogForm
       open={open}
       onClose={handleCancel}
-      title="Create New Case"
-      subtitle="Fill in the details below to create a new legal case."
-      submitLabel="Create Case"
+      title={title}
+      subtitle={subtitle}
+      submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Case Title */}
       <Controller
-        name="caseTitle"
+        name="title"
         control={control}
         rules={{ required: "Case title is required" }}
         render={({ field, fieldState }) => (
@@ -127,9 +158,9 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
             >
-              {Object.keys(PracticeArea).map((type) => (
+              {Object.keys(CasePracticeArea).map((type) => (
                 <MenuItem key={type} value={type}>
-                  {PracticeArea[type as keyof typeof PracticeArea]}
+                  {CasePracticeArea[type as keyof typeof CasePracticeArea]}
                 </MenuItem>
               ))}
             </TextField>
@@ -157,7 +188,7 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
       {/* Dates */}
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Controller
-          name="filingDate"
+          name="openedAt"
           control={control}
           rules={{ required: "Filing date is required" }}
           render={({ field, fieldState }) => (
@@ -168,6 +199,7 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
               type="date"
               size="small"
               required
+              disabled={mode === "edit"}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
               slotProps={{ inputLabel: { shrink: true } }}
@@ -177,7 +209,7 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
         />
 
         <Controller
-          name="deadline"
+          name="nextDeadline"
           control={control}
           render={({ field }) => (
             <TextField
@@ -210,9 +242,9 @@ export function NewCaseForm({ open, onClose }: QuickAcessFormProps) {
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
           >
-            {Object.keys(PriorityLevel).map((p) => (
+            {Object.keys(CasePriority).map((p) => (
               <MenuItem key={p} value={p}>
-                {PriorityLevel[p as keyof typeof PriorityLevel]}
+                {CasePriority[p as keyof typeof CasePriority]}
               </MenuItem>
             ))}
           </TextField>

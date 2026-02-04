@@ -10,7 +10,7 @@ export type ClearableSelectProps = {
   disabled?: boolean;
 } & Omit<ComponentProps<typeof TextField>, "onChange">;
 
-export interface QuickFilterItem<K extends string = string> {
+export interface FilterItem<K extends string = string> {
   label: string;
   onClick: (setValue: (value: K) => void) => void;
   styling?: {
@@ -26,7 +26,7 @@ export interface QuickFilterItem<K extends string = string> {
 
 export type QuickFilterChipsProps<K extends string> = {
   title: string;
-  items: [K, QuickFilterItem<K>][];
+  items: [K, FilterItem<K>][];
   value: K;
   onChange: (value: K) => void;
 };

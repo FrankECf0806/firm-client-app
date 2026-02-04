@@ -8,7 +8,11 @@ import { DialogForm } from "@/components/dialogs/DialogForm";
 import { ClientType } from "@/enums/client";
 import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
 
-export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
+export default function AddClientForm({
+  mode,
+  open,
+  onClose,
+}: QuickAcessFormProps<AddClientFormValues>) {
   const {
     control,
     handleSubmit,
@@ -39,6 +43,8 @@ export default function AddClientForm({ open, onClose }: QuickAcessFormProps) {
     reset();
     onClose();
   };
+
+  console.log({ mode });
 
   return (
     <DialogForm

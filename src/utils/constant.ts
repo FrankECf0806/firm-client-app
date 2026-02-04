@@ -1,7 +1,7 @@
-import { CaseStatus, PracticeArea } from "@/enums/case";
+import { CaseStatus, CasePracticeArea } from "@/enums/case";
 import { PageItem } from "@/types/layout";
-import { QuickFilterItem } from "@/types/ui";
-import { QuickFilterStatus } from "@/types/case";
+import { FilterItem } from "@/types/ui";
+import { CaseFilterPracticeArea, CaseFilterStatus } from "@/types/case";
 
 // Upload File
 export const MAX_FILES = 10;
@@ -30,75 +30,102 @@ export const pageConfig: Record<string, PageItem> = {
 };
 
 /**
- * Case Type
+ * Practice Area
  * */
 export const CASE_TYPE_CONFIG: Record<
-  PracticeArea,
-  QuickFilterItem<PracticeArea>
+  CaseFilterPracticeArea,
+  FilterItem<CaseFilterPracticeArea>
 > = {
-  [PracticeArea.CIVIL_LITIGATION]: {
-    label: PracticeArea.CIVIL_LITIGATION,
+  ["CIVIL_LITIGATION"]: {
+    label: CasePracticeArea.CIVIL_LITIGATION,
     styling: {
       selectedClass: "bg-blue-600 text-white",
-      unselectedClass: "bg-blue-50 text-blue-700 border border-blue-200",
+      unselectedClass:
+        "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:text-white",
     },
-    onClick: (setType) => setType(PracticeArea.CIVIL_LITIGATION),
+    onClick: (setType) => setType("CIVIL_LITIGATION"),
   },
-  [PracticeArea.ESTATE_PLANNING]: {
-    label: PracticeArea.ESTATE_PLANNING,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.ESTATE_PLANNING),
+  ["ESTATE_PLANNING"]: {
+    label: CasePracticeArea.ESTATE_PLANNING,
+    styling: {
+      selectedClass: "bg-emerald-600 text-white",
+      unselectedClass:
+        "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100",
+    },
+    onClick: (setType) => setType("ESTATE_PLANNING"),
   },
-  [PracticeArea.CORPORATE]: {
-    label: PracticeArea.CORPORATE,
+  ["CORPORATE"]: {
+    label: CasePracticeArea.CORPORATE,
     styling: {
       selectedClass: "bg-indigo-600 text-white",
-      unselectedClass: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+      unselectedClass:
+        "bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100",
     },
-    onClick: (setType) => setType(PracticeArea.CORPORATE),
+    onClick: (setType) => setType("CORPORATE"),
   },
-  [PracticeArea.FAMILY_LAW]: {
-    label: PracticeArea.FAMILY_LAW,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.FAMILY_LAW),
+  ["FAMILY_LAW"]: {
+    label: CasePracticeArea.FAMILY_LAW,
+    styling: {
+      selectedClass: "bg-pink-600 text-white",
+      unselectedClass:
+        "bg-pink-50 text-pink-700 border border-pink-200 hover:bg-pink-100",
+    },
+    onClick: (setType) => setType("FAMILY_LAW"),
   },
-  [PracticeArea.INMIGRATION]: {
-    label: PracticeArea.INMIGRATION,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.INMIGRATION),
+  ["INMIGRATION"]: {
+    label: CasePracticeArea.INMIGRATION,
+    styling: {
+      selectedClass: "bg-amber-600 text-white",
+      unselectedClass:
+        "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100",
+    },
+    onClick: (setType) => setType("INMIGRATION"),
   },
-  [PracticeArea.REAL_ESTATE]: {
-    label: PracticeArea.REAL_ESTATE,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.REAL_ESTATE),
+  ["REAL_ESTATE"]: {
+    label: CasePracticeArea.REAL_ESTATE,
+    styling: {
+      selectedClass: "bg-teal-600 text-white",
+      unselectedClass:
+        "bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100",
+    },
+    onClick: (setType) => setType("REAL_ESTATE"),
   },
-  [PracticeArea.CRIMINAL_DEFENSE]: {
-    label: PracticeArea.CRIMINAL_DEFENSE,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.CRIMINAL_DEFENSE),
+  ["CRIMINAL_DEFENSE"]: {
+    label: CasePracticeArea.CRIMINAL_DEFENSE,
+    styling: {
+      selectedClass: "bg-red-600 text-white",
+      unselectedClass:
+        "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100",
+    },
+    onClick: (setType) => setType("CRIMINAL_DEFENSE"),
   },
-  [PracticeArea.INTELLECTUAL_PROPERTY]: {
-    label: PracticeArea.INTELLECTUAL_PROPERTY,
-    styling: {},
-    onClick: (setType) => setType(PracticeArea.INTELLECTUAL_PROPERTY),
+  ["INTELLECTUAL_PROPERTY"]: {
+    label: CasePracticeArea.INTELLECTUAL_PROPERTY,
+    styling: {
+      selectedClass: "bg-purple-600 text-white",
+      unselectedClass:
+        "bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100",
+    },
+    onClick: (setType) => setType("INTELLECTUAL_PROPERTY"),
   },
 };
 
-export const QUICK_FILTER_CASE_TYPE_KEYS: PracticeArea[] = [
-  PracticeArea.CIVIL_LITIGATION,
-  PracticeArea.CORPORATE,
+export const QUICK_FILTER_CASE_TYPE_KEYS: CaseFilterPracticeArea[] = [
+  "CIVIL_LITIGATION",
+  "CORPORATE",
 ] as const;
 
 export const QUICK_FILTER_CASE_TYPE = Object.entries(CASE_TYPE_CONFIG).filter(
-  ([key]) => QUICK_FILTER_CASE_TYPE_KEYS.includes(key as PracticeArea),
+  ([key]) =>
+    QUICK_FILTER_CASE_TYPE_KEYS.includes(key as CaseFilterPracticeArea),
 );
 
 /**
  * Case Status
  * */
 export const CASE_STATUS_CONFIG: Record<
-  QuickFilterStatus,
-  QuickFilterItem<QuickFilterStatus>
+  CaseFilterStatus,
+  FilterItem<CaseFilterStatus>
 > = {
   ["ALL_STATUS"]: {
     label: "All Status",
@@ -108,45 +135,45 @@ export const CASE_STATUS_CONFIG: Record<
     onClick: (setStatus) => setStatus("ALL_STATUS"),
   },
 
-  [CaseStatus.ACTIVE]: {
+  ["ACTIVE"]: {
     label: CaseStatus.ACTIVE,
     styling: {
       color: "success",
     },
-    onClick: (setStatus) => setStatus(CaseStatus.ACTIVE),
+    onClick: (setStatus) => setStatus("ACTIVE"),
   },
 
-  [CaseStatus.PENDING]: {
+  ["PENDING"]: {
     label: CaseStatus.PENDING,
     styling: {
       color: "warning",
     },
-    onClick: (setStatus) => setStatus(CaseStatus.PENDING),
+    onClick: (setStatus) => setStatus("PENDING"),
   },
-  [CaseStatus.CLOSED]: {
+  ["CLOSED"]: {
     label: CaseStatus.CLOSED,
     styling: {
       color: "error",
     },
-    onClick: (setStatus) => setStatus(CaseStatus.CLOSED),
+    onClick: (setStatus) => setStatus("CLOSED"),
   },
-  [CaseStatus.ARCHIVED]: {
+  ["ARCHIVED"]: {
     label: CaseStatus.ARCHIVED,
     styling: {
       color: "info",
     },
-    onClick: (setStatus) => setStatus(CaseStatus.ARCHIVED),
+    onClick: (setStatus) => setStatus("ARCHIVED"),
   },
 };
 
-export const QUICK_FILTER_CASE_STATUS_KEYS: QuickFilterStatus[] = [
+export const QUICK_FILTER_CASE_STATUS_KEYS: CaseFilterStatus[] = [
   "ALL_STATUS",
-  CaseStatus.ACTIVE,
-  CaseStatus.PENDING,
+  "ACTIVE",
+  "PENDING",
 ] as const;
 
 export const QUICK_FILTER_CASE_STATUS = Object.entries(
   CASE_STATUS_CONFIG,
 ).filter(([key]) =>
-  QUICK_FILTER_CASE_STATUS_KEYS.includes(key as QuickFilterStatus),
+  QUICK_FILTER_CASE_STATUS_KEYS.includes(key as CaseFilterStatus),
 );

@@ -1,4 +1,4 @@
-export enum PracticeArea {
+export enum CasePracticeArea {
   CIVIL_LITIGATION = "Civil Litigation",
   CORPORATE = "Corporate Law",
   CRIMINAL_DEFENSE = "Criminal Defense",
@@ -16,7 +16,7 @@ export enum CaseStatus {
   ARCHIVED = "Archived",
 }
 
-export enum PriorityLevel {
+export enum CasePriority {
   LOW = "Low",
   MEDIUM = "Medium",
   HIGH = "High",
@@ -28,5 +28,5 @@ export type SortKey =
   | "title"
   | "client"
   | "practiceArea"
-  | "openDate"
+  | "openedAt"
   | "status";

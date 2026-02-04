@@ -9,7 +9,7 @@ import {
 } from "@mui/icons-material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { NewCaseForm } from "@/components/forms/NewCaseForm";
+import { CaseForm } from "@/components/forms/CaseForm";
 import AddClientForm from "@/components/forms/AddClientForm";
 import UploadFileForm from "@/components/forms/UploadFileForm";
 
@@ -90,12 +90,18 @@ export default function QuickActions() {
           </Grid>
         ))}
       </Grid>
-      <NewCaseForm open={newCaseOpen} onClose={() => setNewCaseOpen(false)} />
+      <CaseForm
+        mode="create"
+        open={newCaseOpen}
+        onClose={() => setNewCaseOpen(false)}
+      />
       <AddClientForm
+        mode="create"
         open={addClientOpen}
         onClose={() => setAddClientOpen(false)}
       />
       <UploadFileForm
+        mode="create"
         open={uploadDocOpen}
         onClose={() => setUploadDocOpen(false)}
       />

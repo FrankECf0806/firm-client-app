@@ -1,14 +1,25 @@
 import { ChipProps } from "@mui/material";
-import { CaseStatus, PracticeArea, SortKey } from "@/enums/case";
+import {
+  CasePriority,
+  CaseStatus,
+  CasePracticeArea,
+  SortKey,
+} from "@/enums/case";
+
+// Types for enum keys
+export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "CLOSED" | "ARCHIVED"
+export type CasePracticeAreaKey = keyof typeof CasePracticeArea; // "CIVIL_LITIGATION" | "CORPORATE" | ...
+export type CasePriorityKey = keyof typeof CasePriority; // "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 
 export interface Case {
   id: string;
   title: string;
   client: string;
   clientId: string;
-  status: CaseStatus;
-  practiceArea: PracticeArea;
-  openDate: string;
+  status: CaseStatusKey;
+  practiceArea: CasePracticeAreaKey;
+  priority: CasePriorityKey;
+  openedAt: string;
   nextDeadline?: string;
   description?: string;
   notes: Note[];
@@ -17,18 +28,18 @@ export interface Case {
 export interface Note {
   id: string;
   content: string;
-  timestamp: string;
+  createdAt: string;
   author: string;
 }
 
-export type NewCaseFormValues = {
-  caseTitle: string;
+export type CaseFormValues = {
+  title: string;
   client: string;
-  practiceArea: string;
-  priority: string;
-  filingDate: string;
-  deadline: string;
-  description: string;
+  practiceArea: CasePracticeAreaKey;
+  priority: CasePriorityKey;
+  openedAt: string;
+  nextDeadline: string;
+  description?: string;
 };
 
 export type CaseTypeItem = {
@@ -44,7 +55,8 @@ export type CaseStatusItem = {
   onClick: (setStatus: (value: string) => void) => void;
 };
 
-export type QuickFilterStatus = CaseStatus | "ALL_STATUS";
+export type CaseFilterStatus = CaseStatusKey | "ALL_STATUS";
+export type CaseFilterPracticeArea = CasePracticeAreaKey;
 
 // Case Table
 export interface CaseColumnTable {

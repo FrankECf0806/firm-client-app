@@ -28,11 +28,11 @@ export const COLUMNS: CaseColumnTable[] = [
     sortKey: "practiceArea",
   },
   {
-    field: "openDate",
+    field: "openedAt",
     label: "Open Date",
     minWidth: 140,
     sortable: true,
-    sortKey: "openDate",
+    sortKey: "openedAt",
   },
   {
     field: "status",

@@ -32,13 +32,11 @@ type UploadFormValues = {
   description: string;
 };
 
-export default function UploadFileForm({ open, onClose }: QuickAcessFormProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const [items, setItems] = useState<UploadItem[]>([]);
-  const [isDragging, setIsDragging] = useState(false);
-  const [fileError, setFileError] = useState<string | null>(null);
-
+export default function UploadFileForm({
+  mode,
+  open,
+  onClose,
+}: QuickAcessFormProps<UploadFormValues>) {
   const {
     control,
     handleSubmit,
@@ -51,6 +49,14 @@ export default function UploadFileForm({ open, onClose }: QuickAcessFormProps) {
       description: "",
     },
   });
+
+  console.log({ mode });
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [items, setItems] = useState<UploadItem[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   const canAddMore = items.length < MAX_FILES;
 

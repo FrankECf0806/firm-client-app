@@ -32,13 +32,14 @@ import {
 } from "@mui/icons-material";
 import { useMemo, useState, MouseEvent, ChangeEvent } from "react";
 import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
-import { CaseStatus, PracticeArea, SortKey } from "@/enums/case";
+import { CaseStatus, CasePracticeArea, SortKey } from "@/enums/case";
 import {
   CASE_STATUS_CONFIG,
+  CASE_TYPE_CONFIG,
   QUICK_FILTER_CASE_STATUS,
   QUICK_FILTER_CASE_TYPE,
 } from "@/utils/constant";
-import { NewCaseForm } from "@/components/forms/NewCaseForm";
+import { CaseForm } from "@/components/forms/CaseForm";
 import { SortableHeader } from "@/components/table/SortableHeader";
 
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
@@ -50,7 +51,9 @@ import {
   TABLE_TOTAL_WIDTH,
 } from "@/utils/constant/case";
 import { mockCases } from "@/mock_data";
-import { SortOrder } from "@/types/case";
+import { CaseFormValues, SortOrder } from "@/types/case";
+import { caseToFormValues } from "@/mappers/case.mapper";
+import { FormState } from "@/types/form";
 
 export default function Cases() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,7 +65,12 @@ export default function Cases() {
   const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
-  const [newCaseOpen, setNewCaseOpen] = useState(false);
+  const [caseFormState, setCaseFormState] = useState<FormState<CaseFormValues>>(
+    {
+      open: false,
+      mode: "create",
+    },
+  );
 
   const showClear = Boolean(searchQuery);
 
@@ -212,7 +220,7 @@ export default function Cases() {
                   <MenuItem value="ALL_STATUS">All Status</MenuItem>
                   <Divider />
                   {Object.entries(CaseStatus).map(([key, value]) => (
-                    <MenuItem key={key} value={value}>
+                    <MenuItem key={key} value={key}>
                       {value}
                     </MenuItem>
                   ))}
@@ -232,8 +240,8 @@ export default function Cases() {
                 >
                   <MenuItem value="ALL_TYPES">All Practice Area</MenuItem>
                   <Divider />
-                  {Object.entries(PracticeArea).map(([key, value]) => (
-                    <MenuItem key={key} value={value}>
+                  {Object.entries(CasePracticeArea).map(([key, value]) => (
+                    <MenuItem key={key} value={key}>
                       {value}
                     </MenuItem>
                   ))}
@@ -250,7 +258,12 @@ export default function Cases() {
                     hover:bg-primary-dark shadow-sm
                     w-full
 				   "
-                  onClick={() => setNewCaseOpen(true)}
+                  onClick={() =>
+                    setCaseFormState({
+                      open: true,
+                      mode: "create",
+                    })
+                  }
                 >
                   <span className="hidden sm:inline">New</span>
                   <span className="sm:hidden">New Case</span>
@@ -285,9 +298,6 @@ export default function Cases() {
           </Grid>
         </Box>
       </Paper>
-
-      {/* New Case Form Dialog */}
-      <NewCaseForm open={newCaseOpen} onClose={() => setNewCaseOpen(false)} />
 
       {/* Cases Table */}
       <Paper className="p-2 mb-12 rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -333,22 +343,40 @@ export default function Cases() {
                     <Typography>{caseItem.client}</Typography>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
-                    <Typography>{caseItem.practiceArea}</Typography>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid size={{ xs: 12, md: 10 }}>
+                        <Chip
+                          className={`
+							w-full
+							${CASE_TYPE_CONFIG[caseItem.practiceArea].styling?.unselectedClass}
+						`}
+                          label={CASE_TYPE_CONFIG[caseItem.practiceArea].label}
+                          variant="filled"
+                        />
+                      </Grid>
+                    </Grid>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Box className="flex items-center gap-1">
                       <ScheduleIcon className="text-gray-400 text-sm" />
                       <Typography variant="body2">
-                        {caseItem.openDate}
+                        {caseItem.openedAt}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Chip
-                      label={caseItem.status}
-                      variant="filled"
-                      color={CASE_STATUS_CONFIG[caseItem.status].styling?.color}
-                    />
+                  <TableCell className="whitespace-nowrap items-center">
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid size={{ xs: 12, md: 10 }}>
+                        <Chip
+                          className="w-full"
+                          label={CASE_STATUS_CONFIG[caseItem.status].label}
+                          variant="filled"
+                          color={
+                            CASE_STATUS_CONFIG[caseItem.status].styling?.color
+                          }
+                        />
+                      </Grid>
+                    </Grid>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Box className="flex gap-1">
@@ -356,7 +384,6 @@ export default function Cases() {
                         <IconButton
                           size="small"
                           className="bg-primary/10 hover:bg-primary/20 text-primary"
-                          // onClick={() => handleViewCase(caseItem)}
                         >
                           <FileTextIcon fontSize="small" />
                         </IconButton>
@@ -365,6 +392,13 @@ export default function Cases() {
                         <IconButton
                           size="small"
                           className="bg-gray-100 hover:bg-gray-200 text-gray-600"
+                          onClick={() =>
+                            setCaseFormState({
+                              open: true,
+                              mode: "edit",
+                              formData: caseToFormValues(caseItem),
+                            })
+                          }
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
@@ -401,6 +435,17 @@ export default function Cases() {
           className="border-t border-primary-light/50"
         />
       </Paper>
+
+      {/* Case Form Dialog */}
+      <CaseForm
+        {...caseFormState}
+        onClose={() =>
+          setCaseFormState((prev) => ({
+            ...prev,
+            open: false,
+          }))
+        }
+      />
     </Box>
   );
 }
