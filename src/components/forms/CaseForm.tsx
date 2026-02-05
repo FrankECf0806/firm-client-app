@@ -194,7 +194,7 @@ export function CaseForm({
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              className="input-rounded-firm"
+              className={`input-rounded-firm ${mode == "edit" ? "bg-gray-100 rounded-2xl" : ""}`}
               label="Filing Date"
               type="date"
               size="small"

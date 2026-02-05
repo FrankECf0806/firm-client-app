@@ -4,11 +4,9 @@ import {
   Box,
   Button,
   Chip,
-  Divider,
   Grid,
   IconButton,
   InputAdornment,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -30,8 +28,7 @@ import {
   Description as FileTextIcon,
   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
-import { useMemo, useState, MouseEvent, ChangeEvent } from "react";
-import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
+import { useMemo, useState, MouseEvent, ChangeEvent, useEffect } from "react";
 import { CaseStatus, CasePracticeArea, SortKey } from "@/enums/case";
 import {
   CASE_STATUS_CONFIG,
@@ -45,7 +42,7 @@ import { SortableHeader } from "@/components/table/SortableHeader";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import {
   COLUMNS,
-  CURRENT_PAGE,
+  DEFAULT_PAGE,
   ROWS_PER_PAGE,
   ROWS_PER_PAGE_OPTIONS,
   TABLE_TOTAL_WIDTH,
@@ -54,12 +51,13 @@ import { mockCases } from "@/mock_data";
 import { CaseFormValues, SortOrder } from "@/types/case";
 import { caseToFormValues } from "@/mappers/case.mapper";
 import { FormState } from "@/types/form";
+import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 
 export default function Cases() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<string>("ALL_TYPES");
+  const [typeFilter, setTypeFilter] = useState<string>("ALL_PRACTICE_AREAS");
   const [statusFilter, setStatusFilter] = useState<string>("ALL_STATUS");
-  const [page, setPage] = useState(CURRENT_PAGE);
+  const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
   const [sortKey, setSortKey] = useState<SortKey>("id");
@@ -95,7 +93,7 @@ export default function Cases() {
     }
 
     // 🔵 Type filter
-    if (typeFilter !== "ALL_TYPES") {
+    if (typeFilter !== "ALL_PRACTICE_AREAS") {
       result = result.filter((c) => c.practiceArea === typeFilter);
     }
 
@@ -124,9 +122,13 @@ export default function Cases() {
 
       return 0;
     });
-
     return result;
   }, [searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+
+  useEffect(() => {
+    const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);
+    return () => clearTimeout(id);
+  }, [searchQuery, statusFilter, typeFilter]);
 
   const paginatedCases = useMemo(() => {
     const start = page * rowsPerPage;
@@ -208,44 +210,28 @@ export default function Cases() {
 
               {/* Status Filter */}
               <Grid size={{ xs: 6, sm: 5, md: 5, lg: 3 }}>
-                <ClearableSelect
+                <ResettableSelect
                   className="input-rounded-firm w-full"
-                  size="small"
                   label="Case Status"
                   value={statusFilter}
-                  clearValue="ALL_STATUS"
                   onChange={setStatusFilter}
-                  clearable={statusFilter !== "ALL_STATUS"}
-                >
-                  <MenuItem value="ALL_STATUS">All Status</MenuItem>
-                  <Divider />
-                  {Object.entries(CaseStatus).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value}
-                    </MenuItem>
-                  ))}
-                </ClearableSelect>
+                  options={CaseStatus}
+                  resetValue="ALL_STATUS"
+                  resetLabel="All Status"
+                />
               </Grid>
 
               {/* Practice Area Filter */}
               <Grid size={{ xs: 6, sm: 5, md: 5, lg: 3 }}>
-                <ClearableSelect
+                <ResettableSelect
                   className="input-rounded-firm w-full"
-                  size="small"
                   label="Practice Area"
                   value={typeFilter}
-                  clearValue="ALL_TYPES"
                   onChange={setTypeFilter}
-                  clearable={typeFilter !== "ALL_TYPES"}
-                >
-                  <MenuItem value="ALL_TYPES">All Practice Area</MenuItem>
-                  <Divider />
-                  {Object.entries(CasePracticeArea).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value}
-                    </MenuItem>
-                  ))}
-                </ClearableSelect>
+                  options={CasePracticeArea}
+                  resetValue="ALL_PRACTICE_AREAS"
+                  resetLabel="All Practice Area"
+                />
               </Grid>
 
               {/* New Case Button */}
