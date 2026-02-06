@@ -6,7 +6,7 @@ export enum ClientType {
 }
 
 export enum ClientStatus {
-  ACTIVE = "active",
-  INACTIVE = "inactive",
-  PROSPECT = "prospect",
+  ACTIVE = "Active",
+  INACTIVE = "Inactive",
+  PROSPECT = "Prospect",
 }

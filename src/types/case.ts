@@ -6,6 +6,7 @@ import {
   SortKey,
 } from "@/enums/case";
 import { ALL_CASE_STATUS } from "@/utils/constant/case";
+import { Note } from "@/types/note";
 
 // Types for enum keys
 export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "CLOSED" | "ARCHIVED"
@@ -24,13 +25,6 @@ export interface Case {
   nextDeadline?: string;
   description?: string;
   notes: Note[];
-}
-
-export interface Note {
-  id: string;
-  content: string;
-  createdAt: string;
-  author: string;
 }
 
 export type CaseFormValues = {

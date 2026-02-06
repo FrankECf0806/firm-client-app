@@ -31,7 +31,7 @@ import {
   CASE_TYPE_CONFIG,
   QUICK_FILTER_CASE_STATUS,
   QUICK_FILTER_CASE_TYPE,
-} from "@/utils/constant";
+} from "@/utils/constant/case";
 import {
   ALL_CASE_STATUS,
   ALL_CASE_PRACTICE_AREAS,
@@ -40,13 +40,12 @@ import { CaseForm } from "@/components/forms/CaseForm";
 import { SortableHeader } from "@/components/table/SortableHeader";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import { SearchInput } from "@/components/ui/input/SearchInput";
+import { COLUMNS, TABLE_TOTAL_WIDTH } from "@/utils/constant/case";
 import {
-  COLUMNS,
   DEFAULT_PAGE,
   ROWS_PER_PAGE,
   ROWS_PER_PAGE_OPTIONS,
-  TABLE_TOTAL_WIDTH,
-} from "@/utils/constant/case";
+} from "@/utils/constant/table";
 import { mockCases } from "@/mock_data";
 import { CaseFormValues, SortOrder } from "@/types/case";
 import { caseToFormValues } from "@/mappers/case.mapper";
@@ -177,7 +176,7 @@ export default function Cases() {
               alignItems="center"
               justifyContent={{ xs: "flex-start", md: "flex-end" }}
             >
-              {/* Filter Icon - Only visible on larger screens */}
+              {/* Filter Icon */}
               <Grid size="auto" className="hidden lg:block">
                 <Box className="flex items-end justify-center h-full pr-1">
                   <FilterIcon className="text-gray-400" />
@@ -373,7 +372,7 @@ export default function Cases() {
                 <TableRow>
                   <TableCell
                     className="align-middle items-center text-center font-semibold"
-                    colSpan={7}
+                    colSpan={COLUMNS.length}
                   >
                     <Typography variant="subtitle1" className="text-gray-600">
                       No cases found matching your criteria.

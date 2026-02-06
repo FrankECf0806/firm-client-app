@@ -3,22 +3,24 @@
 import { Box, MenuItem, TextField } from "@mui/material";
 import { QuickAcessFormProps } from "@/types/form";
 import { Controller, useForm } from "react-hook-form";
-import { AddClientFormValues } from "@/types/client";
+import { ClientFormValues } from "@/types/client";
 import { DialogForm } from "@/components/dialogs/DialogForm";
 import { ClientType } from "@/enums/client";
 import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
+import { useEffect } from "react";
 
-export default function AddClientForm({
+export function ClientForm({
   mode,
   open,
   onClose,
-}: QuickAcessFormProps<AddClientFormValues>) {
+  formData,
+}: QuickAcessFormProps<ClientFormValues>) {
   const {
     control,
     handleSubmit,
     reset,
     formState: { isSubmitting },
-  } = useForm<AddClientFormValues>({
+  } = useForm<ClientFormValues>({
     mode: "onBlur",
     defaultValues: {
       firstName: "",
@@ -27,13 +29,40 @@ export default function AddClientForm({
       email: "",
       phone: "",
       address: "",
-      clientType: "",
-      notes: "",
+      type: undefined,
+      status: undefined,
+      description: "",
     },
   });
 
-  const onSubmit = async (data: AddClientFormValues) => {
-    console.log("SUBMITTED", data);
+  useEffect(() => {
+    if (!open) return;
+
+    reset({
+      firstName: "",
+      lastName: "",
+      company: "",
+      email: "",
+      phone: "",
+      address: "",
+      type: undefined,
+      status: undefined,
+      description: "",
+      ...formData,
+    });
+  }, [open, formData, reset]);
+
+  const title = mode === "create" ? "Add New Client" : "Edit Client";
+
+  const subtitle =
+    mode === "create"
+      ? "Fill in the details below to add a new client to your practice."
+      : "Update the details of this client.";
+
+  const submitLabel = mode === "create" ? "Add Client" : "Save Changes";
+
+  const onSubmit = async (data: ClientFormValues) => {
+    console.log(`SUBMIT - ${mode}`, data);
     await new Promise((r) => setTimeout(r, 1000));
     reset();
     onClose();
@@ -44,15 +73,13 @@ export default function AddClientForm({
     onClose();
   };
 
-  console.log({ mode });
-
   return (
     <DialogForm
       open={open}
       onClose={handleCancel}
-      title="Add Client"
-      subtitle="Add a new client to your practice. Fill in the details below."
-      submitLabel="Add Client"
+      title={title}
+      subtitle={subtitle}
+      submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -170,7 +197,7 @@ export default function AddClientForm({
 
         {/* Client Type */}
         <Controller
-          name="clientType"
+          name="type"
           control={control}
           render={({ field }) => (
             <ClearableSelect
@@ -209,13 +236,13 @@ export default function AddClientForm({
 
       {/* Notes */}
       <Controller
-        name="notes"
+        name="description"
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
             className="input-rounded-firm"
-            label="Notes"
+            label="Description"
             placeholder="e.g. Client prefers email communication, important deadlines..."
             multiline
             rows={3}

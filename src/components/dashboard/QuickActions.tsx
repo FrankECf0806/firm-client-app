@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CaseForm } from "@/components/forms/CaseForm";
-import AddClientForm from "@/components/forms/AddClientForm";
+import { ClientForm } from "@/components/forms/ClientForm";
 import UploadFileForm from "@/components/forms/UploadFileForm";
 
 export default function QuickActions() {
@@ -95,7 +95,7 @@ export default function QuickActions() {
         open={newCaseOpen}
         onClose={() => setNewCaseOpen(false)}
       />
-      <AddClientForm
+      <ClientForm
         mode="create"
         open={addClientOpen}
         onClose={() => setAddClientOpen(false)}
