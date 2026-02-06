@@ -18,7 +18,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-
+import Link from "next/link";
 import {
   FilterList as FilterIcon,
   Add as AddIcon,
@@ -295,18 +295,22 @@ export default function Clients() {
                     </Typography>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
-                    <Typography className="font-medium">
-                      {client.name}
-                    </Typography>
+                    <Link href={`/clients`}>
+                      <Typography className="font-medium text-primary hover:underline">
+                        {client.name}
+                      </Typography>
+                    </Link>
+                    {client.company && (
+                      <Typography variant="caption">
+                        {client.company}
+                      </Typography>
+                    )}
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Typography>{client.email}</Typography>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Typography>{client.phone}</Typography>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Typography>{client.company}</Typography>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Grid container spacing={2} alignItems="center">

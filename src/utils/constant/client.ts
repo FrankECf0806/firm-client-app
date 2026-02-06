@@ -36,13 +36,6 @@ export const COLUMNS: TableColumn<TableClientSortKey>[] = [
     sortKey: "phone",
   },
   {
-    field: "company",
-    label: "Company",
-    minWidth: 120,
-    sortable: true,
-    sortKey: "company",
-  },
-  {
     field: "type",
     label: "Type",
     minWidth: 180,
