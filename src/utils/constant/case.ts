@@ -1,5 +1,10 @@
 import { CaseColumnTable } from "@/types/case";
 
+// Status and Practice Area
+export const ALL_CASE_STATUS = "ALL_STATUS";
+export const ALL_CASE_PRACTICE_AREAS = "ALL_PRACTICE_AREAS";
+
+// Table
 export const DEFAULT_PAGE = 0;
 export const ROWS_PER_PAGE = 10;
 export const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];

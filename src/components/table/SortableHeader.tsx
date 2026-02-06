@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { SortableHeaderProps } from "../../types/table";
+import { SortableHeaderProps } from "@/types/table";
 
 export function SortableHeader<T extends string>({
   label,

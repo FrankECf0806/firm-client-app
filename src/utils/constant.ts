@@ -2,7 +2,7 @@ import { CaseStatus, CasePracticeArea } from "@/enums/case";
 import { PageItem } from "@/types/layout";
 import { FilterItem } from "@/types/ui";
 import { CaseFilterPracticeArea, CaseFilterStatus } from "@/types/case";
-
+import { ALL_CASE_STATUS } from "@/utils/constant/case";
 // Upload File
 export const MAX_FILES = 10;
 
@@ -127,12 +127,12 @@ export const CASE_STATUS_CONFIG: Record<
   CaseFilterStatus,
   FilterItem<CaseFilterStatus>
 > = {
-  ["ALL_STATUS"]: {
+  [ALL_CASE_STATUS]: {
     label: "All Status",
     styling: {
       color: "primary",
     },
-    onClick: (setStatus) => setStatus("ALL_STATUS"),
+    onClick: (setStatus) => setStatus(ALL_CASE_STATUS),
   },
 
   ["ACTIVE"]: {
@@ -167,7 +167,7 @@ export const CASE_STATUS_CONFIG: Record<
 };
 
 export const QUICK_FILTER_CASE_STATUS_KEYS: CaseFilterStatus[] = [
-  "ALL_STATUS",
+  ALL_CASE_STATUS,
   "ACTIVE",
   "PENDING",
 ] as const;

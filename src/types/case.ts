@@ -5,6 +5,7 @@ import {
   CasePracticeArea,
   SortKey,
 } from "@/enums/case";
+import { ALL_CASE_STATUS } from "@/utils/constant/case";
 
 // Types for enum keys
 export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "CLOSED" | "ARCHIVED"
@@ -55,7 +56,7 @@ export type CaseStatusItem = {
   onClick: (setStatus: (value: string) => void) => void;
 };
 
-export type CaseFilterStatus = CaseStatusKey | "ALL_STATUS";
+export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;
 export type CaseFilterPracticeArea = CasePracticeAreaKey;
 
 // Case Table

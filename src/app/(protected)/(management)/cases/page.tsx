@@ -6,7 +6,6 @@ import {
   Chip,
   Grid,
   IconButton,
-  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -15,13 +14,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import {
-  Search as SearchIcon,
-  CloseOutlined as CloseOutlinedIcon,
   FilterList as FilterIcon,
   Add as AddIcon,
   Edit as EditIcon,
@@ -36,10 +32,14 @@ import {
   QUICK_FILTER_CASE_STATUS,
   QUICK_FILTER_CASE_TYPE,
 } from "@/utils/constant";
+import {
+  ALL_CASE_STATUS,
+  ALL_CASE_PRACTICE_AREAS,
+} from "@/utils/constant/case";
 import { CaseForm } from "@/components/forms/CaseForm";
 import { SortableHeader } from "@/components/table/SortableHeader";
-
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
+import { SearchInput } from "@/components/ui/input/SearchInput";
 import {
   COLUMNS,
   DEFAULT_PAGE,
@@ -55,8 +55,8 @@ import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 
 export default function Cases() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<string>("ALL_PRACTICE_AREAS");
-  const [statusFilter, setStatusFilter] = useState<string>("ALL_STATUS");
+  const [typeFilter, setTypeFilter] = useState<string>(ALL_CASE_PRACTICE_AREAS);
+  const [statusFilter, setStatusFilter] = useState<string>(ALL_CASE_STATUS);
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
@@ -69,8 +69,6 @@ export default function Cases() {
       mode: "create",
     },
   );
-
-  const showClear = Boolean(searchQuery);
 
   // Sort and filter cases
   const filteredAndSortedCases = useMemo(() => {
@@ -88,12 +86,12 @@ export default function Cases() {
     }
 
     // 🟡 Status filter
-    if (statusFilter !== "ALL_STATUS") {
+    if (statusFilter !== ALL_CASE_STATUS) {
       result = result.filter((c) => c.status === statusFilter);
     }
 
     // 🔵 Type filter
-    if (typeFilter !== "ALL_PRACTICE_AREAS") {
+    if (typeFilter !== ALL_CASE_PRACTICE_AREAS) {
       result = result.filter((c) => c.practiceArea === typeFilter);
     }
 
@@ -162,34 +160,12 @@ export default function Cases() {
         <Grid container spacing={2} alignItems="center">
           {/* Search Field */}
           <Grid size={{ xs: 12, md: 5, lg: 5 }}>
-            <TextField
+            <SearchInput
               className="input-rounded-firm w-full"
               size="medium"
               placeholder="Search by case, client, or case type..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon className="text-gray-400 text-md" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: showClear ? (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSearchQuery("");
-                        }}
-                      >
-                        <CloseOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ) : null,
-                },
-              }}
+              onChange={setSearchQuery}
             />
           </Grid>
 
@@ -216,7 +192,7 @@ export default function Cases() {
                   value={statusFilter}
                   onChange={setStatusFilter}
                   options={CaseStatus}
-                  resetValue="ALL_STATUS"
+                  resetValue={ALL_CASE_STATUS}
                   resetLabel="All Status"
                 />
               </Grid>
@@ -229,7 +205,7 @@ export default function Cases() {
                   value={typeFilter}
                   onChange={setTypeFilter}
                   options={CasePracticeArea}
-                  resetValue="ALL_PRACTICE_AREAS"
+                  resetValue={ALL_CASE_PRACTICE_AREAS}
                   resetLabel="All Practice Area"
                 />
               </Grid>
