@@ -1,12 +1,12 @@
 "use client";
 
-import { Box, MenuItem, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { QuickAcessFormProps } from "@/types/form";
 import { Controller, useForm } from "react-hook-form";
 import { ClientFormValues } from "@/types/client";
 import { DialogForm } from "@/components/dialogs/DialogForm";
 import { ClientType } from "@/enums/client";
-import { ClearableSelect } from "@/components/ui/input/ClearableSelect";
+import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { useEffect } from "react";
 
 export function ClientForm({
@@ -200,21 +200,16 @@ export function ClientForm({
           name="type"
           control={control}
           render={({ field }) => (
-            <ClearableSelect
+            <ResettableSelect
               {...field}
-              className="input-rounded-firm"
-              size="small"
+              className="input-rounded-firm w-full"
               label="Client Type"
-              placeholder="Select client type"
-              fullWidth
-              clearable
-            >
-              {Object.keys(ClientType).map((type) => (
-                <MenuItem key={type} value={type}>
-                  {ClientType[type as keyof typeof ClientType]}
-                </MenuItem>
-              ))}
-            </ClearableSelect>
+              value={field.value}
+              onChange={field.onChange}
+              options={ClientType}
+              resetValue=""
+              resetLabel="All Types"
+            />
           )}
         />
       </Box>

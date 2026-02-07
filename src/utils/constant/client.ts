@@ -32,7 +32,7 @@ export const COLUMNS: TableColumn<TableClientSortKey>[] = [
     field: "phone",
     label: "Phone",
     minWidth: 180,
-    sortable: true,
+    sortable: false,
     sortKey: "phone",
   },
   {
@@ -46,7 +46,7 @@ export const COLUMNS: TableColumn<TableClientSortKey>[] = [
     field: "address",
     label: "Address",
     minWidth: 150,
-    sortable: true,
+    sortable: false,
     sortKey: "address",
   },
   {
