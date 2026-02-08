@@ -86,7 +86,7 @@ const theme = createTheme({
         MenuProps: {
           PaperProps: {
             sx: {
-              borderRadius: 2,
+              borderRadius: 3,
               border: "1px solid #f3f4f6",
               elevation: 12,
             },

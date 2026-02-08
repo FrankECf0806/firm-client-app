@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Box,
@@ -36,6 +36,7 @@ export default function UploadFileForm({
   mode,
   open,
   onClose,
+  formData,
 }: QuickAcessFormProps<UploadFormValues>) {
   const {
     control,
@@ -50,7 +51,23 @@ export default function UploadFileForm({
     },
   });
 
-  console.log({ mode });
+  useEffect(() => {
+    if (!open) return;
+
+    reset({
+      caseId: "",
+      description: "",
+      ...formData,
+    });
+  }, [open, formData, reset]);
+
+  const title = mode === "create" ? "Upload Documents" : "Edit Upload";
+  const subtitle =
+    mode === "create"
+      ? "Upload documents and associate them with a case."
+      : "Update the details of this upload.";
+
+  const summitLabel = mode === "create" ? "Upload" : "Save";
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -177,9 +194,9 @@ export default function UploadFileForm({
     <DialogForm
       open={open}
       onClose={handleCancel}
-      title="Upload Documents"
-      subtitle="Upload documents and associate them with a case."
-      submitLabel="Upload"
+      title={title}
+      subtitle={subtitle}
+      submitLabel={summitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(handleSubmitForm)}
     >
