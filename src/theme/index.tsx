@@ -57,6 +57,43 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 12,
+          border: "1px solid #f3f4f6",
+          backgroundColor: "#fff",
+        },
+      },
+      defaultProps: {
+        elevation: 12,
+      },
+    },
+    MuiPopover: {
+      defaultProps: {
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+        transformOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        MenuProps: {
+          PaperProps: {
+            sx: {
+              borderRadius: 2,
+              border: "1px solid #f3f4f6",
+              elevation: 12,
+            },
+          },
+        },
+      },
+    },
     MuiChip: {
       styleOverrides: {
         root: {

@@ -6,7 +6,7 @@ import { OptionsMap, ResettableSelectProps } from "@/types/ui";
 
 export function ResettableSelect<T extends OptionsMap>({
   label,
-  value,
+  value = "",
   onChange,
   options,
   resetValue,
@@ -27,7 +27,7 @@ export function ResettableSelect<T extends OptionsMap>({
       disabled={disabled}
     >
       {resetValue && <MenuItem value={resetValue}>{resetLabel}</MenuItem>}
-      <Divider />
+      {resetValue && <Divider />}
       {Object.entries(options).map(([key, label]) => (
         <MenuItem key={key} value={key}>
           {label}

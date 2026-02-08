@@ -1,14 +1,13 @@
-import { ChipProps, TextField } from "@mui/material";
-import { ComponentProps } from "react";
+import { ChipProps, TextFieldProps } from "@mui/material";
 
-export type ClearableSelectProps = {
+export interface ClearableSelectProps extends Omit<TextFieldProps, "onChange"> {
   value: string;
   clearValue?: string;
   onChange: (value: string) => void;
   clearable?: boolean;
   required?: boolean;
   disabled?: boolean;
-} & Omit<ComponentProps<typeof TextField>, "onChange">;
+}
 
 export interface FilterItem<K extends string = string> {
   label: string;

@@ -1,5 +1,5 @@
 import { TextField, InputAdornment, IconButton } from "@mui/material";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { CloseOutlined as CloseOutlinedIcon } from "@mui/icons-material";
 import { ClearableSelectProps } from "@/types/ui";
 
 export function ClearableSelect({

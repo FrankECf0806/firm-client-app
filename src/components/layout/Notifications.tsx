@@ -112,12 +112,6 @@ export function Notifications() {
         onClose={() => setAnchorEl(null)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
-        slotProps={{
-          paper: {
-            className: "w-80 p-0 rounded-xl border border-gray-100 bg-white",
-            elevation: 12,
-          },
-        }}
       >
         {/* Header */}
         <Box className="flex items-center justify-between px-4 py-2 w-80 max-w-sm border-b border-primary">
@@ -128,17 +122,17 @@ export function Notifications() {
           {unreadCount > 0 && (
             <span
               className="
-                                text-xs 
-                                hover:text-white
-                                hover:font-semibold
-                                hover:bg-primary
-                                focus:bg-primary
-                                active:bg-primary
-                                active:text-white
-                                px-2 
-                                py-1 
-                                rounded
-                                cursor-pointer"
+				text-xs 
+				hover:text-white
+				hover:font-semibold
+				hover:bg-primary
+				focus:bg-primary
+				active:bg-primary
+				active:text-white
+				px-2 
+				py-1 
+				rounded
+				cursor-pointer"
               onClick={handleMarkAllAsRead}
             >
               Mark all as read

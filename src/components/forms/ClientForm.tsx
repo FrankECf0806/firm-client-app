@@ -208,7 +208,7 @@ export function ClientForm({
               onChange={field.onChange}
               options={ClientType}
               resetValue=""
-              resetLabel="All Types"
+              resetLabel=""
             />
           )}
         />
