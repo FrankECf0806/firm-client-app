@@ -45,13 +45,14 @@ import { SortableHeader } from "@/components/table/SortableHeader";
 import { COLUMNS } from "@/utils/constant/client";
 import { ClientFormValues, TableClientSortKey } from "@/types/client";
 import { FormState } from "@/types/form";
-import { mockClients } from "@/mock_data";
+import { useAppContext } from "@/providers/AppProvider";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { ClientStatus, ClientType } from "@/enums/client";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import { clientToFormValues } from "@/mappers/client.mappers";
 
 export default function Clients() {
+  const { clients } = useAppContext();
   const [searchQuery, setSearchQuery] = useState("");
 
   const [statusFilter, setStatusFilter] = useState<string>(ALL_CLIENT_STATUS);
@@ -71,7 +72,7 @@ export default function Clients() {
 
   // Sort and filter cases
   const filteredAndSortedCases = useMemo(() => {
-    let result = [...mockClients];
+    let result = [...clients];
 
     // 🔍 Search filter
     if (searchQuery) {
@@ -121,7 +122,7 @@ export default function Clients() {
       return 0;
     });
     return result;
-  }, [searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+  }, [clients, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
   useEffect(() => {
     const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);

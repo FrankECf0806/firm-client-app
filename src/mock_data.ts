@@ -1,8 +1,10 @@
-import { Case } from "./types/case";
-import { Client } from "./types/client";
-import { Invoice } from "./types/invoice";
-import { Meeting } from "./types/meeting";
-import { Document } from "./types/document";
+import { Case } from "@/types/case";
+import { Client } from "@/types/client";
+import { Invoice } from "@/types/invoice";
+import { Meeting, ScheduledMeeting } from "@/types/meeting";
+import { Document } from "@/types/document";
+import { Task } from "@/types/task";
+import { Communication } from "@/types/communication";
 
 export const user = {
   firstName: "Fernando",
@@ -1204,6 +1206,125 @@ export const mockMeetings: Meeting[] = [
     type: "meeting",
     summary: "Board presentation on merger terms",
     duration: "2 hours",
+  },
+];
+
+export const mockTasks: Task[] = [
+  {
+    id: "t1",
+    title: "Draft settlement agreement",
+    caseId: "6",
+    caseName: "Brown Property Sale",
+    assignee: "Alexandra Mitchell",
+    dueDate: "2025-02-08",
+    completed: false,
+    priority: "high",
+  },
+  {
+    id: "t2",
+    title: "Review discovery documents",
+    caseId: "1",
+    caseName: "Smith vs. Johnson Corp",
+    assignee: "Alexandra Mitchell",
+    dueDate: "2025-02-07",
+    completed: false,
+    priority: "high",
+  },
+  {
+    id: "t3",
+    title: "Prepare immigration forms",
+    caseId: "5",
+    caseName: "Garcia Immigration",
+    assignee: "Alexandra Mitchell",
+    dueDate: "2025-02-10",
+    completed: false,
+    priority: "medium",
+  },
+  {
+    id: "t4",
+    title: "Client meeting prep",
+    caseId: "3",
+    caseName: "Davis Corp Merger",
+    assignee: "Alexandra Mitchell",
+    dueDate: "2025-02-09",
+    completed: false,
+    priority: "medium",
+  },
+  {
+    id: "t5",
+    title: "File court response",
+    caseId: "8",
+    caseName: "Anderson Liability",
+    assignee: "Alexandra Mitchell",
+    dueDate: "2025-02-06",
+    completed: false,
+    priority: "high",
+  },
+];
+
+export const mockSchedule: ScheduledMeeting[] = [
+  {
+    id: "ms1",
+    title: "Client Call - Robert Smith",
+    time: "10:00 AM",
+    duration: "30 min",
+    type: "call",
+    hasVideoLink: true,
+  },
+  {
+    id: "ms2",
+    title: "Deposition Prep - Anderson",
+    time: "2:00 PM",
+    duration: "1 hour",
+    type: "meeting",
+    hasVideoLink: false,
+  },
+  {
+    id: "ms3",
+    title: "Court Hearing - Smith",
+    time: "3:30 PM",
+    duration: "2 hours",
+    type: "hearing",
+    hasVideoLink: false,
+  },
+];
+
+export const mockCommunications: Communication[] = [
+  {
+    id: "cm1",
+    clientName: "Robert Smith",
+    clientId: "c1",
+    type: "email",
+    subject: "Re: Settlement offer review",
+    time: "30 min ago",
+    unread: true,
+  },
+  {
+    id: "cm2",
+    clientName: "Davis Corporation",
+    clientId: "c3",
+    type: "call",
+    subject: "Merger timeline discussion",
+    time: "2 hours ago",
+    unread: true,
+  },
+  {
+    id: "cm3",
+    clientName: "Maria Garcia",
+    clientId: "c5",
+    type: "email",
+    subject: "Visa application update",
+    time: "Yesterday",
+    unread: false,
+  },
+  {
+    id: "cm4",
+    clientName: "Emily Brown",
+    clientId: "c6",
+    type: "message",
+    subject: "Closing date confirmation",
+    time: "Yesterday",
+    unread: false,
   },
 ];
 

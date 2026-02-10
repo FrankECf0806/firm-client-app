@@ -88,14 +88,14 @@ export const CLIENT_STATUS_CONFIG: Record<
   ["INACTIVE"]: {
     label: ClientStatus.INACTIVE,
     styling: {
-      color: "warning",
+      color: "error",
     },
     onClick: (setStatus) => setStatus("INACTIVE"),
   },
   ["PROSPECT"]: {
     label: ClientStatus.PROSPECT,
     styling: {
-      color: "error",
+      color: "warning",
     },
     onClick: (setStatus) => setStatus("PROSPECT"),
   },

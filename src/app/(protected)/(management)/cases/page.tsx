@@ -46,13 +46,15 @@ import {
   ROWS_PER_PAGE,
   ROWS_PER_PAGE_OPTIONS,
 } from "@/utils/constant/table";
-import { mockCases } from "@/mock_data";
+import { useAppContext } from "@/providers/AppProvider";
 import { CaseFormValues, SortOrder } from "@/types/case";
 import { caseToFormValues } from "@/mappers/case.mapper";
 import { FormState } from "@/types/form";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 
 export default function Cases() {
+  const { cases } = useAppContext();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>(ALL_CASE_PRACTICE_AREAS);
   const [statusFilter, setStatusFilter] = useState<string>(ALL_CASE_STATUS);
@@ -71,7 +73,7 @@ export default function Cases() {
 
   // Sort and filter cases
   const filteredAndSortedCases = useMemo(() => {
-    let result = [...mockCases];
+    let result = [...cases];
 
     // 🔍 Search filter
     if (searchQuery) {
@@ -120,7 +122,7 @@ export default function Cases() {
       return 0;
     });
     return result;
-  }, [searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+  }, [cases, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
   useEffect(() => {
     const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);

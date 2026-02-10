@@ -6,3 +6,12 @@ export interface Meeting {
   summary: string;
   duration: string;
 }
+
+export interface ScheduledMeeting {
+  id: string;
+  title: string;
+  time: string;
+  duration: string;
+  type: "call" | "meeting" | "hearing";
+  hasVideoLink: boolean;
+}

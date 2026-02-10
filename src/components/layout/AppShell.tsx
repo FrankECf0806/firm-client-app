@@ -6,7 +6,7 @@ import { Sidebar } from "./Sidebar";
 import { MobileSidebar } from "./MobileSidebar";
 import { Box } from "@mui/material";
 
-export default function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children }: { children: ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   return (

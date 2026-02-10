@@ -13,7 +13,7 @@ import { CaseForm } from "@/components/forms/CaseForm";
 import { ClientForm } from "@/components/forms/ClientForm";
 import UploadFileForm from "@/components/forms/UploadFileForm";
 
-export default function QuickActions() {
+export function QuickActions() {
   const [newCaseOpen, setNewCaseOpen] = useState(false);
   const [addClientOpen, setAddClientOpen] = useState(false);
   const [uploadDocOpen, setUploadDocOpen] = useState(false);
@@ -77,7 +77,7 @@ export default function QuickActions() {
 				hover:bg-primary
 				hover:text-white
 				hover:shadow-lg
-				hover:translate-x-0.5
+				hover:-translate-y-0.5
 				transition-all
 				duration-150
 				ease-in-out

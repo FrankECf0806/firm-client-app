@@ -1,7 +1,8 @@
 "use client";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import AppShell from "@/components/layout/AppShell";
+import { AppShell } from "@/components/layout/AppShell";
+import { AppProvider } from "@/providers/AppProvider";
 
 export default function ProtectedLayout({
   children,
@@ -10,7 +11,9 @@ export default function ProtectedLayout({
 }) {
   return (
     <ProtectedRoute>
-      <AppShell>{children}</AppShell>
+      <AppProvider>
+        <AppShell>{children}</AppShell>
+      </AppProvider>
     </ProtectedRoute>
   );
 }
