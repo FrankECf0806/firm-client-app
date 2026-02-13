@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
+import { DeleteOutline } from "@mui/icons-material";
 import { QuickAcessFormProps } from "@/types/form";
 import { Controller, useForm } from "react-hook-form";
 import { ClientFormValues } from "@/types/client";
@@ -8,6 +9,7 @@ import { DialogForm } from "@/components/dialogs/DialogForm";
 import { ClientType } from "@/enums/client";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { useEffect } from "react";
+import { useAppContext } from "@/providers/AppProvider";
 
 export function ClientForm({
   mode,
@@ -15,6 +17,8 @@ export function ClientForm({
   onClose,
   formData,
 }: QuickAcessFormProps<ClientFormValues>) {
+  const { addClient, updateClient, deleteClient } = useAppContext();
+
   const {
     control,
     handleSubmit,
@@ -30,7 +34,6 @@ export function ClientForm({
       phone: "",
       address: "",
       type: undefined,
-      status: undefined,
       description: "",
     },
   });
@@ -46,23 +49,27 @@ export function ClientForm({
       phone: "",
       address: "",
       type: undefined,
-      status: undefined,
       description: "",
       ...formData,
     });
   }, [open, formData, reset]);
 
   const title = mode === "create" ? "Add New Client" : "Edit Client";
-
   const subtitle =
     mode === "create"
       ? "Fill in the details below to add a new client to your practice."
       : "Update the details of this client.";
-
   const submitLabel = mode === "create" ? "Add Client" : "Save Changes";
 
   const onSubmit = async (data: ClientFormValues) => {
-    console.log(`SUBMIT - ${mode}`, data);
+    if (mode === "create") {
+      addClient({
+        ...data,
+      });
+    } else if (mode === "edit" && formData?.id) {
+      updateClient(formData.id, data);
+    }
+
     await new Promise((r) => setTimeout(r, 1000));
     reset();
     onClose();
@@ -73,6 +80,38 @@ export function ClientForm({
     onClose();
   };
 
+  const handleDelete = async () => {
+    if (!formData?.id) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete client "${formData.firstName} ${formData.lastName}"? This action cannot be undone.`,
+    );
+
+    if (confirmed) {
+      try {
+        await deleteClient(formData.id);
+        onClose();
+      } catch (error) {
+        console.error("Error deleting client:", error);
+      }
+    }
+  };
+
+  // Delete button component (only in edit mode)
+  const dangerAction =
+    mode === "edit" ? (
+      <Button
+        color="error"
+        startIcon={<DeleteOutline />}
+        onClick={handleDelete}
+        disabled={isSubmitting}
+        variant="outlined"
+        className="button-firm w-full hover:bg-red-500 hover:text-white"
+      >
+        {isSubmitting ? "Deleting..." : "Delete Client"}
+      </Button>
+    ) : undefined;
+
   return (
     <DialogForm
       open={open}
@@ -82,6 +121,7 @@ export function ClientForm({
       submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
+      dangerAction={dangerAction}
     >
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* First Name */}
@@ -143,7 +183,7 @@ export function ClientForm({
               className="input-rounded-firm"
               size="small"
               label="Email"
-              placeholder="e.g. jhonsmith@gmail.com"
+              placeholder="e.g. john.smith@example.com"
               fullWidth
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
@@ -156,9 +196,8 @@ export function ClientForm({
           name="phone"
           control={control}
           rules={{
-            // required: "Phone number is required",
             pattern: {
-              // Allows digits, spaces, +, -, parentheses
+              // required: "Phone number is required",
               value: /^[0-9+\-\s()]{7,20}$/,
               message: "Enter a valid phone number",
             },
@@ -169,7 +208,7 @@ export function ClientForm({
               className="input-rounded-firm"
               size="small"
               label="Phone"
-              placeholder="e.g. 07720123456"
+              placeholder="e.g. (555) 123-4567"
               fullWidth
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
@@ -179,7 +218,6 @@ export function ClientForm({
       </Box>
 
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Company */}
         <Controller
           name="company"
           control={control}
@@ -189,13 +227,11 @@ export function ClientForm({
               className="input-rounded-firm"
               size="small"
               label="Company (optional)"
-              placeholder="e.g. SoloLawyer"
+              placeholder="e.g. Smith Enterprises"
               fullWidth
             />
           )}
         />
-
-        {/* Client Type */}
         <Controller
           name="type"
           control={control}
@@ -208,13 +244,12 @@ export function ClientForm({
               onChange={field.onChange}
               options={ClientType}
               resetValue=""
-              resetLabel=""
+              resetLabel="Select type"
             />
           )}
         />
       </Box>
 
-      {/* Address */}
       <Controller
         name="address"
         control={control}
@@ -223,13 +258,12 @@ export function ClientForm({
             {...field}
             className="input-rounded-firm"
             label="Address"
-            placeholder="e.g. 123 Main Street, London, SW1A 1AA"
+            placeholder="e.g. 123 Main St, New York, NY 10001"
             fullWidth
           />
         )}
       />
 
-      {/* Notes */}
       <Controller
         name="description"
         control={control}

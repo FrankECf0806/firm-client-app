@@ -1,16 +1,18 @@
-import { FormHTMLAttributes, ReactNode } from "react";
+import { ReactNode, FormEvent, RefObject } from "react";
 
 export interface GlobalDialogProps {
   open: boolean;
   onClose: () => void;
-  title?: ReactNode;
-  subtitle?: ReactNode;
+  title?: string;
+  subtitle?: string;
   children: ReactNode;
   actions?: ReactNode;
+  dangerAction?: ReactNode;
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl";
-  // Form-specific props
-  formProps?: FormHTMLAttributes<HTMLFormElement> & {
-    ref?: React.Ref<HTMLFormElement>;
+  formProps?: {
+    ref: RefObject<HTMLFormElement | null>;
+    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    noValidate?: boolean;
   };
   disableBackdropClose?: boolean;
 }

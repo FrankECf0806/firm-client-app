@@ -50,6 +50,7 @@ import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { ClientStatus, ClientType } from "@/enums/client";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import { clientToFormValues } from "@/mappers/client.mappers";
+import { TableSortOrder } from "@/types/table";
 
 export default function Clients() {
   const { clients } = useAppContext();
@@ -59,7 +60,7 @@ export default function Clients() {
   const [typeFilter, setTypeFilter] = useState<string>(ALL_CLIENT_TYPES);
 
   const [sortKey, setSortKey] = useState<TableClientSortKey>("id");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<TableSortOrder>("asc");
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
@@ -80,9 +81,9 @@ export default function Clients() {
       result = result.filter(
         (c) =>
           c.name.toLowerCase().includes(q) ||
-          c.email.toLowerCase().includes(q) ||
-          c.phone.toLowerCase().includes(q) ||
-          c.company.toLowerCase().includes(q),
+          c.email?.toLowerCase().includes(q) ||
+          c.phone?.toLowerCase().includes(q) ||
+          c.company?.toLowerCase().includes(q),
       );
     }
 
@@ -100,6 +101,11 @@ export default function Clients() {
     result.sort((a, b) => {
       const aVal = a[sortKey];
       const bVal = b[sortKey];
+
+      // Handle undefined safely
+      if (aVal == null && bVal == null) return 0;
+      if (aVal == null) return sortOrder === "asc" ? -1 : 1;
+      if (bVal == null) return sortOrder === "asc" ? 1 : -1;
 
       // NUMERIC SORT (ID)
       if (sortKey === "id") {

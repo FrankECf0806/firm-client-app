@@ -20,9 +20,9 @@ export function Metric() {
   const totalClients = clients.length;
   const totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
   const outstanding = invoices
-    .filter((inv) => inv.status !== "paid")
+    .filter((inv) => inv.status !== "PAID")
     .reduce((sum, inv) => sum + inv.total, 0);
-  const unpaidCount = invoices.filter((inv) => inv.status !== "paid").length;
+  const unpaidCount = invoices.filter((inv) => inv.status !== "PAID").length;
 
   const metrics: MetricCardProps[] = [
     {

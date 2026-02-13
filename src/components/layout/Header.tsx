@@ -99,7 +99,7 @@ export function Header() {
             <Avatar
               className="border w-15 h-15"
               alt={`${user.firstName} ${user.lastName}`}
-              src={`${user.src}`}
+              src={`${user.avatar}`}
             >
               {user.firstName.charAt(0)}
               {user.lastName.charAt(0)}

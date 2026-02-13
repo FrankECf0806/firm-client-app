@@ -1,10 +1,4 @@
-import { ChipProps } from "@mui/material";
-import {
-  CasePriority,
-  CaseStatus,
-  CasePracticeArea,
-  SortKey,
-} from "@/enums/case";
+import { CasePriority, CaseStatus, CasePracticeArea } from "@/enums/case";
 import { ALL_CASE_STATUS } from "@/utils/constant/case";
 import { Note } from "@/types/note";
 
@@ -13,54 +7,41 @@ export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "
 export type CasePracticeAreaKey = keyof typeof CasePracticeArea; // "CIVIL_LITIGATION" | "CORPORATE" | ...
 export type CasePriorityKey = keyof typeof CasePriority; // "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 
-export interface Case {
-  id: string;
+/** Base Case - shared fields for forms and creation */
+export interface CaseBase {
   title: string;
-  client: string;
   clientId: string;
-  status: CaseStatusKey;
   practiceArea: CasePracticeAreaKey;
   priority: CasePriorityKey;
+  status: CaseStatusKey;
   openedAt: string;
   nextDeadline?: string;
   description?: string;
-  notes: Note[];
 }
 
-export type CaseFormValues = {
-  title: string;
-  client: string;
-  practiceArea: CasePracticeAreaKey;
-  priority: CasePriorityKey;
-  openedAt: string;
-  nextDeadline: string;
-  description?: string;
-};
+// Form values
+export interface CaseFormValues extends CaseBase {
+  id?: string; // Required for edit mode, not for create
+}
+// Create input (same as base)
+export type CreateCaseInput = CaseBase;
 
-export type CaseTypeItem = {
-  label: string;
-  selectedClass: string;
-  unselectedClass: string;
-  onClick: (setType: (value: string) => void) => void;
-};
-
-export type CaseStatusItem = {
-  label: string;
-  color: ChipProps["color"];
-  onClick: (setStatus: (value: string) => void) => void;
-};
+/** Full Case Entity - stored in AppProvider */
+export interface Case extends CaseBase {
+  id: string;
+  client: string; // Client name (computed from clientId)
+  notes: Note[];
+}
 
 export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;
 export type CaseFilterPracticeArea = CasePracticeAreaKey;
 
-// Case Table
-export interface CaseColumnTable {
-  field: string;
-  label: string;
-  minWidth?: number;
-  sortable?: boolean;
-  sortKey?: SortKey;
-  align?: "left" | "right" | "center";
-}
-
-export type SortOrder = "asc" | "desc";
+export type TableCaseSortKey =
+  | "id"
+  | "title"
+  | "client"
+  | "status"
+  | "practiceArea"
+  | "priority"
+  | "openedAt"
+  | "nextDeadline";

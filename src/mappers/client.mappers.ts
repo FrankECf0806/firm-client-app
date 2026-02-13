@@ -2,6 +2,7 @@ import { Client, ClientFormValues } from "../types/client";
 
 export function clientToFormValues(clientItem: Client): ClientFormValues {
   return {
+    id: clientItem.id,
     firstName: clientItem.name.split(" ")[0] || "",
     lastName: clientItem.name.split(" ")[1] || "",
     company: clientItem.company,

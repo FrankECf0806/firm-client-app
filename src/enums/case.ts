@@ -4,9 +4,14 @@ export enum CasePracticeArea {
   CRIMINAL_DEFENSE = "Criminal Defense",
   ESTATE_PLANNING = "Estate Planning",
   FAMILY_LAW = "Family Law",
-  INMIGRATION = "Immigration",
+  IMMIGRATION = "Immigration",
+  GOVERNMENT = "Government",
+  EMPLOYMENT = "Employment Law",
+  PERSONAL_INJURY = "Personal Injury",
   INTELLECTUAL_PROPERTY = "Intellectual Property",
   REAL_ESTATE = "Real Estate",
+  NON_PROFIT = "Non-Profit",
+  ENVIRONMENTAL = "Environmental Law",
 }
 
 export enum CaseStatus {
@@ -22,11 +27,3 @@ export enum CasePriority {
   HIGH = "High",
   URGENT = "Urgent",
 }
-
-export type SortKey =
-  | "id"
-  | "title"
-  | "client"
-  | "practiceArea"
-  | "openedAt"
-  | "status";

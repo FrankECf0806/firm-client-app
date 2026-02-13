@@ -1,14 +1,15 @@
 "use client";
 
 import { Button, TextField, MenuItem, Box } from "@mui/material";
-import { mockClients } from "@/mock_data";
-import { PersonAddAltOutlined } from "@mui/icons-material";
+import { PersonAddAltOutlined, DeleteOutline } from "@mui/icons-material";
 import { CaseFormValues } from "@/types/case";
 import { useForm, Controller } from "react-hook-form";
 import { QuickAcessFormProps } from "@/types/form";
 import { DialogForm } from "@/components/dialogs/DialogForm";
 import { CasePracticeArea, CasePriority } from "@/enums/case";
 import { useEffect } from "react";
+import { useAppContext } from "@/providers/AppProvider";
+import { formValuesToCaseUpdate } from "@/mappers/case.mapper";
 
 export function CaseForm({
   mode,
@@ -16,6 +17,8 @@ export function CaseForm({
   onClose,
   formData,
 }: QuickAcessFormProps<CaseFormValues>) {
+  const { clients, addCase, updateCase, deleteCase } = useAppContext();
+
   const {
     control,
     handleSubmit,
@@ -25,13 +28,13 @@ export function CaseForm({
     mode: "onBlur",
     defaultValues: {
       title: "",
-      client: "",
+      clientId: "",
       practiceArea: undefined,
       priority: undefined,
+      status: "ACTIVE",
       openedAt: "",
       nextDeadline: "",
       description: "",
-      ...formData,
     },
   });
 
@@ -40,9 +43,10 @@ export function CaseForm({
 
     reset({
       title: "",
-      client: "",
+      clientId: "",
       practiceArea: undefined,
       priority: undefined,
+      status: "ACTIVE",
       openedAt: new Date().toISOString().split("T")[0],
       nextDeadline: "",
       description: "",
@@ -51,16 +55,26 @@ export function CaseForm({
   }, [open, formData, reset]);
 
   const title = mode === "create" ? "Create New Case" : "Edit Case";
-
   const subtitle =
     mode === "create"
       ? "Fill in the details below to create a new legal case."
       : "Update the details of this case.";
-
   const submitLabel = mode === "create" ? "Create Case" : "Save Changes";
 
   const onSubmit = async (data: CaseFormValues) => {
-    console.log(`SUBMIT - ${mode}`, data);
+    if (mode === "create") {
+      // Create new case with default status ACTIVE
+      addCase({
+        ...data,
+      });
+      console.log("Case created:", data);
+    } else if (mode === "edit" && formData?.id) {
+      // Update existing case
+      const updates = formValuesToCaseUpdate(data);
+      updateCase(formData.id, updates);
+      console.log("Case updated:", formData.id);
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
     reset();
     onClose();
@@ -71,6 +85,39 @@ export function CaseForm({
     onClose();
   };
 
+  const handleDelete = async () => {
+    if (!formData?.id) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete case "${formData.title}"? This action cannot be undone.`,
+    );
+
+    if (confirmed) {
+      try {
+        await deleteCase(formData.id);
+        onClose();
+      } catch (error) {
+        console.error("Error deleting case:", error);
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  // Delete button component
+  const dangerAction =
+    mode === "edit" ? (
+      <Button
+        variant="outlined"
+        color="error"
+        startIcon={<DeleteOutline />}
+        onClick={handleDelete}
+        disabled={isSubmitting}
+        className="button-firm w-full hover:bg-red-500 hover:text-white"
+      >
+        {isSubmitting ? "Deleting..." : "Delete Case"}
+      </Button>
+    ) : undefined;
+
   return (
     <DialogForm
       open={open}
@@ -80,6 +127,7 @@ export function CaseForm({
       submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
+      dangerAction={dangerAction}
     >
       {/* Case Title */}
       <Controller
@@ -104,7 +152,7 @@ export function CaseForm({
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Client */}
         <Controller
-          name="client"
+          name="clientId"
           control={control}
           rules={{ required: "Client is required" }}
           render={({ field, fieldState }) => (
@@ -132,7 +180,7 @@ export function CaseForm({
                   <span>Create New Client</span>
                 </Button>
               </MenuItem>
-              {mockClients.map((c) => (
+              {clients.map((c) => (
                 <MenuItem key={c.id} value={c.id}>
                   {c.name}
                 </MenuItem>
@@ -145,7 +193,7 @@ export function CaseForm({
         <Controller
           name="practiceArea"
           control={control}
-          rules={{ required: "Case type is required" }}
+          rules={{ required: "Practice area is required" }}
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -194,7 +242,7 @@ export function CaseForm({
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              className={`input-rounded-firm ${mode == "edit" ? "bg-gray-100 rounded-2xl" : ""}`}
+              className={`input-rounded-firm ${mode === "edit" ? "bg-gray-100 rounded-2xl" : ""}`}
               label="Filing Date"
               type="date"
               size="small"
@@ -250,6 +298,9 @@ export function CaseForm({
           </TextField>
         )}
       />
+
+      {/* Hidden status field */}
+      <input type="hidden" {...control.register("status")} />
     </DialogForm>
   );
 }

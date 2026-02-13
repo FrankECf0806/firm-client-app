@@ -25,7 +25,7 @@ import {
   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
 import { useMemo, useState, MouseEvent, ChangeEvent, useEffect } from "react";
-import { CaseStatus, CasePracticeArea, SortKey } from "@/enums/case";
+import { CaseStatus, CasePracticeArea } from "@/enums/case";
 import {
   CASE_STATUS_CONFIG,
   CASE_TYPE_CONFIG,
@@ -47,10 +47,11 @@ import {
   ROWS_PER_PAGE_OPTIONS,
 } from "@/utils/constant/table";
 import { useAppContext } from "@/providers/AppProvider";
-import { CaseFormValues, SortOrder } from "@/types/case";
+import { CaseFormValues, TableCaseSortKey } from "@/types/case";
 import { caseToFormValues } from "@/mappers/case.mapper";
 import { FormState } from "@/types/form";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
+import { TableSortOrder } from "@/types/table";
 
 export default function Cases() {
   const { cases } = useAppContext();
@@ -61,8 +62,8 @@ export default function Cases() {
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
-  const [sortKey, setSortKey] = useState<SortKey>("id");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortKey, setSortKey] = useState<TableCaseSortKey>("id");
+  const [sortOrder, setSortOrder] = useState<TableSortOrder>("asc");
 
   const [caseFormState, setCaseFormState] = useState<FormState<CaseFormValues>>(
     {
@@ -101,6 +102,11 @@ export default function Cases() {
       const aVal = a[sortKey];
       const bVal = b[sortKey];
 
+      // Handle undefined safely
+      if (aVal == null && bVal == null) return 0;
+      if (aVal == null) return sortOrder === "asc" ? -1 : 1;
+      if (bVal == null) return sortOrder === "asc" ? 1 : -1;
+
       // NUMERIC SORT (ID)
       if (sortKey === "id") {
         return sortOrder === "asc"
@@ -134,7 +140,7 @@ export default function Cases() {
     return filteredAndSortedCases.slice(start, start + rowsPerPage);
   }, [filteredAndSortedCases, page, rowsPerPage]);
 
-  const handleSort = (key: SortKey) => {
+  const handleSort = (key: TableCaseSortKey) => {
     if (sortKey === key) {
       setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {

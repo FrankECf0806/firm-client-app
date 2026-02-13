@@ -1,17 +1,33 @@
-export interface Meeting {
-  id: string;
+import { MeetingStatus, MeetingType } from "@/enums/meeting";
+
+export type MeetingStatusKey = keyof typeof MeetingStatus;
+export type MeetingTypeKey = keyof typeof MeetingType;
+
+/** Base Meeting - shared fields for forms and creation */
+export interface MeetingBase {
+  title: string;
   caseId: string;
+  caseName: string;
   date: string;
-  type: "call" | "meeting" | "email" | "hearing";
-  summary: string;
-  duration: string;
+  time: string;
+  duration: number;
+  type: MeetingTypeKey;
+  location?: string;
+  attendees?: string[];
+  agenda?: string;
+  notes?: string;
 }
 
-export interface ScheduledMeeting {
+// Form values (same as base)
+export type MeetingFormValues = MeetingBase;
+
+// Create input (same as base)
+export type CreateMeetingInput = MeetingBase;
+
+/** Full Meeting Entity - stored in AppProvider */
+export interface Meeting extends MeetingBase {
   id: string;
-  title: string;
-  time: string;
-  duration: string;
-  type: "call" | "meeting" | "hearing";
-  hasVideoLink: boolean;
+  status: MeetingStatusKey;
+  createdAt?: string;
+  updatedAt?: string;
 }

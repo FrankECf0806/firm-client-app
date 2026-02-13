@@ -13,6 +13,7 @@ type DialogFormProps = {
   isSubmitting?: boolean;
   submitLabel: string;
   children: ReactNode;
+  dangerAction?: ReactNode;
 };
 
 export function DialogForm({
@@ -24,6 +25,7 @@ export function DialogForm({
   isSubmitting,
   submitLabel,
   children,
+  dangerAction,
 }: DialogFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -55,6 +57,7 @@ export function DialogForm({
       title={title}
       subtitle={subtitle}
       actions={actions}
+      dangerAction={dangerAction}
       formProps={{
         ref: formRef,
         onSubmit,

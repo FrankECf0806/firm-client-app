@@ -14,15 +14,20 @@ import {
   mockDocuments,
   mockMeetings,
   mockTasks,
+  mockCommunications,
 } from "@/mock_data";
 
 import { Invoice } from "@/types/invoice";
-import { Case } from "@/types/case";
-import { Client } from "@/types/client";
-import { Document as CaseDocument } from "@/types/document";
-import { Meeting } from "@/types/meeting";
+import { Case, CreateCaseInput } from "@/types/case";
+import { Client, CreateClientInput } from "@/types/client";
+import {
+  Document as CaseDocument,
+  CreateDocumentInput,
+} from "@/types/document";
+import { Meeting, CreateMeetingInput } from "@/types/meeting";
 import { Note } from "@/types/note";
-import { Task } from "@/types/task";
+import { Task, CreateTaskInput } from "@/types/task";
+import { Communication, CreateCommunicationInput } from "@/types/communication";
 
 interface AppContextType {
   // State
@@ -32,6 +37,7 @@ interface AppContextType {
   documents: CaseDocument[];
   meetings: Meeting[];
   tasks: Task[];
+  communications: Communication[];
   loading: boolean;
   error: string | null;
 
@@ -45,7 +51,7 @@ interface AppContextType {
   getInvoiceById: (id: string) => Invoice | undefined;
 
   // Cases
-  addCase: (caseData: Case) => void;
+  addCase: (input: CreateCaseInput) => Case;
   updateCase: (id: string, updates: Partial<Case>) => void;
   deleteCase: (id: string) => void;
   getCaseById: (id: string) => Case | undefined;
@@ -53,30 +59,42 @@ interface AppContextType {
   getCasesByClientId: (clientId: string) => Case[];
 
   // Clients
-  addClient: (client: Client) => void;
+  addClient: (input: CreateClientInput) => Client;
   updateClient: (id: string, updates: Partial<Client>) => void;
   deleteClient: (id: string) => void;
   getClientById: (id: string) => Client | undefined;
   getClientsByName: (name: string) => Client[];
 
   // Documents
-  addDocument: (doc: CaseDocument) => void;
+  addDocument: (input: CreateDocumentInput) => CaseDocument;
   updateDocument: (id: string, updates: Partial<CaseDocument>) => void;
   deleteDocument: (id: string) => void;
   getDocumentsByCase: (caseId: string) => CaseDocument[];
 
   // Meetings
-  addMeeting: (meeting: Meeting) => void;
+  addMeeting: (input: CreateMeetingInput) => Meeting;
   updateMeeting: (id: string, updates: Partial<Meeting>) => void;
   deleteMeeting: (id: string) => void;
   getMeetingsByCase: (caseId: string) => Meeting[];
 
   // Tasks
-  addTask: (task: Task) => void;
+  addTask: (input: CreateTaskInput) => Task;
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   toggleTask: (id: string) => void;
   getTasksByCase: (caseId: string) => Task[];
+
+  // Communications
+  addCommunication: (input: CreateCommunicationInput) => Communication;
+  updateCommunication: (id: string, updates: Partial<Communication>) => void;
+  deleteCommunication: (id: string) => void;
+  getCommunicationById: (id: string) => Communication | undefined;
+  getCommunicationsByClient: (clientId: string) => Communication[];
+  getCommunicationsByCase: (caseId: string) => Communication[];
+  getUnreadCommunications: () => Communication[];
+  markAsRead: (id: string) => void;
+  markAsUnread: (id: string) => void;
+  archiveCommunication: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -88,6 +106,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [documents, setDocuments] = useState<CaseDocument[]>(mockDocuments);
   const [meetings, setMeetings] = useState<Meeting[]>(mockMeetings);
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [communications, setCommunications] =
+    useState<Communication[]>(mockCommunications);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -95,16 +115,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const refetch = useCallback(async () => {
     setLoading(true);
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Reset to mock data
       setInvoices(mockInvoices);
       setCases(mockCases);
       setClients(mockClients);
       setDocuments(mockDocuments);
       setMeetings(mockMeetings);
       setTasks(mockTasks);
+      setCommunications(mockCommunications);
       setError(null);
     } catch (err) {
       setError("Failed to fetch data");
@@ -114,14 +132,28 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Client operations
-  const addClient = useCallback((client: Client) => {
-    setClients((prev) => [...prev, client]);
+  // ============ Client Operations ============
+  const addClient = useCallback((input: CreateClientInput) => {
+    const newClient: Client = {
+      ...input,
+      id: Date.now().toString(),
+      name: `${input.firstName} ${input.lastName}`.trim(),
+      casesCount: 0,
+      status: "ACTIVE",
+      notes: [],
+      createdAt: new Date().toISOString(),
+    };
+    setClients((prev) => [...prev, newClient]);
+    return newClient;
   }, []);
 
   const updateClient = useCallback((id: string, updates: Partial<Client>) => {
     setClients((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, ...updates, updatedAt: new Date().toISOString() }
+          : c,
+      ),
     );
   }, []);
 
@@ -130,9 +162,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getClientById = useCallback(
-    (id: string) => {
-      return clients.find((c) => c.id === id);
-    },
+    (id: string) => clients.find((c) => c.id === id),
     [clients],
   );
 
@@ -148,10 +178,31 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [clients],
   );
 
-  // Case operations
-  const addCase = useCallback((caseData: Case) => {
-    setCases((prev) => [...prev, caseData]);
-  }, []);
+  // ============ Case Operations ============
+  const addCase = useCallback(
+    (input: CreateCaseInput) => {
+      const client = clients.find((c) => c.id === input.clientId);
+      const newCase: Case = {
+        ...input,
+        id: Date.now().toString(),
+        client: client?.name || "Unknown Client",
+        status: "ACTIVE",
+        notes: [],
+      };
+      setCases((prev) => [...prev, newCase]);
+
+      // Increment client's casesCount
+      if (client) {
+        setClients((prev) =>
+          prev.map((c) =>
+            c.id === client.id ? { ...c, casesCount: c.casesCount + 1 } : c,
+          ),
+        );
+      }
+      return newCase;
+    },
+    [clients],
+  );
 
   const updateCase = useCallback((id: string, updates: Partial<Case>) => {
     setCases((prev) =>
@@ -164,9 +215,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getCaseById = useCallback(
-    (id: string) => {
-      return cases.find((c) => c.id === id);
-    },
+    (id: string) => cases.find((c) => c.id === id),
     [cases],
   );
 
@@ -179,15 +228,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getCasesByClientId = useCallback(
-    (clientId: string) => {
-      return cases.filter((c) => c.clientId === clientId);
-    },
+    (clientId: string) => cases.filter((c) => c.clientId === clientId),
     [cases],
   );
 
-  // Document operations
-  const addDocument = useCallback((doc: CaseDocument) => {
-    setDocuments((prev) => [...prev, doc]);
+  // ============ Document Operations ============
+  const addDocument = useCallback((input: CreateDocumentInput) => {
+    const newDocument: CaseDocument = {
+      ...input,
+      id: crypto.randomUUID(),
+      uploadDate: new Date().toISOString(),
+      size: "0 MB",
+    };
+    setDocuments((prev) => [...prev, newDocument]);
+    return newDocument;
   }, []);
 
   const updateDocument = useCallback(
@@ -204,20 +258,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getDocumentsByCase = useCallback(
-    (caseId: string) => {
-      return documents.filter((d) => d.caseId === caseId);
-    },
+    (caseId: string) => documents.filter((d) => d.caseId === caseId),
     [documents],
   );
 
-  // Meeting operations
-  const addMeeting = useCallback((meeting: Meeting) => {
-    setMeetings((prev) => [...prev, meeting]);
+  // ============ Meeting Operations ============
+  const addMeeting = useCallback((input: CreateMeetingInput) => {
+    const newMeeting: Meeting = {
+      ...input,
+      id: Date.now().toString(),
+      status: "SCHEDULED",
+      createdAt: new Date().toISOString(),
+    };
+    setMeetings((prev) => [...prev, newMeeting]);
+    return newMeeting;
   }, []);
 
   const updateMeeting = useCallback((id: string, updates: Partial<Meeting>) => {
     setMeetings((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, ...updates } : m)),
+      prev.map((m) =>
+        m.id === id
+          ? { ...m, ...updates, updatedAt: new Date().toISOString() }
+          : m,
+      ),
     );
   }, []);
 
@@ -226,20 +289,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getMeetingsByCase = useCallback(
-    (caseId: string) => {
-      return meetings.filter((m) => m.caseId === caseId);
-    },
+    (caseId: string) => meetings.filter((m) => m.caseId === caseId),
     [meetings],
   );
 
-  // Task operations
-  const addTask = useCallback((task: Task) => {
-    setTasks((prev) => [...prev, task]);
+  // ============ Task Operations ============
+  const addTask = useCallback((input: CreateTaskInput) => {
+    const newTask: Task = {
+      ...input,
+      id: Date.now().toString(),
+      status: "TODO",
+      completed: false,
+      createdAt: new Date().toISOString(),
+    };
+    setTasks((prev) => [...prev, newTask]);
+    return newTask;
   }, []);
 
   const updateTask = useCallback((id: string, updates: Partial<Task>) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, ...updates } : t)),
+      prev.map((t) =>
+        t.id === id
+          ? { ...t, ...updates, updatedAt: new Date().toISOString() }
+          : t,
+      ),
     );
   }, []);
 
@@ -249,16 +322,157 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const toggleTask = useCallback((id: string) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              completed: !t.completed,
+              status: !t.completed ? "DONE" : "TODO",
+              updatedAt: new Date().toISOString(),
+            }
+          : t,
+      ),
     );
   }, []);
 
   const getTasksByCase = useCallback(
-    (caseId: string) => {
-      return tasks.filter((t) => t.caseId === caseId);
-    },
+    (caseId: string) => tasks.filter((t) => t.caseId === caseId),
     [tasks],
   );
+
+  // ============ Invoice Operations ============
+  const addInvoice = useCallback(
+    (invoice: Invoice) =>
+      setInvoices((prev) => [
+        ...prev,
+        {
+          ...invoice,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+        },
+      ]),
+    [],
+  );
+
+  const updateInvoice = useCallback(
+    (id: string, updates: Partial<Invoice>) =>
+      setInvoices((prev) =>
+        prev.map((inv) =>
+          inv.id === id
+            ? { ...inv, ...updates, updatedAt: new Date().toISOString() }
+            : inv,
+        ),
+      ),
+    [],
+  );
+
+  const deleteInvoice = useCallback(
+    (id: string) => setInvoices((prev) => prev.filter((inv) => inv.id !== id)),
+    [],
+  );
+
+  const getInvoiceById = useCallback(
+    (id: string) => invoices.find((inv) => inv.id === id),
+    [invoices],
+  );
+
+  // ============ Communication Operations ============
+  const addCommunication = useCallback((input: CreateCommunicationInput) => {
+    const now = new Date().toISOString();
+    const newCommunication: Communication = {
+      ...input,
+      id: Date.now().toString(),
+      status: "UNREAD",
+      unread: true,
+      time: "Just now",
+      createdAt: now,
+    };
+    setCommunications((prev) => [newCommunication, ...prev]);
+    return newCommunication;
+  }, []);
+
+  const updateCommunication = useCallback(
+    (id: string, updates: Partial<Communication>) => {
+      setCommunications((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? {
+                ...c,
+                ...updates,
+                updatedAt: new Date().toISOString(),
+                ...(updates.unread === false && { status: "READ" }),
+                ...(updates.unread === true && { status: "UNREAD" }),
+              }
+            : c,
+        ),
+      );
+    },
+    [],
+  );
+
+  const deleteCommunication = useCallback((id: string) => {
+    setCommunications((prev) => prev.filter((c) => c.id !== id));
+  }, []);
+
+  const getCommunicationById = useCallback(
+    (id: string) => communications.find((c) => c.id === id),
+    [communications],
+  );
+
+  const getCommunicationsByClient = useCallback(
+    (clientId: string) => communications.filter((c) => c.clientId === clientId),
+    [communications],
+  );
+
+  const getCommunicationsByCase = useCallback(
+    (caseId: string) => communications.filter((c) => c.caseId === caseId),
+    [communications],
+  );
+
+  const getUnreadCommunications = useCallback(
+    () => communications.filter((c) => c.unread),
+    [communications],
+  );
+
+  const markAsRead = useCallback((id: string) => {
+    setCommunications((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? {
+              ...c,
+              unread: false,
+              status: "READ",
+              updatedAt: new Date().toISOString(),
+            }
+          : c,
+      ),
+    );
+  }, []);
+
+  const markAsUnread = useCallback((id: string) => {
+    setCommunications((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? {
+              ...c,
+              unread: true,
+              status: "UNREAD",
+              updatedAt: new Date().toISOString(),
+            }
+          : c,
+      ),
+    );
+  }, []);
+
+  const archiveCommunication = useCallback((id: string) => {
+    setCommunications((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, status: "ARCHIVED", updatedAt: new Date().toISOString() }
+          : c,
+      ),
+    );
+  }, []);
 
   const value: AppContextType = {
     // State
@@ -268,6 +482,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     documents,
     meetings,
     tasks,
+    communications,
     loading,
     error,
 
@@ -308,18 +523,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     toggleTask,
     getTasksByCase,
 
-    // Invoice (keep your existing)
-    addInvoice: (invoice: Invoice) => setInvoices((prev) => [...prev, invoice]),
-    updateInvoice: (id: string, updates: Partial<Invoice>) =>
-      setInvoices((prev) =>
-        prev.map((inv) => (inv.id === id ? { ...inv, ...updates } : inv)),
-      ),
-    deleteInvoice: (id: string) =>
-      setInvoices((prev) => prev.filter((inv) => inv.id !== id)),
-    getInvoiceById: (id: string) => invoices.find((inv) => inv.id === id),
+    // Invoice
+    addInvoice,
+    updateInvoice,
+    deleteInvoice,
+    getInvoiceById,
+
+    // Communication
+    addCommunication,
+    updateCommunication,
+    deleteCommunication,
+    getCommunicationById,
+    getCommunicationsByClient,
+    getCommunicationsByCase,
+    getUnreadCommunications,
+    markAsRead,
+    markAsUnread,
+    archiveCommunication,
   };
 
-  return <AppContext value={value}>{children}</AppContext>;
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 // Custom hook for easy access

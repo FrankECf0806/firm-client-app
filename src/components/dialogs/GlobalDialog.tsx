@@ -19,6 +19,7 @@ export function GlobalDialog({
   subtitle,
   children,
   actions,
+  dangerAction,
   maxWidth = "sm",
   formProps,
   disableBackdropClose = false,
@@ -90,6 +91,13 @@ export function GlobalDialog({
         {actions && (
           <DialogActions className="px-6 py-4 shrink-0">
             {actions}
+          </DialogActions>
+        )}
+
+        {/* Danger Action (Delete etc.) */}
+        {dangerAction && (
+          <DialogActions className=" flex items-start px-6 pb-6 pt-4 shrink-0 border-t border-gray-300">
+            {dangerAction}
           </DialogActions>
         )}
       </Box>

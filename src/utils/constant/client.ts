@@ -1,5 +1,5 @@
 import { FilterItem } from "@/types/ui";
-import { TableColumn } from "./table";
+import { TableColumn } from "@/types/table";
 import {
   ClientFilterStatus,
   ClientFilterType,
