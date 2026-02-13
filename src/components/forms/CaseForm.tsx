@@ -182,7 +182,7 @@ export function CaseForm({
               </MenuItem>
               {clients.map((c) => (
                 <MenuItem key={c.id} value={c.id}>
-                  {c.name}
+                  {c.firstName} {c.lastName}
                 </MenuItem>
               ))}
             </TextField>

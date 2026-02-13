@@ -111,6 +111,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // ============ Utility Functions ============
+  const generateId = useCallback(() => Date.now().toString(), []);
+  const getCurrentISOString = useCallback(() => new Date().toISOString(), []);
+
   // Refetch function (for future API integration)
   const refetch = useCallback(async () => {
     setLoading(true);
@@ -133,29 +137,36 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // ============ Client Operations ============
-  const addClient = useCallback((input: CreateClientInput) => {
-    const newClient: Client = {
-      ...input,
-      id: Date.now().toString(),
-      name: `${input.firstName} ${input.lastName}`.trim(),
-      casesCount: 0,
-      status: "ACTIVE",
-      notes: [],
-      createdAt: new Date().toISOString(),
-    };
-    setClients((prev) => [...prev, newClient]);
-    return newClient;
-  }, []);
+  const addClient = useCallback(
+    (input: CreateClientInput) => {
+      const now = getCurrentISOString();
+      const newClient: Client = {
+        ...input,
+        id: generateId(),
+        casesCount: 0,
+        status: "ACTIVE",
+        notes: [],
+        createdAt: now,
+        updatedAt: now,
+      };
+      setClients((prev) => [...prev, newClient]);
+      return newClient;
+    },
+    [generateId, getCurrentISOString],
+  );
 
-  const updateClient = useCallback((id: string, updates: Partial<Client>) => {
-    setClients((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? { ...c, ...updates, updatedAt: new Date().toISOString() }
-          : c,
-      ),
-    );
-  }, []);
+  const updateClient = useCallback(
+    (id: string, updates: Partial<Client>) => {
+      setClients((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? { ...c, ...updates, updatedAt: getCurrentISOString() }
+            : c,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
   const deleteClient = useCallback((id: string) => {
     setClients((prev) => prev.filter((c) => c.id !== id));
@@ -169,11 +180,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const getClientsByName = useCallback(
     (name: string) => {
       const searchTerm = name.toLowerCase();
-      return clients.filter(
-        (client) =>
-          client.name.toLowerCase().includes(searchTerm) ||
-          client.company?.toLowerCase().includes(searchTerm),
-      );
+      return clients.filter((client) => {
+        const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
+        return (
+          fullName.includes(searchTerm) ||
+          client.company?.toLowerCase().includes(searchTerm)
+        );
+      });
     },
     [clients],
   );
@@ -182,10 +195,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const addCase = useCallback(
     (input: CreateCaseInput) => {
       const client = clients.find((c) => c.id === input.clientId);
+      const now = getCurrentISOString();
+
+      // Compute client name on the fly
+      const clientName = client
+        ? `${client.firstName} ${client.lastName}`.trim()
+        : "Unknown Client";
+
       const newCase: Case = {
         ...input,
-        id: Date.now().toString(),
-        client: client?.name || "Unknown Client",
+        id: generateId(),
+        client: clientName,
         status: "ACTIVE",
         notes: [],
       };
@@ -195,13 +215,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (client) {
         setClients((prev) =>
           prev.map((c) =>
-            c.id === client.id ? { ...c, casesCount: c.casesCount + 1 } : c,
+            c.id === client.id
+              ? { ...c, casesCount: c.casesCount + 1, updatedAt: now }
+              : c,
           ),
         );
       }
       return newCase;
     },
-    [clients],
+    [clients, generateId, getCurrentISOString],
   );
 
   const updateCase = useCallback((id: string, updates: Partial<Case>) => {
@@ -219,13 +241,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [cases],
   );
 
-  const addCaseNote = useCallback((caseId: string, note: Note) => {
-    setCases((prev) =>
-      prev.map((c) =>
-        c.id === caseId ? { ...c, notes: [note, ...(c.notes || [])] } : c,
-      ),
-    );
-  }, []);
+  const addCaseNote = useCallback(
+    (caseId: string, note: Note) => {
+      const now = getCurrentISOString();
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === caseId
+            ? {
+                ...c,
+                notes: [
+                  { ...note, id: generateId(), createdAt: now },
+                  ...(c.notes || []),
+                ],
+              }
+            : c,
+        ),
+      );
+    },
+    [generateId, getCurrentISOString],
+  );
 
   const getCasesByClientId = useCallback(
     (clientId: string) => cases.filter((c) => c.clientId === clientId),
@@ -233,16 +267,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   // ============ Document Operations ============
-  const addDocument = useCallback((input: CreateDocumentInput) => {
-    const newDocument: CaseDocument = {
-      ...input,
-      id: crypto.randomUUID(),
-      uploadDate: new Date().toISOString(),
-      size: "0 MB",
-    };
-    setDocuments((prev) => [...prev, newDocument]);
-    return newDocument;
-  }, []);
+  const addDocument = useCallback(
+    (input: CreateDocumentInput) => {
+      const now = getCurrentISOString();
+      const newDocument: CaseDocument = {
+        ...input,
+        id: crypto.randomUUID(),
+        uploadDate: now,
+        size: "0 MB",
+      };
+      setDocuments((prev) => [...prev, newDocument]);
+      return newDocument;
+    },
+    [getCurrentISOString],
+  );
 
   const updateDocument = useCallback(
     (id: string, updates: Partial<CaseDocument>) => {
@@ -263,26 +301,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   // ============ Meeting Operations ============
-  const addMeeting = useCallback((input: CreateMeetingInput) => {
-    const newMeeting: Meeting = {
-      ...input,
-      id: Date.now().toString(),
-      status: "SCHEDULED",
-      createdAt: new Date().toISOString(),
-    };
-    setMeetings((prev) => [...prev, newMeeting]);
-    return newMeeting;
-  }, []);
+  const addMeeting = useCallback(
+    (input: CreateMeetingInput) => {
+      const now = getCurrentISOString();
+      const newMeeting: Meeting = {
+        ...input,
+        id: generateId(),
+        status: "SCHEDULED",
+        createdAt: now,
+        updatedAt: now,
+      };
+      setMeetings((prev) => [...prev, newMeeting]);
+      return newMeeting;
+    },
+    [generateId, getCurrentISOString],
+  );
 
-  const updateMeeting = useCallback((id: string, updates: Partial<Meeting>) => {
-    setMeetings((prev) =>
-      prev.map((m) =>
-        m.id === id
-          ? { ...m, ...updates, updatedAt: new Date().toISOString() }
-          : m,
-      ),
-    );
-  }, []);
+  const updateMeeting = useCallback(
+    (id: string, updates: Partial<Meeting>) => {
+      setMeetings((prev) =>
+        prev.map((m) =>
+          m.id === id
+            ? { ...m, ...updates, updatedAt: getCurrentISOString() }
+            : m,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
   const deleteMeeting = useCallback((id: string) => {
     setMeetings((prev) => prev.filter((m) => m.id !== id));
@@ -294,46 +340,57 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   // ============ Task Operations ============
-  const addTask = useCallback((input: CreateTaskInput) => {
-    const newTask: Task = {
-      ...input,
-      id: Date.now().toString(),
-      status: "TODO",
-      completed: false,
-      createdAt: new Date().toISOString(),
-    };
-    setTasks((prev) => [...prev, newTask]);
-    return newTask;
-  }, []);
+  const addTask = useCallback(
+    (input: CreateTaskInput) => {
+      const now = getCurrentISOString();
+      const newTask: Task = {
+        ...input,
+        id: generateId(),
+        status: "TODO",
+        completed: false,
+        createdAt: now,
+        updatedAt: now,
+      };
+      setTasks((prev) => [...prev, newTask]);
+      return newTask;
+    },
+    [generateId, getCurrentISOString],
+  );
 
-  const updateTask = useCallback((id: string, updates: Partial<Task>) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? { ...t, ...updates, updatedAt: new Date().toISOString() }
-          : t,
-      ),
-    );
-  }, []);
+  const updateTask = useCallback(
+    (id: string, updates: Partial<Task>) => {
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? { ...t, ...updates, updatedAt: getCurrentISOString() }
+            : t,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
   const deleteTask = useCallback((id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  const toggleTask = useCallback((id: string) => {
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              completed: !t.completed,
-              status: !t.completed ? "DONE" : "TODO",
-              updatedAt: new Date().toISOString(),
-            }
-          : t,
-      ),
-    );
-  }, []);
+  const toggleTask = useCallback(
+    (id: string) => {
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                completed: !t.completed,
+                status: !t.completed ? "DONE" : "TODO",
+                updatedAt: getCurrentISOString(),
+              }
+            : t,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
   const getTasksByCase = useCallback(
     (caseId: string) => tasks.filter((t) => t.caseId === caseId),
@@ -342,28 +399,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // ============ Invoice Operations ============
   const addInvoice = useCallback(
-    (invoice: Invoice) =>
+    (invoice: Invoice) => {
+      const now = getCurrentISOString();
       setInvoices((prev) => [
         ...prev,
         {
           ...invoice,
-          id: Date.now().toString(),
-          createdAt: new Date().toISOString(),
+          id: generateId(),
+          createdAt: now,
+          updatedAt: now,
         },
-      ]),
-    [],
+      ]);
+    },
+    [generateId, getCurrentISOString],
   );
 
   const updateInvoice = useCallback(
-    (id: string, updates: Partial<Invoice>) =>
+    (id: string, updates: Partial<Invoice>) => {
       setInvoices((prev) =>
         prev.map((inv) =>
           inv.id === id
-            ? { ...inv, ...updates, updatedAt: new Date().toISOString() }
+            ? { ...inv, ...updates, updatedAt: getCurrentISOString() }
             : inv,
         ),
-      ),
-    [],
+      );
+    },
+    [getCurrentISOString],
   );
 
   const deleteInvoice = useCallback(
@@ -377,19 +438,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   // ============ Communication Operations ============
-  const addCommunication = useCallback((input: CreateCommunicationInput) => {
-    const now = new Date().toISOString();
-    const newCommunication: Communication = {
-      ...input,
-      id: Date.now().toString(),
-      status: "UNREAD",
-      unread: true,
-      time: "Just now",
-      createdAt: now,
-    };
-    setCommunications((prev) => [newCommunication, ...prev]);
-    return newCommunication;
-  }, []);
+  const addCommunication = useCallback(
+    (input: CreateCommunicationInput) => {
+      const now = getCurrentISOString();
+      const newCommunication: Communication = {
+        ...input,
+        id: generateId(),
+        status: "UNREAD",
+        unread: true,
+        time: "Just now",
+        createdAt: now,
+        updatedAt: now,
+      };
+      setCommunications((prev) => [newCommunication, ...prev]);
+      return newCommunication;
+    },
+    [generateId, getCurrentISOString],
+  );
 
   const updateCommunication = useCallback(
     (id: string, updates: Partial<Communication>) => {
@@ -399,7 +464,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             ? {
                 ...c,
                 ...updates,
-                updatedAt: new Date().toISOString(),
+                updatedAt: getCurrentISOString(),
                 ...(updates.unread === false && { status: "READ" }),
                 ...(updates.unread === true && { status: "UNREAD" }),
               }
@@ -407,7 +472,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ),
       );
     },
-    [],
+    [getCurrentISOString],
   );
 
   const deleteCommunication = useCallback((id: string) => {
@@ -434,45 +499,54 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [communications],
   );
 
-  const markAsRead = useCallback((id: string) => {
-    setCommunications((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? {
-              ...c,
-              unread: false,
-              status: "READ",
-              updatedAt: new Date().toISOString(),
-            }
-          : c,
-      ),
-    );
-  }, []);
+  const markAsRead = useCallback(
+    (id: string) => {
+      setCommunications((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? {
+                ...c,
+                unread: false,
+                status: "READ",
+                updatedAt: getCurrentISOString(),
+              }
+            : c,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
-  const markAsUnread = useCallback((id: string) => {
-    setCommunications((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? {
-              ...c,
-              unread: true,
-              status: "UNREAD",
-              updatedAt: new Date().toISOString(),
-            }
-          : c,
-      ),
-    );
-  }, []);
+  const markAsUnread = useCallback(
+    (id: string) => {
+      setCommunications((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? {
+                ...c,
+                unread: true,
+                status: "UNREAD",
+                updatedAt: getCurrentISOString(),
+              }
+            : c,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
-  const archiveCommunication = useCallback((id: string) => {
-    setCommunications((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? { ...c, status: "ARCHIVED", updatedAt: new Date().toISOString() }
-          : c,
-      ),
-    );
-  }, []);
+  const archiveCommunication = useCallback(
+    (id: string) => {
+      setCommunications((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? { ...c, status: "ARCHIVED", updatedAt: getCurrentISOString() }
+            : c,
+        ),
+      );
+    },
+    [getCurrentISOString],
+  );
 
   const value: AppContextType = {
     // State

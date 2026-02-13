@@ -43,7 +43,7 @@ import {
 import { ClientForm } from "@/components/forms/ClientForm";
 import { SortableHeader } from "@/components/table/SortableHeader";
 import { COLUMNS } from "@/utils/constant/client";
-import { ClientFormValues, TableClientSortKey } from "@/types/client";
+import { Client, ClientFormValues, TableClientSortKey } from "@/types/client";
 import { FormState } from "@/types/form";
 import { useAppContext } from "@/providers/AppProvider";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
@@ -71,62 +71,78 @@ export default function Clients() {
     mode: "create",
   });
 
-  // Sort and filter cases
-  const filteredAndSortedCases = useMemo(() => {
-    let result = [...clients];
+  // Sort and filter clients
+  const filteredAndSortedItems = useMemo(() => {
+    if (!clients.length) return [];
 
-    // 🔍 Search filter
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
+    // Trim search to avoid whitespace-only searches
+    const trimmedQuery = searchQuery.trim();
+    const hasSearch = trimmedQuery.length > 0;
+    const hasStatusFilter = statusFilter !== ALL_CLIENT_STATUS;
+    const hasTypeFilter = typeFilter !== ALL_CLIENT_TYPES;
+
+    const q = hasSearch ? trimmedQuery.toLowerCase() : "";
+
+    const filtered = clients.filter((c) => {
+      if (hasSearch) {
+        const fullName = `${c.firstName} ${c.lastName}`.toLowerCase();
+
+        const matchesSearch =
+          fullName.includes(q) ||
           c.email?.toLowerCase().includes(q) ||
           c.phone?.toLowerCase().includes(q) ||
-          c.company?.toLowerCase().includes(q),
-      );
-    }
+          c.company?.toLowerCase().includes(q);
 
-    // 🟡 Status filter
-    if (statusFilter !== ALL_CLIENT_STATUS) {
-      result = result.filter((c) => c.status === statusFilter);
-    }
+        if (!matchesSearch) return false;
+      }
 
-    // 🔵 Type filter
-    if (typeFilter !== ALL_CLIENT_TYPES) {
-      result = result.filter((c) => c.type === typeFilter);
-    }
+      if (hasStatusFilter && c.status !== statusFilter) return false;
+      if (hasTypeFilter && c.type !== typeFilter) return false;
 
-    // Sort
+      return true;
+    });
+
+    if (!sortKey || filtered.length <= 1) return filtered;
+
+    const result = [...filtered];
+    const direction = sortOrder === "asc" ? 1 : -1;
+
     result.sort((a, b) => {
-      const aVal = a[sortKey];
-      const bVal = b[sortKey];
+      if (sortKey === "name") {
+        return (
+          `${a.firstName} ${a.lastName}`.localeCompare(
+            `${b.firstName} ${b.lastName}`,
+          ) * direction
+        );
+      }
 
-      // Handle undefined safely
+      const aVal = a[sortKey as keyof Client];
+      const bVal = b[sortKey as keyof Client];
+
+      // 🔹 Null / undefined always go to the end
       if (aVal == null && bVal == null) return 0;
-      if (aVal == null) return sortOrder === "asc" ? -1 : 1;
-      if (bVal == null) return sortOrder === "asc" ? 1 : -1;
+      if (aVal == null) return 1;
+      if (bVal == null) return -1;
 
-      // NUMERIC SORT (ID)
       if (sortKey === "id") {
-        return sortOrder === "asc"
-          ? Number(aVal) - Number(bVal)
-          : Number(bVal) - Number(aVal);
+        const aNum = Number(aVal);
+        const bNum = Number(bVal);
+
+        if (isNaN(aNum) || isNaN(bNum)) return 0;
+
+        return (aNum - bNum) * direction;
       }
 
-      // STRING SORT
       if (typeof aVal === "string" && typeof bVal === "string") {
-        return sortOrder === "asc"
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
+        return aVal.localeCompare(bVal) * direction;
       }
 
-      // fallback
-      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
-      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+      if (aVal < bVal) return -1 * direction;
+      if (aVal > bVal) return 1 * direction;
 
       return 0;
     });
+
     return result;
   }, [clients, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
@@ -137,8 +153,8 @@ export default function Clients() {
 
   const paginatedClients = useMemo(() => {
     const start = page * rowsPerPage;
-    return filteredAndSortedCases.slice(start, start + rowsPerPage);
-  }, [filteredAndSortedCases, page, rowsPerPage]);
+    return filteredAndSortedItems.slice(start, start + rowsPerPage);
+  }, [filteredAndSortedItems, page, rowsPerPage]);
 
   const handleSort = (key: TableClientSortKey) => {
     if (sortKey === key) {
@@ -304,7 +320,7 @@ export default function Clients() {
                   <TableCell className="whitespace-nowrap">
                     <Link href={`/clients`}>
                       <Typography className="font-medium text-primary hover:underline">
-                        {client.name}
+                        {client.firstName} {client.lastName}
                       </Typography>
                     </Link>
                     {client.company && (
@@ -399,7 +415,7 @@ export default function Clients() {
         <TablePagination
           rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
           component="div"
-          count={filteredAndSortedCases.length}
+          count={filteredAndSortedItems.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -31,7 +31,6 @@ export type CreateClientInput = ClientBase;
 /** Client Entity */
 export interface Client extends ClientBase {
   id: string;
-  name: string; // Computed: `${firstName} ${lastName}`
   casesCount: number;
   notes: Note[];
   createdAt?: string; // Optional timestamp

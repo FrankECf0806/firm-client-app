@@ -1,31 +1,35 @@
-import { Client, ClientFormValues } from "../types/client";
+import { Client, ClientFormValues } from "@/types/client";
 
-export function clientToFormValues(clientItem: Client): ClientFormValues {
+export function clientToFormValues(
+  client: Client,
+): ClientFormValues & { id: string } {
   return {
-    id: clientItem.id,
-    firstName: clientItem.name.split(" ")[0] || "",
-    lastName: clientItem.name.split(" ")[1] || "",
-    company: clientItem.company,
-    email: clientItem.email,
-    phone: clientItem.phone,
-    address: clientItem.address,
-    type: clientItem.type,
-    status: clientItem.status,
-    description: clientItem.description,
+    id: client.id,
+    firstName: client.firstName,
+    lastName: client.lastName,
+    company: client.company,
+    email: client.email,
+    phone: client.phone,
+    address: client.address,
+    status: client.status,
+    type: client.type,
+    description: client.description,
   };
 }
 
+// No changes needed for formValuesToClientUpdate
 export function formValuesToClientUpdate(
-  clientItem: ClientFormValues,
+  formValues: ClientFormValues,
 ): Partial<Client> {
   return {
-    name: `${clientItem.firstName} ${clientItem.lastName}`.trim(),
-    company: clientItem.company,
-    email: clientItem.email,
-    phone: clientItem.phone,
-    address: clientItem.address,
-    type: clientItem.type,
-    status: clientItem.status,
-    description: clientItem.description,
+    firstName: formValues.firstName,
+    lastName: formValues.lastName,
+    company: formValues.company,
+    email: formValues.email,
+    phone: formValues.phone,
+    address: formValues.address,
+    status: formValues.status,
+    type: formValues.type,
+    description: formValues.description,
   };
 }

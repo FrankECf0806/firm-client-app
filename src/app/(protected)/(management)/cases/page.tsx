@@ -73,60 +73,86 @@ export default function Cases() {
   );
 
   // Sort and filter cases
-  const filteredAndSortedCases = useMemo(() => {
-    let result = [...cases];
+  const filteredAndSortedItems = useMemo(() => {
+    if (!cases.length) return [];
 
-    // 🔍 Search filter
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (c) =>
+    // Trim search to avoid whitespace-only searches
+    const trimmedQuery = searchQuery.trim();
+    const hasSearch = trimmedQuery.length > 0;
+    const hasStatusFilter = statusFilter !== ALL_CASE_STATUS;
+    const hasTypeFilter = typeFilter !== ALL_CASE_PRACTICE_AREAS;
+
+    const q = hasSearch ? trimmedQuery.toLowerCase() : "";
+
+    const filtered = cases.filter((c) => {
+      if (hasSearch) {
+        const matchesSearch =
           c.title.toLowerCase().includes(q) ||
           c.client.toLowerCase().includes(q) ||
-          c.practiceArea.toLowerCase().includes(q),
-      );
-    }
+          c.practiceArea.toLowerCase().includes(q);
 
-    // 🟡 Status filter
-    if (statusFilter !== ALL_CASE_STATUS) {
-      result = result.filter((c) => c.status === statusFilter);
-    }
+        if (!matchesSearch) return false;
+      }
 
-    // 🔵 Type filter
-    if (typeFilter !== ALL_CASE_PRACTICE_AREAS) {
-      result = result.filter((c) => c.practiceArea === typeFilter);
-    }
+      if (hasStatusFilter && c.status !== statusFilter) return false;
+      if (hasTypeFilter && c.practiceArea !== typeFilter) return false;
 
-    // Sort
+      return true;
+    });
+
+    if (!sortKey || filtered.length <= 1) return filtered;
+
+    const result = [...filtered];
+    const direction = sortOrder === "asc" ? 1 : -1;
+
     result.sort((a, b) => {
-      const aVal = a[sortKey];
-      const bVal = b[sortKey];
+      if (sortKey === "client") {
+        return a.client.localeCompare(b.client) * direction;
+      }
 
-      // Handle undefined safely
-      if (aVal == null && bVal == null) return 0;
-      if (aVal == null) return sortOrder === "asc" ? -1 : 1;
-      if (bVal == null) return sortOrder === "asc" ? 1 : -1;
+      if (sortKey === "title") {
+        return a.title.localeCompare(b.title) * direction;
+      }
 
-      // NUMERIC SORT (ID)
+      if (sortKey === "practiceArea") {
+        return a.practiceArea.localeCompare(b.practiceArea) * direction;
+      }
+
+      if (sortKey === "status") {
+        return a.status.localeCompare(b.status) * direction;
+      }
+
+      if (sortKey === "priority") {
+        // Priority order: LOW, MEDIUM, HIGH, URGENT
+        const priorityOrder = { LOW: 0, MEDIUM: 1, HIGH: 2, URGENT: 3 };
+        const aPriority = priorityOrder[a.priority] ?? 0;
+        const bPriority = priorityOrder[b.priority] ?? 0;
+        return (aPriority - bPriority) * direction;
+      }
+
+      if (sortKey === "openedAt" || sortKey === "nextDeadline") {
+        const aDate = a[sortKey] ? new Date(a[sortKey]).getTime() : null;
+        const bDate = b[sortKey] ? new Date(b[sortKey]).getTime() : null;
+
+        if (aDate == null && bDate == null) return 0;
+        if (aDate == null) return 1;
+        if (bDate == null) return -1;
+
+        return (aDate - bDate) * direction;
+      }
+
+      // 🔹 ID - numeric sort
       if (sortKey === "id") {
-        return sortOrder === "asc"
-          ? Number(aVal) - Number(bVal)
-          : Number(bVal) - Number(aVal);
-      }
+        const aNum = Number(a.id);
+        const bNum = Number(b.id);
 
-      // STRING SORT
-      if (typeof aVal === "string" && typeof bVal === "string") {
-        return sortOrder === "asc"
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
+        if (isNaN(aNum) || isNaN(bNum)) return 0;
+        return (aNum - bNum) * direction;
       }
-
-      // fallback
-      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
-      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
 
       return 0;
     });
+
     return result;
   }, [cases, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
@@ -137,8 +163,8 @@ export default function Cases() {
 
   const paginatedCases = useMemo(() => {
     const start = page * rowsPerPage;
-    return filteredAndSortedCases.slice(start, start + rowsPerPage);
-  }, [filteredAndSortedCases, page, rowsPerPage]);
+    return filteredAndSortedItems.slice(start, start + rowsPerPage);
+  }, [filteredAndSortedItems, page, rowsPerPage]);
 
   const handleSort = (key: TableCaseSortKey) => {
     if (sortKey === key) {
@@ -376,7 +402,7 @@ export default function Cases() {
                   </TableCell>
                 </TableRow>
               ))}
-              {filteredAndSortedCases.length === 0 && (
+              {filteredAndSortedItems.length === 0 && (
                 <TableRow>
                   <TableCell
                     className="align-middle items-center text-center font-semibold"
@@ -396,7 +422,7 @@ export default function Cases() {
         <TablePagination
           rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
           component="div"
-          count={filteredAndSortedCases.length}
+          count={filteredAndSortedItems.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
