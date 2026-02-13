@@ -55,6 +55,7 @@ import { TableSortOrder } from "@/types/table";
 
 export default function Cases() {
   const { cases } = useAppContext();
+  const { cases: casesList } = cases;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>(ALL_CASE_PRACTICE_AREAS);
@@ -74,7 +75,7 @@ export default function Cases() {
 
   // Sort and filter cases
   const filteredAndSortedItems = useMemo(() => {
-    if (!cases.length) return [];
+    if (!casesList.length) return [];
 
     // Trim search to avoid whitespace-only searches
     const trimmedQuery = searchQuery.trim();
@@ -84,7 +85,7 @@ export default function Cases() {
 
     const q = hasSearch ? trimmedQuery.toLowerCase() : "";
 
-    const filtered = cases.filter((c) => {
+    const filtered = casesList.filter((c) => {
       if (hasSearch) {
         const matchesSearch =
           c.title.toLowerCase().includes(q) ||
@@ -154,7 +155,7 @@ export default function Cases() {
     });
 
     return result;
-  }, [cases, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+  }, [casesList, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
   useEffect(() => {
     const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);

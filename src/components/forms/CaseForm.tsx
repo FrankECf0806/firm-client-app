@@ -17,7 +17,9 @@ export function CaseForm({
   onClose,
   formData,
 }: QuickAcessFormProps<CaseFormValues>) {
-  const { clients, addCase, updateCase, deleteCase } = useAppContext();
+  const { clients, cases } = useAppContext();
+  const { addCase, updateCase, deleteCase } = cases;
+  const { clients: clientList } = clients;
 
   const {
     control,
@@ -180,7 +182,7 @@ export function CaseForm({
                   <span>Create New Client</span>
                 </Button>
               </MenuItem>
-              {clients.map((c) => (
+              {clientList.map((c) => (
                 <MenuItem key={c.id} value={c.id}>
                   {c.firstName} {c.lastName}
                 </MenuItem>

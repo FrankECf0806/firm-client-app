@@ -54,6 +54,7 @@ import { TableSortOrder } from "@/types/table";
 
 export default function Clients() {
   const { clients } = useAppContext();
+  const { clients: clientList } = clients;
   const [searchQuery, setSearchQuery] = useState("");
 
   const [statusFilter, setStatusFilter] = useState<string>(ALL_CLIENT_STATUS);
@@ -73,7 +74,7 @@ export default function Clients() {
 
   // Sort and filter clients
   const filteredAndSortedItems = useMemo(() => {
-    if (!clients.length) return [];
+    if (!clientList.length) return [];
 
     // Trim search to avoid whitespace-only searches
     const trimmedQuery = searchQuery.trim();
@@ -83,7 +84,7 @@ export default function Clients() {
 
     const q = hasSearch ? trimmedQuery.toLowerCase() : "";
 
-    const filtered = clients.filter((c) => {
+    const filtered = clientList.filter((c) => {
       if (hasSearch) {
         const fullName = `${c.firstName} ${c.lastName}`.toLowerCase();
 
@@ -144,7 +145,7 @@ export default function Clients() {
     });
 
     return result;
-  }, [clients, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+  }, [clientList, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
 
   useEffect(() => {
     const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);

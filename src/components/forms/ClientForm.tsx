@@ -17,7 +17,8 @@ export function ClientForm({
   onClose,
   formData,
 }: QuickAcessFormProps<ClientFormValues>) {
-  const { addClient, updateClient, deleteClient } = useAppContext();
+  const { clients } = useAppContext();
+  const { addClient, updateClient, deleteClient } = clients;
 
   const {
     control,

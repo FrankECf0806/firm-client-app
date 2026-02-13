@@ -31,6 +31,8 @@ export interface Case extends CaseBase {
   id: string;
   client: string; // Client name (computed from clientId)
   notes: Note[];
+  createdAt?: string; // Optional timestamp
+  updatedAt?: string; // Optional timestamp
 }
 
 export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;

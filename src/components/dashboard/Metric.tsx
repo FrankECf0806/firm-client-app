@@ -14,15 +14,18 @@ import { MetricCardProps } from "@/types/metric";
 
 export function Metric() {
   const { cases, clients, invoices } = useAppContext();
+  const { cases: casesList } = cases;
+  const { clients: clientList } = clients;
+  const { invoices: invoiceList } = invoices;
 
   // Metrics
-  const activeCases = cases.filter((c) => c.status === "ACTIVE").length;
-  const totalClients = clients.length;
-  const totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
-  const outstanding = invoices
+  const activeCases = casesList.filter((c) => c.status === "ACTIVE").length;
+  const totalClients = clientList.length;
+  const totalRevenue = invoiceList.reduce((sum, inv) => sum + inv.total, 0);
+  const outstanding = invoiceList
     .filter((inv) => inv.status !== "PAID")
     .reduce((sum, inv) => sum + inv.total, 0);
-  const unpaidCount = invoices.filter((inv) => inv.status !== "PAID").length;
+  const unpaidCount = invoiceList.filter((inv) => inv.status !== "PAID").length;
 
   const metrics: MetricCardProps[] = [
     {

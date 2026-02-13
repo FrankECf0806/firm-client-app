@@ -26,7 +26,7 @@ export function SortableHeader<T extends string>({
         className={`
 			text-sm transition-transform
 			${isActive ? "opacity-100" : "opacity-40"}
-			${isActive && sortOrder === "desc" ? "rotate-180" : "rotate-none"}
+			${isActive && sortOrder === "asc" ? "rotate-180" : ""}
 		`}
       />
     </Box>
