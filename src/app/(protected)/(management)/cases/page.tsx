@@ -54,8 +54,9 @@ import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { TableSortOrder } from "@/types/table";
 
 export default function Cases() {
-  const { cases } = useAppContext();
+  const { cases, clients } = useAppContext();
   const { cases: casesList } = cases;
+  const { clientNamesMap } = clients;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>(ALL_CASE_PRACTICE_AREAS);
@@ -86,10 +87,12 @@ export default function Cases() {
     const q = hasSearch ? trimmedQuery.toLowerCase() : "";
 
     const filtered = casesList.filter((c) => {
+      const clientName = clientNamesMap.get(c.clientId) || "";
+
       if (hasSearch) {
         const matchesSearch =
           c.title.toLowerCase().includes(q) ||
-          c.client.toLowerCase().includes(q) ||
+          clientName.toLowerCase().includes(q) ||
           c.practiceArea.toLowerCase().includes(q);
 
         if (!matchesSearch) return false;
@@ -107,8 +110,10 @@ export default function Cases() {
     const direction = sortOrder === "asc" ? 1 : -1;
 
     result.sort((a, b) => {
-      if (sortKey === "client") {
-        return a.client.localeCompare(b.client) * direction;
+      if (sortKey === "clientId") {
+        const clientNameA = clientNamesMap.get(a.clientId) || "";
+        const clientNameB = clientNamesMap.get(b.clientId) || "";
+        return clientNameA.localeCompare(clientNameB) * direction;
       }
 
       if (sortKey === "title") {
@@ -155,7 +160,15 @@ export default function Cases() {
     });
 
     return result;
-  }, [casesList, searchQuery, statusFilter, typeFilter, sortKey, sortOrder]);
+  }, [
+    casesList,
+    clientNamesMap,
+    searchQuery,
+    statusFilter,
+    typeFilter,
+    sortKey,
+    sortOrder,
+  ]);
 
   useEffect(() => {
     const id = setTimeout(() => setPage(DEFAULT_PAGE), 0);
@@ -323,86 +336,91 @@ export default function Cases() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedCases.map((caseItem) => (
-                <TableRow key={caseItem.id} className="hover:bg-primary/5">
-                  <TableCell className="whitespace-nowrap">
-                    <Typography className="font-mono text-gray-600">
-                      #{caseItem.id}
-                    </Typography>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Typography className="font-medium">
-                      {caseItem.title}
-                    </Typography>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Typography>{caseItem.client}</Typography>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid size={{ xs: 12, md: 10 }}>
-                        <Chip
-                          className={`
-							w-full
-							${CASE_TYPE_CONFIG[caseItem.practiceArea].styling?.unselectedClass}
-						`}
-                          label={CASE_TYPE_CONFIG[caseItem.practiceArea].label}
-                          variant="filled"
-                        />
-                      </Grid>
-                    </Grid>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Box className="flex items-center gap-1">
-                      <ScheduleIcon className="text-gray-400 text-sm" />
-                      <Typography variant="body2">
-                        {caseItem.openedAt}
+              {paginatedCases.map((caseItem) => {
+                const clientName = clientNamesMap.get(caseItem.clientId);
+                return (
+                  <TableRow key={caseItem.id} className="hover:bg-primary/5">
+                    <TableCell className="whitespace-nowrap">
+                      <Typography className="font-mono text-gray-600">
+                        #{caseItem.id}
                       </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap items-center">
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid size={{ xs: 12, md: 10 }}>
-                        <Chip
-                          className="w-full"
-                          label={CASE_STATUS_CONFIG[caseItem.status].label}
-                          variant="filled"
-                          color={
-                            CASE_STATUS_CONFIG[caseItem.status].styling?.color
-                          }
-                        />
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Typography className="font-medium">
+                        {caseItem.title}
+                      </Typography>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Typography>{clientName}</Typography>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid size={{ xs: 12, md: 10 }}>
+                          <Chip
+                            className={`
+                              w-full
+                              ${CASE_TYPE_CONFIG[caseItem.practiceArea].styling?.unselectedClass}
+                            `}
+                            label={
+                              CASE_TYPE_CONFIG[caseItem.practiceArea].label
+                            }
+                            variant="filled"
+                          />
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <Box className="flex gap-1">
-                      <Tooltip title="View Notes">
-                        <IconButton
-                          size="small"
-                          className="bg-primary/10 hover:bg-primary/20 text-primary"
-                        >
-                          <FileTextIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Edit Case">
-                        <IconButton
-                          size="small"
-                          className="bg-gray-100 hover:bg-gray-200 text-gray-600"
-                          onClick={() =>
-                            setCaseFormState({
-                              open: true,
-                              mode: "edit",
-                              formData: caseToFormValues(caseItem),
-                            })
-                          }
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Box className="flex items-center gap-1">
+                        <ScheduleIcon className="text-gray-400 text-sm" />
+                        <Typography variant="body2">
+                          {caseItem.openedAt}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap items-center">
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid size={{ xs: 12, md: 10 }}>
+                          <Chip
+                            className="w-full"
+                            label={CASE_STATUS_CONFIG[caseItem.status].label}
+                            variant="filled"
+                            color={
+                              CASE_STATUS_CONFIG[caseItem.status].styling?.color
+                            }
+                          />
+                        </Grid>
+                      </Grid>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Box className="flex gap-1">
+                        <Tooltip title="View Notes">
+                          <IconButton
+                            size="small"
+                            className="bg-primary/10 hover:bg-primary/20 text-primary"
+                          >
+                            <FileTextIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit Case">
+                          <IconButton
+                            size="small"
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-600"
+                            onClick={() =>
+                              setCaseFormState({
+                                open: true,
+                                mode: "edit",
+                                formData: caseToFormValues(caseItem),
+                              })
+                            }
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
               {filteredAndSortedItems.length === 0 && (
                 <TableRow>
                   <TableCell

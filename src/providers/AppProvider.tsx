@@ -89,12 +89,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addCase: (input: Parameters<typeof cases.addCase>[0]) => {
         const newCase = cases.addCase(input);
 
-        // Find client and update case with client name
-        const client = clients.clients.find((c) => c.id === input.clientId);
+        const client = clients.getClientById(input.clientId);
         if (client) {
-          const clientName = `${client.firstName} ${client.lastName}`.trim();
-          cases.updateCase(newCase.id, { client: clientName });
-
           // Increment client's casesCount
           clients.updateClient(client.id, {
             casesCount: client.casesCount + 1,
@@ -105,8 +101,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       // Override deleteCase to also handle related data
       deleteCase: (id: string) => {
+        // Get the case to find its clientId
+        const caseToDelete = cases.getCaseById(id);
+
         // Delete the case
         cases.deleteCase(id);
+
+        // Decrement client's casesCount if we found the case
+        if (caseToDelete) {
+          const client = clients.getClientById(caseToDelete.clientId);
+          if (client) {
+            clients.updateClient(client.id, {
+              casesCount: Math.max(0, client.casesCount - 1), // Ensure it doesn't go below 0
+            });
+          }
+        }
 
         // Also delete related documents, meetings, tasks, etc.
         documents.getDocumentsByCase(id).forEach((doc) => {
@@ -124,6 +133,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
         communications.getCommunicationsByCase(id).forEach((comm) => {
           communications.deleteCommunication(comm.id);
         });
+      },
+
+      // Optional: Add an updateCase override to handle client changes
+      updateCase: (id: string, updates: Partial<(typeof cases.cases)[0]>) => {
+        // If clientId is being updated, we need to adjust casesCount for both old and new clients
+        if (updates.clientId) {
+          const oldCase = cases.getCaseById(id);
+          if (oldCase && oldCase.clientId !== updates.clientId) {
+            // Decrement count for old client
+            const oldClient = clients.getClientById(oldCase.clientId);
+            if (oldClient) {
+              clients.updateClient(oldClient.id, {
+                casesCount: Math.max(0, oldClient.casesCount - 1),
+              });
+            }
+
+            // Increment count for new client
+            const newClient = clients.getClientById(updates.clientId);
+            if (newClient) {
+              clients.updateClient(newClient.id, {
+                casesCount: newClient.casesCount + 1,
+              });
+            }
+          }
+        }
+
+        // Call the original updateCase
+        cases.updateCase(id, updates);
       },
     }),
     [cases, clients, documents, meetings, tasks, communications],

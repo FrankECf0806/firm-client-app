@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Client, CreateClientInput } from "@/types/client";
 import { mockClients } from "@/mock_data";
 
@@ -8,6 +8,19 @@ export function useClients() {
   const resetClients = useCallback(() => {
     setClients(mockClients);
   }, []);
+
+  const clientsMap = useMemo(
+    () => new Map(clients.map((c) => [c.id, c])),
+    [clients],
+  );
+
+  const clientNamesMap = useMemo(
+    () =>
+      new Map(
+        clients.map((c) => [c.id, `${c.firstName} ${c.lastName}`.trim()]),
+      ),
+    [clients],
+  );
 
   const addClient = useCallback((input: CreateClientInput) => {
     const now = new Date().toISOString();
@@ -67,6 +80,8 @@ export function useClients() {
 
   return {
     clients,
+    clientsMap,
+    clientNamesMap,
     addClient,
     updateClient,
     deleteClient,

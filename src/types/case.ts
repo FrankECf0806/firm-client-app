@@ -29,7 +29,6 @@ export type CreateCaseInput = CaseBase;
 /** Full Case Entity - stored in AppProvider */
 export interface Case extends CaseBase {
   id: string;
-  client: string; // Client name (computed from clientId)
   notes: Note[];
   createdAt?: string; // Optional timestamp
   updatedAt?: string; // Optional timestamp
@@ -41,7 +40,7 @@ export type CaseFilterPracticeArea = CasePracticeAreaKey;
 export type TableCaseSortKey =
   | "id"
   | "title"
-  | "client"
+  | "clientId"
   | "status"
   | "practiceArea"
   | "priority"

@@ -25,7 +25,7 @@ export const COLUMNS: TableColumn<TableCaseSortKey>[] = [
     label: "Client",
     minWidth: 180,
     sortable: true,
-    sortKey: "client",
+    sortKey: "clientId",
   },
   {
     field: "practiceArea",

@@ -15,7 +15,6 @@ export function useCases() {
     const newCase: Case = {
       ...input,
       id: Date.now().toString(),
-      client: "Unknown Client",
       status: "ACTIVE",
       notes: [],
       createdAt: now,
