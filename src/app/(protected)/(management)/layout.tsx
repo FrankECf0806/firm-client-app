@@ -1,10 +1,14 @@
+// src/app/(protected)/(management)/layout.tsx
 "use client";
 
 import { ReactNode } from "react";
 import Management from "@/components/layout/Management";
 import { usePathname } from "next/navigation";
 import { Box } from "@mui/material";
-import { defaultSourcePath, pageConfig } from "@/utils/constant";
+import { rootSourcePath, pageConfig } from "@/utils/constant";
+
+// All list pages are exactly the keys in pageConfig
+const listPaths = Object.keys(pageConfig);
 
 export default function ManagementLayout({
   children,
@@ -13,22 +17,23 @@ export default function ManagementLayout({
 }) {
   const pathname = usePathname();
 
-  const isDetailPage = pathname.split("/").filter(Boolean).length > 2;
+  // Check if current path is exactly a list page
+  const isListPage = listPaths.includes(pathname);
 
-  if (isDetailPage) {
-    return <Box className="p-4">{children}</Box>;
+  if (!isListPage) {
+    // Detail page or nested route – just render children with padding
+    return <Box>{children}</Box>;
   }
 
-  const config = pageConfig[pathname] || {
-    title: pathname.split("/").pop()?.replace("-", " ") || "Page",
-  };
+  // List page – use Management component with pageConfig
+  const config = pageConfig[pathname];
 
   return (
     <Management
       title={config.title}
       subtitle={config.subtitle}
       breadcrumbs={[
-        { ...defaultSourcePath },
+        { ...rootSourcePath },
         { label: config.title, href: undefined },
       ]}
     >

@@ -1,3 +1,4 @@
+import { SvgIconComponent } from "@mui/icons-material";
 import { ChipProps, TextFieldProps } from "@mui/material";
 
 export interface ClearableSelectProps extends Omit<TextFieldProps, "onChange"> {
@@ -20,6 +21,8 @@ export interface FilterItem<K extends string = string> {
     unselectedClass?: string;
     // OR use custom sx prop
     sx?: ChipProps["sx"];
+    // OR use an icon
+    icon?: SvgIconComponent;
   };
 }
 

@@ -319,7 +319,7 @@ export default function Clients() {
                     </Typography>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
-                    <Link href={`/clients`}>
+                    <Link href={`/clients/${client.id}`}>
                       <Typography className="font-medium text-primary hover:underline">
                         {client.firstName} {client.lastName}
                       </Typography>
@@ -365,7 +365,7 @@ export default function Clients() {
                           }
                         />
                       </Grid>
-                    </Grid>{" "}
+                    </Grid>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     <Box className="flex gap-1">

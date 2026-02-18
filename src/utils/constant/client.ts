@@ -3,9 +3,24 @@ import { TableColumn } from "@/types/table";
 import {
   ClientFilterStatus,
   ClientFilterType,
+  ClientTypeKey,
   TableClientSortKey,
 } from "@/types/client";
 import { ClientStatus } from "@/enums/client";
+import {
+  Person2Outlined,
+  BusinessOutlined,
+  AccountBalanceOutlined,
+  VolunteerActivismOutlined,
+  SvgIconComponent,
+} from "@mui/icons-material";
+
+export const CLIENT_TYPE_ICONS: Record<ClientTypeKey, SvgIconComponent> = {
+  INDIVIDUAL: Person2Outlined,
+  CORPORATE: BusinessOutlined,
+  GOVERNMENT: AccountBalanceOutlined,
+  NON_PROFIT: VolunteerActivismOutlined,
+};
 
 /** Status and Client Type */
 export const ALL_CLIENT_STATUS = "ALL_STATUS";
@@ -123,6 +138,7 @@ export const CLIENT_TYPE_CONFIG: Record<
       selectedClass: "bg-blue-600 text-white",
       unselectedClass:
         "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:text-white",
+      icon: undefined,
     },
     onClick: (setType) => setType(ALL_CLIENT_TYPES),
   },
@@ -132,6 +148,7 @@ export const CLIENT_TYPE_CONFIG: Record<
       selectedClass: "bg-emerald-600 text-white",
       unselectedClass:
         "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100",
+      icon: CLIENT_TYPE_ICONS.INDIVIDUAL,
     },
     onClick: (setType) => setType("INDIVIDUAL"),
   },
@@ -141,6 +158,7 @@ export const CLIENT_TYPE_CONFIG: Record<
       selectedClass: "bg-indigo-600 text-white",
       unselectedClass:
         "bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100",
+      icon: CLIENT_TYPE_ICONS.CORPORATE,
     },
     onClick: (setType) => setType("CORPORATE"),
   },
@@ -150,6 +168,7 @@ export const CLIENT_TYPE_CONFIG: Record<
       selectedClass: "bg-purple-600 text-white",
       unselectedClass:
         "bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100",
+      icon: CLIENT_TYPE_ICONS.GOVERNMENT,
     },
     onClick: (setType) => setType("GOVERNMENT"),
   },
@@ -159,6 +178,7 @@ export const CLIENT_TYPE_CONFIG: Record<
       selectedClass: "bg-amber-600 text-white",
       unselectedClass:
         "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100",
+      icon: CLIENT_TYPE_ICONS.NON_PROFIT,
     },
     onClick: (setType) => setType("NON_PROFIT"),
   },

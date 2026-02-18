@@ -1,5 +1,5 @@
 import { ManagementProps } from "@/types/layout";
-import { Box, Breadcrumbs, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Chip, Typography } from "@mui/material";
 import {
   Home as HomeIcon,
   NavigateNext as NavigateNextIcon,
@@ -12,6 +12,8 @@ export default function ManagementLayout({
   subtitle,
   breadcrumbs = [],
   actions,
+  metadata,
+  metadataPosition = "below",
   showHeader = true,
 }: ManagementProps) {
   // Default breadcrumbs if none provided
@@ -60,12 +62,35 @@ export default function ManagementLayout({
           {/* Title Row */}
           <Box className="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-3">
             <Box className="flex-1">
-              <Typography
-                variant="h4"
-                className="font-bold mb-0.5 text-xl md:text-3xl"
-              >
-                {title}
-              </Typography>
+              <Box className="flex items-center gap-1 flex-wrap">
+                <Typography
+                  variant="h4"
+                  className="font-bold text-xl md:text-3xl truncate max-w-full"
+                >
+                  {title}
+                </Typography>
+
+                {/* Metadata chips - inline next to title */}
+                {metadata && metadataPosition === "inline" && (
+                  <Box className="flex items-center gap-1">
+                    {metadata.map((item, index) => {
+                      const Icon = item.icon;
+                      return (
+                        <Chip
+                          key={index}
+                          label={item.label}
+                          color={item.color}
+                          size={item.size ?? "small"}
+                          className={item.className}
+                          icon={Icon ? <Icon className="w-3 h-3" /> : undefined}
+                          sx={{ height: "1.5rem" }}
+                        />
+                      );
+                    })}
+                  </Box>
+                )}
+              </Box>
+
               {subtitle && (
                 <Typography
                   variant="body1"
