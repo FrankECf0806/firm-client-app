@@ -10,7 +10,7 @@ export interface ClearableSelectProps extends Omit<TextFieldProps, "onChange"> {
   disabled?: boolean;
 }
 
-export interface FilterItem<K extends string = string> {
+export interface ConfigItem<K extends string = string> {
   label: string;
   onClick: (setValue: (value: K) => void) => void;
   styling?: {
@@ -29,7 +29,7 @@ export interface FilterItem<K extends string = string> {
 // Filter
 export type QuickFilterChipsProps<K extends string> = {
   title: string;
-  items: [K, FilterItem<K>][];
+  items: [K, ConfigItem<K>][];
   value: K;
   onChange: (value: K) => void;
 };

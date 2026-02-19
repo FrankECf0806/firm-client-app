@@ -1,4 +1,4 @@
-import { FilterItem } from "@/types/ui";
+import { ConfigItem } from "@/types/ui";
 import { TableColumn } from "@/types/table";
 import {
   ClientFilterStatus,
@@ -82,7 +82,7 @@ export const TABLE_TOTAL_WIDTH = COLUMNS.reduce(
 /** Client Status* */
 export const CLIENT_STATUS_CONFIG: Record<
   ClientFilterStatus,
-  FilterItem<ClientFilterStatus>
+  ConfigItem<ClientFilterStatus>
 > = {
   [ALL_CLIENT_STATUS]: {
     label: "All Status",
@@ -130,7 +130,7 @@ export const QUICK_FILTER_CLIENT_STATUS = Object.entries(
 //** Client Type */
 export const CLIENT_TYPE_CONFIG: Record<
   ClientFilterType,
-  FilterItem<ClientFilterType>
+  ConfigItem<ClientFilterType>
 > = {
   [ALL_CLIENT_TYPES]: {
     label: "All Types",

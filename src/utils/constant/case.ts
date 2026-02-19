@@ -3,7 +3,7 @@ import {
   CaseFilterStatus,
   TableCaseSortKey,
 } from "@/types/case";
-import { FilterItem } from "@/types/ui";
+import { ConfigItem } from "@/types/ui";
 import { CasePracticeArea, CaseStatus } from "@/enums/case";
 import { TableColumn } from "@/types/table";
 
@@ -61,7 +61,7 @@ export const TABLE_TOTAL_WIDTH = COLUMNS.reduce(
  * */
 export const CASE_TYPE_CONFIG: Record<
   CaseFilterPracticeArea,
-  FilterItem<CaseFilterPracticeArea>
+  ConfigItem<CaseFilterPracticeArea>
 > = {
   ["CIVIL_LITIGATION"]: {
     label: CasePracticeArea.CIVIL_LITIGATION,
@@ -210,7 +210,7 @@ export const QUICK_FILTER_CASE_TYPE = Object.entries(CASE_TYPE_CONFIG).filter(
  * */
 export const CASE_STATUS_CONFIG: Record<
   CaseFilterStatus,
-  FilterItem<CaseFilterStatus>
+  ConfigItem<CaseFilterStatus>
 > = {
   [ALL_CASE_STATUS]: {
     label: "All Status",

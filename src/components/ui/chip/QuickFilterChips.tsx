@@ -1,5 +1,5 @@
-// components/ui/QuickFilterChips.tsx
-import { Grid, Typography, Chip, ChipProps } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import { AppChip } from "./AppChip";
 import { QuickFilterChipsProps } from "@/types/ui";
 
 export function QuickFilterChips<K extends string>({
@@ -20,33 +20,14 @@ export function QuickFilterChips<K extends string>({
       <Grid container spacing={1}>
         {items.map(([key, item]) => {
           const isSelected = value === key;
-          const { styling = {} } = item;
-
-          // Build chip props safely
-          const chipProps: ChipProps = {
-            label: item.label,
-            variant: isSelected ? "filled" : "outlined",
-            onClick: () => item.onClick(onChange),
-          };
-
-          // Add conditional props
-          if (styling.color) {
-            chipProps.color = styling.color;
-          }
-
-          if (styling.sx) {
-            chipProps.sx = styling.sx;
-          }
-
-          if (styling.selectedClass && styling.unselectedClass) {
-            chipProps.className = isSelected
-              ? styling.selectedClass
-              : styling.unselectedClass;
-          }
 
           return (
             <Grid key={key} size="auto">
-              <Chip {...chipProps} />
+              <AppChip
+                config={item}
+                selected={isSelected}
+                onClick={() => item.onClick?.(onChange)}
+              />
             </Grid>
           );
         })}

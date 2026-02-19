@@ -4,7 +4,6 @@ import { useState, useMemo, MouseEvent, useEffect, ChangeEvent } from "react";
 import {
   Box,
   Button,
-  Chip,
   Grid,
   IconButton,
   Paper,
@@ -51,6 +50,7 @@ import { ClientStatus, ClientType } from "@/enums/client";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import { clientToFormValues } from "@/mappers/client.mappers";
 import { TableSortOrder } from "@/types/table";
+import { AppChip } from "@/components/ui/chip/AppChip";
 
 export default function Clients() {
   const { clients } = useAppContext();
@@ -339,13 +339,10 @@ export default function Clients() {
                   <TableCell className="whitespace-nowrap">
                     <Grid container spacing={2} alignItems="center">
                       <Grid size={{ xs: 12, md: 10 }}>
-                        <Chip
-                          className={`
-							w-full
-							${CLIENT_TYPE_CONFIG[client.type].styling?.unselectedClass}
-						`}
-                          label={CLIENT_TYPE_CONFIG[client.type].label}
-                          variant="filled"
+                        <AppChip
+                          config={CLIENT_TYPE_CONFIG[client.type]}
+                          selected={false}
+                          className="w-full"
                         />
                       </Grid>
                     </Grid>
@@ -356,13 +353,10 @@ export default function Clients() {
                   <TableCell className="whitespace-nowrap items-center">
                     <Grid container spacing={2} alignItems="center">
                       <Grid size={{ xs: 12, md: 10 }}>
-                        <Chip
+                        <AppChip
+                          config={CLIENT_STATUS_CONFIG[client.status]}
+                          selected={true}
                           className="w-full"
-                          label={CLIENT_STATUS_CONFIG[client.status].label}
-                          variant="filled"
-                          color={
-                            CLIENT_STATUS_CONFIG[client.status].styling?.color
-                          }
                         />
                       </Grid>
                     </Grid>

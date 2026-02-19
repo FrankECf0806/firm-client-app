@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  Chip,
   Grid,
   IconButton,
   Paper,
@@ -52,6 +51,7 @@ import { caseToFormValues } from "@/mappers/case.mapper";
 import { FormState } from "@/types/form";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { TableSortOrder } from "@/types/table";
+import { AppChip } from "@/components/ui/chip/AppChip";
 
 export default function Cases() {
   const { cases, clients } = useAppContext();
@@ -356,15 +356,10 @@ export default function Cases() {
                     <TableCell className="whitespace-nowrap">
                       <Grid container spacing={2} alignItems="center">
                         <Grid size={{ xs: 12, md: 10 }}>
-                          <Chip
-                            className={`
-                              w-full
-                              ${CASE_TYPE_CONFIG[caseItem.practiceArea].styling?.unselectedClass}
-                            `}
-                            label={
-                              CASE_TYPE_CONFIG[caseItem.practiceArea].label
-                            }
-                            variant="filled"
+                          <AppChip
+                            config={CASE_TYPE_CONFIG[caseItem.practiceArea]}
+                            selected={false}
+                            className="w-full"
                           />
                         </Grid>
                       </Grid>
@@ -380,13 +375,10 @@ export default function Cases() {
                     <TableCell className="whitespace-nowrap items-center">
                       <Grid container spacing={2} alignItems="center">
                         <Grid size={{ xs: 12, md: 10 }}>
-                          <Chip
+                          <AppChip
+                            config={CASE_STATUS_CONFIG[caseItem.status]}
+                            selected={true}
                             className="w-full"
-                            label={CASE_STATUS_CONFIG[caseItem.status].label}
-                            variant="filled"
-                            color={
-                              CASE_STATUS_CONFIG[caseItem.status].styling?.color
-                            }
                           />
                         </Grid>
                       </Grid>
