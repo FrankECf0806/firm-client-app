@@ -1,33 +1,10 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import {
-  FilterList as FilterIcon,
-  Add as AddIcon,
-  Edit as EditIcon,
-  Description as FileTextIcon,
-  Schedule as ScheduleIcon,
-} from "@mui/icons-material";
-import { useMemo, useState, MouseEvent, ChangeEvent, useEffect } from "react";
+import { Box, Button, Grid, Paper } from "@mui/material";
+import { FilterList as FilterIcon, Add as AddIcon } from "@mui/icons-material";
+import { useMemo, useState, useEffect } from "react";
 import { CaseStatus, CasePracticeArea } from "@/enums/case";
 import {
-  CASE_STATUS_CONFIG,
-  CASE_TYPE_CONFIG,
   QUICK_FILTER_CASE_STATUS,
   QUICK_FILTER_CASE_TYPE,
 } from "@/utils/constant/case";
@@ -36,22 +13,16 @@ import {
   ALL_CASE_PRACTICE_AREAS,
 } from "@/utils/constant/case";
 import { CaseForm } from "@/components/forms/CaseForm";
-import { SortableHeader } from "@/components/table/SortableHeader";
 import { QuickFilterChips } from "@/components/ui/chip/QuickFilterChips";
 import { SearchInput } from "@/components/ui/input/SearchInput";
-import { COLUMNS, TABLE_TOTAL_WIDTH } from "@/utils/constant/case";
-import {
-  DEFAULT_PAGE,
-  ROWS_PER_PAGE,
-  ROWS_PER_PAGE_OPTIONS,
-} from "@/utils/constant/table";
+import { DEFAULT_PAGE, ROWS_PER_PAGE } from "@/utils/constant/table";
 import { useAppContext } from "@/providers/AppProvider";
 import { CaseFormValues, TableCaseSortKey } from "@/types/case";
 import { caseToFormValues } from "@/mappers/case.mapper";
 import { FormState } from "@/types/form";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { TableSortOrder } from "@/types/table";
-import { AppChip } from "@/components/ui/chip/AppChip";
+import { CaseTable } from "@/components/table/CaseTable";
 
 export default function Cases() {
   const { cases, clients } = useAppContext();
@@ -74,11 +45,10 @@ export default function Cases() {
     },
   );
 
-  // Sort and filter cases
+  // Sort and filter cases (keeping your existing logic)
   const filteredAndSortedItems = useMemo(() => {
     if (!casesList.length) return [];
 
-    // Trim search to avoid whitespace-only searches
     const trimmedQuery = searchQuery.trim();
     const hasSearch = trimmedQuery.length > 0;
     const hasStatusFilter = statusFilter !== ALL_CASE_STATUS;
@@ -129,7 +99,6 @@ export default function Cases() {
       }
 
       if (sortKey === "priority") {
-        // Priority order: LOW, MEDIUM, HIGH, URGENT
         const priorityOrder = { LOW: 0, MEDIUM: 1, HIGH: 2, URGENT: 3 };
         const aPriority = priorityOrder[a.priority] ?? 0;
         const bPriority = priorityOrder[b.priority] ?? 0;
@@ -147,11 +116,9 @@ export default function Cases() {
         return (aDate - bDate) * direction;
       }
 
-      // 🔹 ID - numeric sort
       if (sortKey === "id") {
         const aNum = Number(a.id);
         const bNum = Number(b.id);
-
         if (isNaN(aNum) || isNaN(bNum)) return 0;
         return (aNum - bNum) * direction;
       }
@@ -189,20 +156,18 @@ export default function Cases() {
     }
   };
 
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (newRowsPerPage: number) => {
+    setRowsPerPage(newRowsPerPage);
     setPage(0);
   };
 
   return (
     <Box>
+      {/* Filters Section */}
       <Paper className="p-4 mb-6 rounded-xl border border-gray-200 shadow-sm">
         <Grid container spacing={2} alignItems="center">
           {/* Search Field */}
@@ -263,9 +228,9 @@ export default function Cases() {
                   variant="contained"
                   startIcon={<AddIcon />}
                   className="
-                    button-firm bg-primary
-                    hover:bg-primary-dark shadow-sm
-                    w-full
+				  	button-firm bg-primary
+					hover:bg-primary-dark shadow-sm
+					w-full
 				   "
                   onClick={() =>
                     setCaseFormState({
@@ -285,7 +250,6 @@ export default function Cases() {
         {/* Quick Filters */}
         <Box className="mt-4">
           <Grid container spacing={2} alignItems="center">
-            {/* Status Quick Filters */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <QuickFilterChips
                 title="Status"
@@ -294,8 +258,6 @@ export default function Cases() {
                 onChange={setStatusFilter}
               />
             </Grid>
-
-            {/* Practice Area Quick Filters */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <QuickFilterChips
                 title="Practice Area"
@@ -309,138 +271,29 @@ export default function Cases() {
       </Paper>
 
       {/* Cases Table */}
-      <Paper className="p-2 mb-12 rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <TableContainer>
-          <Table sx={{ minWidth: TABLE_TOTAL_WIDTH }}>
-            <TableHead className="bg-gray-50">
-              <TableRow className="bg-primary/25">
-                {COLUMNS.map((column) => (
-                  <TableCell
-                    key={column.field}
-                    className="font-semibold text-gray-700 whitespace-nowrap"
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.sortable && column.sortKey ? (
-                      <SortableHeader
-                        label={column.label}
-                        sortKey={column.sortKey}
-                        activeSortKey={sortKey}
-                        sortOrder={sortOrder}
-                        onSort={handleSort}
-                      />
-                    ) : (
-                      column.label
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedCases.map((caseItem) => {
-                const clientName = clientNamesMap.get(caseItem.clientId);
-                return (
-                  <TableRow key={caseItem.id} className="hover:bg-primary/5">
-                    <TableCell className="whitespace-nowrap">
-                      <Typography className="font-mono text-gray-600">
-                        #{caseItem.id}
-                      </Typography>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Typography className="font-medium">
-                        {caseItem.title}
-                      </Typography>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Typography>{clientName}</Typography>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Grid container spacing={2} alignItems="center">
-                        <Grid size={{ xs: 12, md: 10 }}>
-                          <AppChip
-                            config={CASE_TYPE_CONFIG[caseItem.practiceArea]}
-                            selected={false}
-                            className="w-full"
-                          />
-                        </Grid>
-                      </Grid>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Box className="flex items-center gap-1">
-                        <ScheduleIcon className="text-gray-400 text-sm" />
-                        <Typography variant="body2">
-                          {caseItem.openedAt}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap items-center">
-                      <Grid container spacing={2} alignItems="center">
-                        <Grid size={{ xs: 12, md: 10 }}>
-                          <AppChip
-                            config={CASE_STATUS_CONFIG[caseItem.status]}
-                            selected={true}
-                            className="w-full"
-                          />
-                        </Grid>
-                      </Grid>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Box className="flex gap-1">
-                        <Tooltip title="View Notes">
-                          <IconButton
-                            size="small"
-                            className="bg-primary/10 hover:bg-primary/20 text-primary"
-                          >
-                            <FileTextIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edit Case">
-                          <IconButton
-                            size="small"
-                            className="bg-gray-100 hover:bg-gray-200 text-gray-600"
-                            onClick={() =>
-                              setCaseFormState({
-                                open: true,
-                                mode: "edit",
-                                formData: caseToFormValues(caseItem),
-                              })
-                            }
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {filteredAndSortedItems.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    className="align-middle items-center text-center font-semibold"
-                    colSpan={COLUMNS.length}
-                  >
-                    <Typography variant="subtitle1" className="text-gray-600">
-                      No cases found matching your criteria.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {/* Pagination */}
-        <TablePagination
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-          component="div"
-          count={filteredAndSortedItems.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          className="border-t border-primary-light/50"
-        />
-      </Paper>
+      <CaseTable
+        data={paginatedCases}
+        clientNamesMap={clientNamesMap}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        totalCount={filteredAndSortedItems.length}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        onEditCase={(caseItem) =>
+          setCaseFormState({
+            open: true,
+            mode: "edit",
+            formData: caseToFormValues(caseItem),
+          })
+        }
+        onViewNotes={(caseItem) => {
+          // TODO: Implement view notes
+          console.log("View notes for case:", caseItem.id);
+        }}
+      />
 
       {/* Case Form Dialog */}
       <CaseForm
