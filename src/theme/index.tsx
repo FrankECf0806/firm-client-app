@@ -42,7 +42,7 @@ const theme = createTheme({
     info: elementColors.info,
   },
   typography: {
-    fontFamily: "var(--font-inter)",
+    fontFamily: `"DM Sans", sans-serif`,
     button: {
       textTransform: "capitalize" as const,
     },
