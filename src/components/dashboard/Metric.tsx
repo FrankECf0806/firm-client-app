@@ -8,9 +8,9 @@ import {
   ReceiptLongRounded,
 } from "@mui/icons-material";
 import { Box, Grid } from "@mui/material";
-import { MetricCard } from "@/components/card/MetricCard";
+import { DataCard } from "@/components/card/DataCard";
 import { useAppContext } from "@/providers/AppProvider";
-import { MetricCardProps } from "@/types/metric";
+import { DataCardProps } from "@/types/ui/card";
 
 export function Metric() {
   const { cases, clients, invoices } = useAppContext();
@@ -27,7 +27,7 @@ export function Metric() {
     .reduce((sum, inv) => sum + inv.total, 0);
   const unpaidCount = invoiceList.filter((inv) => inv.status !== "PAID").length;
 
-  const metrics: MetricCardProps[] = [
+  const metrics: DataCardProps[] = [
     {
       title: "Active Cases",
       value: activeCases,
@@ -36,6 +36,7 @@ export function Metric() {
       icon: Folder,
       linkTo: "/cases",
       tooltip: "Click to view all cases",
+      sparkline: [5, 6, 7, 6, 8, 9, 10, 12, 11, 13, 15, 14],
     },
     {
       title: "Total Clients",
@@ -45,6 +46,7 @@ export function Metric() {
       icon: PeopleRounded,
       linkTo: "/clients",
       tooltip: "Click to view clients",
+      sparkline: [50, 55, 60, 65, 70, 80, 100],
     },
     {
       title: "Billable Hours",
@@ -62,6 +64,7 @@ export function Metric() {
       icon: AttachMoneyRounded,
       linkTo: "/billing",
       tooltip: "Click to view billing",
+      sparkline: [20000, 22000, 21000, 25000, 24000, 26000, 30000],
     },
     {
       title: "Outstanding",
@@ -71,6 +74,7 @@ export function Metric() {
       icon: ReceiptLongRounded,
       linkTo: "/billing",
       tooltip: "Click to view invoices",
+      sparkline: [5000, 4500, 4800, 5200, 4900, 5300, 5500],
     },
   ];
 
@@ -79,7 +83,7 @@ export function Metric() {
       <Grid container spacing={2} className="my-4">
         {metrics.map((metric) => (
           <Grid key={metric.title} size={{ xs: 6, sm: 6, md: 4, lg: 2.4 }}>
-            <MetricCard {...metric} />
+            <DataCard {...metric} />
           </Grid>
         ))}
       </Grid>
