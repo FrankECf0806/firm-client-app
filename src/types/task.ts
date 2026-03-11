@@ -10,7 +10,6 @@ export interface TaskBase {
   dueDate?: string;
   priority: TaskPriorityKey;
   caseId?: string;
-  caseName?: string;
   assignedTo?: string;
 }
 

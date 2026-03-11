@@ -7,7 +7,6 @@ export type MeetingTypeKey = keyof typeof MeetingType;
 export interface MeetingBase {
   title: string;
   caseId: string;
-  caseName: string;
   date: string;
   time: string;
   duration: number;

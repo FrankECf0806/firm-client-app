@@ -14,7 +14,6 @@ export interface InvoiceItem {
 export interface InvoiceBase {
   invoiceNumber: string;
   clientId: string;
-  clientName: string;
   caseId?: string;
   caseName?: string;
   issueDate: string;

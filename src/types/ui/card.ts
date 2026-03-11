@@ -2,21 +2,24 @@ import { ReactNode } from "react";
 import { TypographyProps } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
 
-export interface BaseCardProps {
+export interface CardProps {
+  linkTo?: string;
+  tooltip?: string;
+  className?: string;
+  onClick?: () => void;
+}
+
+export interface BaseCardProps extends CardProps {
   title?: string;
   titleIcon?: ReactNode;
   titleVariant?: TypographyProps["variant"];
   titleIconClassName?: string;
   action?: ReactNode;
   children: ReactNode;
-  linkTo?: string;
-  tooltip?: string;
-  className?: string;
   contentClassName?: string;
-  onClick?: () => void;
 }
 
-export interface DataCardProps {
+export interface DataCardProps extends CardProps {
   title: string;
   value: string | number;
   change?: string;
@@ -24,8 +27,15 @@ export interface DataCardProps {
   icon: SvgIconComponent;
   iconBgColor?: string;
   iconColor?: string;
-  linkTo?: string;
-  tooltip?: string;
   sparkline?: number[];
   chartColor?: string;
+  size?: "sm" | "md" | "lg";
+}
+
+export interface PriorityCardProps extends CardProps {
+  title: string;
+  description: string;
+  contentClassName?: string;
+  type: "warning" | "info" | "success";
+  actionLabel?: string;
 }

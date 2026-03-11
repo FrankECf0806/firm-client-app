@@ -22,14 +22,13 @@ export function DataCard({
   tooltip,
   sparkline,
   chartColor,
+  size = "md",
 }: DataCardProps) {
   // Determine colors based on changeType
   const getColorsByType = () => {
     switch (changeType) {
       case "positive":
         return {
-          chipBg: "bg-green-100",
-          chipText: "text-green-700",
           sparkline: chartColor || "#10b981",
           iconBg: iconBgColor || "bg-green-500/10",
           iconText: iconColor || "text-green-500",
@@ -37,8 +36,6 @@ export function DataCard({
         };
       case "negative":
         return {
-          chipBg: "bg-red-100",
-          chipText: "text-red-700",
           sparkline: chartColor || "#ef4444",
           iconBg: iconBgColor || "bg-red-500/10",
           iconText: iconColor || "text-red-500",
@@ -46,8 +43,6 @@ export function DataCard({
         };
       default:
         return {
-          chipBg: "bg-gray-100",
-          chipText: "text-gray-700",
           sparkline: chartColor || "#3b82f6",
           iconBg: iconBgColor || "bg-blue-500/10",
           iconText: iconColor || "text-blue-500",
@@ -65,21 +60,57 @@ export function DataCard({
         ? TrendingDownIcon
         : HorizontalRuleIcon;
 
+  // Size-based classes
+  const sizeClasses = {
+    sm: {
+      cardPadding: "p-2",
+      titleSize: "text-xs",
+      valueSize: "text-lg",
+      iconContainer: "w-8 h-8",
+      iconSize: 16,
+      sparklineHeight: 20,
+      changeTextSize: "text-[10px]",
+      trendIconSize: "w-3 h-3",
+    },
+    md: {
+      cardPadding: "p-3",
+      titleSize: "text-sm",
+      valueSize: "text-2xl",
+      iconContainer: "w-11 h-11",
+      iconSize: 20,
+      sparklineHeight: 24,
+      changeTextSize: "text-xs",
+      trendIconSize: "w-3.5 h-3.5",
+    },
+    lg: {
+      cardPadding: "p-4",
+      titleSize: "text-base",
+      valueSize: "text-3xl",
+      iconContainer: "w-14 h-14",
+      iconSize: 24,
+      sparklineHeight: 30,
+      changeTextSize: "text-sm",
+      trendIconSize: "w-4 h-4",
+    },
+  };
+
+  const classes = sizeClasses[size];
+
   return (
-    <BaseCard linkTo={linkTo} tooltip={tooltip}>
+    <BaseCard linkTo={linkTo} tooltip={tooltip} className={classes.cardPadding}>
       {/* Two-column layout */}
       <Box className="flex justify-between h-full">
         {/* Left column: title + value + sparkline */}
         <Box className="flex flex-col flex-1 min-w-0">
           <Typography
             variant="body2"
-            className="text-gray-500 font-medium text-sm mb-0.5"
+            className={`text-gray-500 font-medium ${classes.titleSize} mb-0.5`}
           >
             {title}
           </Typography>
           <Typography
             variant="h4"
-            className="font-bold text-gray-900 text-2xl leading-tight"
+            className={`font-bold text-gray-900 ${classes.valueSize} leading-tight`}
           >
             {value}
           </Typography>
@@ -87,7 +118,7 @@ export function DataCard({
             <Box className="h-6 w-full mt-1">
               <SparkLineChart
                 data={sparkline}
-                height={24}
+                height={classes.sparklineHeight}
                 showTooltip
                 curve="natural"
                 color={colors.sparkline}
@@ -100,20 +131,25 @@ export function DataCard({
         <Box className="flex flex-col items-end justify-between ml-3">
           <Box
             className={`
-              w-11 h-11 rounded-lg flex items-center justify-center
-              ${colors.iconBg}
+              rounded-lg flex items-center justify-center
+              ${classes.iconContainer} ${colors.iconBg}
             `}
           >
-            <Icon className={colors.iconText} sx={{ fontSize: 20 }} />
+            <Icon
+              className={colors.iconText}
+              sx={{ fontSize: classes.iconSize }}
+            />
           </Box>
           {change && (
             <Box className="flex items-center gap-1">
               {(!sparkline || sparkline.length === 0) && (
-                <TrendIcon className={`w-3.5 h-3.5 ${colors.trendIconColor}`} />
+                <TrendIcon
+                  className={`${classes.trendIconSize} ${colors.trendIconColor}`}
+                />
               )}
               <Typography
                 variant="body2"
-                className={`${colors.trendIconColor} font-medium text-xs whitespace-nowrap`}
+                className={`${colors.trendIconColor} font-medium ${classes.changeTextSize} whitespace-nowrap`}
               >
                 {change}
               </Typography>

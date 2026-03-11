@@ -32,7 +32,6 @@ export interface CommunicationBase {
   subject: string;
   content: string;
   clientId: string;
-  clientName: string;
   caseId?: string;
   caseName?: string;
   type: CommunicationTypeKey;
@@ -59,8 +58,8 @@ export interface Communication extends CommunicationBase {
 export type TableCommunicationSortKey =
   | "id"
   | "subject"
-  | "clientName"
-  | "caseName"
+  | "clientId"
+  | "caseId"
   | "type"
   | "direction"
   | "status"

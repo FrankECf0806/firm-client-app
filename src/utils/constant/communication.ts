@@ -181,7 +181,7 @@ export const COLUMNS: TableColumn<keyof Communication>[] = [
     label: "Client",
     minWidth: 150,
     sortable: true,
-    sortKey: "clientName",
+    sortKey: "clientId",
     align: "left",
   },
   {
@@ -189,7 +189,7 @@ export const COLUMNS: TableColumn<keyof Communication>[] = [
     label: "Case",
     minWidth: 150,
     sortable: true,
-    sortKey: "caseName",
+    sortKey: "caseId",
     align: "left",
   },
   {

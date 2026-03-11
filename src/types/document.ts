@@ -2,13 +2,12 @@
 export interface DocumentBase {
   name: string;
   caseId: string;
-  caseName: string;
   type: string;
   description?: string;
 }
 
 // Form values - extends base with file for upload
-export type DocumentFormValues = Omit<DocumentBase, "name" | "caseName"> & {
+export type DocumentFormValues = Omit<DocumentBase, "name" | "caseId"> & {
   file?: File;
 };
 
