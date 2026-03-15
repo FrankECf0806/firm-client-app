@@ -11,7 +11,7 @@ export interface CardProps {
 
 export interface BaseCardProps extends CardProps {
   title?: string;
-  titleIcon?: ReactNode;
+  titleIcon?: SvgIconComponent;
   titleVariant?: TypographyProps["variant"];
   titleIconClassName?: string;
   action?: ReactNode;

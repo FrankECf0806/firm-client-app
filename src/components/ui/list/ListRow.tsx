@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Typography } from "@mui/material";
 import { ElementType, ReactNode } from "react";
 
 interface ListRowProps {
@@ -30,43 +30,55 @@ export function ListRow({
 }: ListRowProps) {
   return (
     <Box
-      className={`flex items-start gap-2 py-2 ${
-        highlight ? "bg-blue-50/50 -mx-2 px-2 rounded" : ""
+      className={`w-full ${
+        highlight ? "bg-blue-50/50 rounded" : ""
       } ${onClick ? "cursor-pointer hover:bg-gray-50" : ""} ${className}`}
       onClick={onClick}
     >
-      {/* Left element: either Avatar or Icon */}
-      {avatar ? (
-        <Avatar className="bg-primary/10 text-primary w-6 h-6 text-xs shrink-0">
-          {avatar}
-        </Avatar>
-      ) : Icon ? (
-        <Box className={`p-1 rounded ${iconBgColor} shrink-0`}>
-          <Icon className={`${iconColor} text-xs`} />
-        </Box>
-      ) : null}
+      <Grid container spacing={1.5} alignItems="center" className="w-full">
+        {/* Left element: either Avatar or Icon */}
+        <Grid size="auto">
+          {avatar ? (
+            <Avatar className="bg-primary/10 text-primary w-6 h-6 text-xs">
+              {avatar}
+            </Avatar>
+          ) : Icon ? (
+            <Box
+              className={`w-5 h-5 rounded-full flex items-center justify-center ${iconBgColor}`}
+            >
+              <Icon className={`${iconColor} text-xs`} />
+            </Box>
+          ) : null}
+        </Grid>
 
-      {/* Main content */}
-      <Box className="flex-1 min-w-0">
-        <Typography className="text-xs font-medium truncate text-gray-900">
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography className="text-[11px] text-gray-600 truncate">
-            {subtitle}
+        {/* Main content - takes remaining space */}
+        <Grid size="grow" className="min-w-0">
+          <Typography className="text-xs font-medium truncate text-gray-900">
+            {title}
           </Typography>
-        )}
-      </Box>
+          {subtitle && (
+            <Typography className="text-[11px] text-gray-600 truncate">
+              {subtitle}
+            </Typography>
+          )}
+        </Grid>
 
-      {/* Right side: meta and badge */}
-      <Box className="flex items-center gap-2 shrink-0">
+        {/* Meta text (if any) */}
         {meta && (
-          <Typography className="text-[10px] text-gray-400 whitespace-nowrap">
-            {meta}
-          </Typography>
+          <Grid size="auto">
+            <Typography className="text-[10px] text-gray-400 whitespace-nowrap">
+              {meta}
+            </Typography>
+          </Grid>
         )}
-        {badge}
-      </Box>
+
+        {/* Badge (chip) - always at the edge */}
+        {badge && (
+          <Grid size={{ xs: 2.5, sm: 2.5, md: 1.75 }} className="ml-auto">
+            {badge}
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 }

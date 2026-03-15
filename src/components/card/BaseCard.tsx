@@ -14,7 +14,7 @@ import { BaseCardProps } from "@/types/ui/card";
 
 export function BaseCard({
   title,
-  titleIcon,
+  titleIcon: Icon,
   titleVariant = "h6",
   titleIconClassName = "",
   action,
@@ -45,19 +45,17 @@ export function BaseCard({
       )}
       onClick={handleClick}
     >
-      <CardContent
-        className={`${contentClassName} p-1 md:p-2 h-full flex flex-col`}
-      >
+      <CardContent className={`${contentClassName} p-2 h-full flex flex-col`}>
         {/* Header with title and action */}
         {(title || action) && (
           <>
             <Box className="flex justify-between items-center mb-1">
               {title && (
                 <Box className="flex items-center gap-1">
-                  {titleIcon && (
-                    <Box className={`text-primary ${titleIconClassName}`}>
-                      {titleIcon}
-                    </Box>
+                  {Icon && (
+                    <Icon
+                      className={`text-lg text-primary ${titleIconClassName}`}
+                    />
                   )}
                   <Typography
                     variant={titleVariant}

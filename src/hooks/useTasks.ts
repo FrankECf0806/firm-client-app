@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Task, CreateTaskInput } from "@/types/task";
 import { mockTasks } from "@/mock_data";
+import { TaskStatus } from "@/enums/task";
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
@@ -14,8 +15,7 @@ export function useTasks() {
     const newTask: Task = {
       ...input,
       id: Date.now().toString(),
-      status: "TODO",
-      completed: false,
+      status: TaskStatus.TODO,
       createdAt: now,
       updatedAt: now,
     };
@@ -43,8 +43,6 @@ export function useTasks() {
         t.id === id
           ? {
               ...t,
-              completed: !t.completed,
-              status: !t.completed ? "DONE" : "TODO",
               updatedAt: new Date().toISOString(),
             }
           : t,
@@ -68,12 +66,12 @@ export function useTasks() {
   );
 
   const getPendingTasks = useCallback(
-    () => tasks.filter((t) => !t.completed),
+    () => tasks.filter((t) => t.status !== TaskStatus.DONE),
     [tasks],
   );
 
   const getCompletedTasks = useCallback(
-    () => tasks.filter((t) => t.completed),
+    () => tasks.filter((t) => t.status === TaskStatus.DONE),
     [tasks],
   );
 

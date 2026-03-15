@@ -1,7 +1,11 @@
 import { TaskPriority, TaskStatus } from "@/enums/task";
+import { ALL_TASK_PRIORITIES, ALL_TASK_STATUSES } from "@/utils/constant/task";
 
-export type TaskPriorityKey = keyof typeof TaskPriority;
-export type TaskStatusKey = keyof typeof TaskStatus;
+export type TaskPriorityKey = keyof typeof TaskPriority; // "LOW" | "MEDIUM" | "HIGH" | "URGENT"
+export type TaskPriorityFilter = TaskPriorityKey | typeof ALL_TASK_PRIORITIES; // "ALL_PRIORITIES" | "LOW" | "MEDIUM" | "HIGH" | "URGENT"
+
+export type TaskStatusKey = keyof typeof TaskStatus; // "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE" | "BLOCKED" | "DEFERRED"
+export type TaskStatusFilter = TaskStatusKey | typeof ALL_TASK_STATUSES; // "ALL_STATUS" | "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE" | "BLOCKED" | "DEFERRED"
 
 /** Base Task - shared fields for forms and creation */
 export interface TaskBase {
@@ -23,7 +27,13 @@ export type CreateTaskInput = TaskBase;
 export interface Task extends TaskBase {
   id: string;
   status: TaskStatusKey;
-  completed: boolean;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface TaskItemProps {
+  title: string;
+  dueDate?: string;
+  priority: TaskPriorityKey;
+  status: TaskStatusKey;
 }
