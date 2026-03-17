@@ -1,4 +1,3 @@
-import { Chip } from "@mui/material";
 import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
@@ -11,6 +10,7 @@ import {
 } from "@/utils/constant/task";
 import { TaskItemProps } from "@/types/task";
 import { TaskStatus } from "@/enums/task";
+import { OverviewChip } from "@/components/ui/chip/OverviewChip";
 
 export function TaskItem({ title, dueDate, priority, status }: TaskItemProps) {
   const dateDisplay = dueDate ? formatDate(dueDate) : "No due date";
@@ -25,8 +25,6 @@ export function TaskItem({ title, dueDate, priority, status }: TaskItemProps) {
   const iconBgColor = isCompleted ? "bg-green-50" : statusBgColor;
   const iconColor = isCompleted ? "text-green-500" : "text-gray-500";
 
-  console.log({ icon, iconBgColor, iconColor });
-
   // Priority config
   const priorityConfig = TASK_PRIORITY_CONFIG[priority];
   const priorityLabel = priorityConfig?.label || priority;
@@ -40,13 +38,7 @@ export function TaskItem({ title, dueDate, priority, status }: TaskItemProps) {
       title={title}
       subtitle={dueDate ? `Due: ${dateDisplay}` : undefined}
       meta={dueDate ? undefined : "No due date"}
-      badge={
-        <Chip
-          label={priorityLabel}
-          size="small"
-          className={`text-[8px] h-4 w-full ${priorityClass}`}
-        />
-      }
+      badge={<OverviewChip label={priorityLabel} className={priorityClass} />}
       iconBgColor={iconBgColor}
       iconColor={iconColor}
       className={isCompleted ? "opacity-50" : ""}

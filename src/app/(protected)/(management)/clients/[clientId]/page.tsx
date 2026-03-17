@@ -42,6 +42,7 @@ export default function ClientOverviewPage() {
   const clientInvoices = invoices.getInvoicesByClient(clientId);
   const clientCommunications =
     communications.getCommunicationsByClient(clientId);
+  const clientDocuments = documents.getDocumentsByClient(clientId);
 
   // Case statistics
   const totalCases = clientCases.length;
@@ -56,14 +57,7 @@ export default function ClientOverviewPage() {
   const totalInvoices = clientInvoices.length;
   const outstanding = unpaidInvoices.reduce((sum, inv) => sum + inv.total, 0);
 
-  // Get documents and tasks through cases
-  const clientDocuments = clientCases
-    .flatMap((caseItem) => documents.getDocumentsByCase(caseItem.id))
-    .sort(
-      (a, b) =>
-        new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
-    );
-
+  // Get tasks through cases
   const clientTasks = clientCases
     .flatMap((caseItem) => tasks.getTasksByCase(caseItem.id))
     .sort((a, b) => {
@@ -92,7 +86,7 @@ export default function ClientOverviewPage() {
     console.log(`Navigate to files for client ${clientId}`);
   const handlePhoneClick = (phone: string) => window.open(`tel:${phone}`);
 
-  // Sparkline data (simplified trends)
+  // Sparkline data
   const caseTrend = [Math.max(1, totalCases - 2), totalCases];
   const activeTrend = [Math.max(1, activeCases - 1), activeCases];
   const billedTrend = [Math.max(0, totalBilled - 1000), totalBilled];
@@ -134,21 +128,47 @@ export default function ClientOverviewPage() {
     .slice(0, 3);
 
   // Communications
-  const unreadCount = clientCommunications.filter((c) => c.unread).length;
-  const recentCommunications = clientCommunications.slice(0, 3);
+  const unreadCount = clientCommunications.filter(
+    (c) => c.status === "UNREAD",
+  ).length;
+  const recentCommunications = clientCommunications.slice(0, 5);
 
-  // Upcoming deadlines
-  const upcomingDeadlines = clientCases
-    .filter((c) => c.nextDeadline && new Date(c.nextDeadline) > new Date())
+  // Get deadlines from cases and tasks
+  const caseDeadlines = clientCases
+    .filter((c) => c.nextDeadline)
+    .map((c) => ({
+      id: `case-${c.id}`,
+      title: c.title,
+      dueDate: c.nextDeadline!,
+      type: "case" as const,
+      priority: c.priority,
+      status: c.status,
+    }));
+
+  const taskDeadlines = clientTasks
+    .filter((t) => t.dueDate && t.status !== "DONE")
+    .map((t) => ({
+      id: `task-${t.id}`,
+      title: t.title,
+      dueDate: t.dueDate!,
+      type: "task" as const,
+      priority: t.priority,
+      status: t.status,
+    }));
+
+  const allDeadlines = [...caseDeadlines, ...taskDeadlines]
     .sort(
-      (a, b) =>
-        new Date(a.nextDeadline!).getTime() -
-        new Date(b.nextDeadline!).getTime(),
+      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
     )
     .slice(0, 5);
 
   // Recent files
-  const recentFiles = clientDocuments.slice(0, 3);
+  const recentFiles = [...clientDocuments]
+    .sort(
+      (a, b) =>
+        new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
+    )
+    .slice(0, 5);
 
   // Currency formatter
   const formatCurrency = (amount: number) =>
@@ -487,7 +507,8 @@ export default function ClientOverviewPage() {
                     senderId={msg.clientId}
                     message={msg.content || msg.subject || "No content"}
                     time={msg.time}
-                    unread={msg.unread}
+                    type={msg.type}
+                    status={msg.status}
                     clients={clients.clientsMap}
                   />
                 ))
@@ -495,15 +516,6 @@ export default function ClientOverviewPage() {
                 <Typography className="text-xs text-gray-400 text-center py-4">
                   No recent messages
                 </Typography>
-              )}
-              {unreadCount > 0 && (
-                <Box className="pt-2 text-center">
-                  <Chip
-                    label={`${unreadCount} unread message${unreadCount > 1 ? "s" : ""}`}
-                    size="small"
-                    className="bg-blue-100 text-blue-600 text-[10px]"
-                  />
-                </Box>
               )}
             </Box>
           </BaseCard>
@@ -556,27 +568,21 @@ export default function ClientOverviewPage() {
                 className="text-primary text-xs"
                 onClick={handleViewFiles}
               >
-                View All ({upcomingDeadlines.length})
+                View All ({allDeadlines.length})
               </Button>
             }
           >
             <Box className="space-y-2 max-h-64 overflow-y-auto">
-              {upcomingDeadlines.length > 0 ? (
-                upcomingDeadlines.map((caseItem) => {
-                  const daysLeft = Math.ceil(
-                    (new Date(caseItem.nextDeadline!).getTime() -
-                      new Date().getTime()) /
-                      (1000 * 60 * 60 * 24),
-                  );
-                  return (
-                    <DeadlineItem
-                      key={caseItem.id}
-                      title={caseItem.title}
-                      deadline={caseItem.nextDeadline!}
-                      daysLeft={daysLeft}
-                    />
-                  );
-                })
+              {allDeadlines.length > 0 ? (
+                allDeadlines.map((item) => (
+                  <DeadlineItem
+                    key={item.id}
+                    title={item.title}
+                    dueDate={item.dueDate}
+                    type={item.type}
+                    priority={item.priority}
+                  />
+                ))
               ) : (
                 <Typography className="text-xs text-gray-400 text-center py-4">
                   No upcoming deadlines
@@ -593,11 +599,11 @@ export default function ClientOverviewPage() {
           <span className="font-semibold text-primary">📊 Summary:</span>
           <span>
             {activeCases} active · {pendingCases} pending · {urgentCases} urgent
-            ·{formatCurrency(totalBilled)} billed ·
+            · {formatCurrency(totalBilled)} billed ·
             {outstanding > 0
               ? `${unpaidInvoices.length} unpaid (${formatCurrency(outstanding)})`
               : "All paid"}{" "}
-            ·{unreadCount} unread
+            · {unreadCount} unread
           </span>
         </Typography>
       </Box>

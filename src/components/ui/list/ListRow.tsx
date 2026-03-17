@@ -28,6 +28,8 @@ export function ListRow({
   iconBgColor = "bg-blue-50",
   iconColor = "text-blue-500",
 }: ListRowProps) {
+  const titleString = typeof title === "string" ? title : undefined;
+
   return (
     <Box
       className={`w-full ${
@@ -53,11 +55,18 @@ export function ListRow({
 
         {/* Main content - takes remaining space */}
         <Grid size="grow" className="min-w-0">
-          <Typography className="text-xs font-medium truncate text-gray-900">
+          <Typography
+            component="div"
+            className="text-xs font-medium truncate text-gray-900"
+            title={titleString}
+          >
             {title}
           </Typography>
           {subtitle && (
-            <Typography className="text-[11px] text-gray-600 truncate">
+            <Typography
+              component="div"
+              className="text-[11px] text-gray-500 truncate"
+            >
               {subtitle}
             </Typography>
           )}
@@ -72,9 +81,9 @@ export function ListRow({
           </Grid>
         )}
 
-        {/* Badge (chip) - always at the edge */}
+        {/* Badge */}
         {badge && (
-          <Grid size={{ xs: 2.5, sm: 2.5, md: 1.75 }} className="ml-auto">
+          <Grid size="auto" className="flex items-center">
             {badge}
           </Grid>
         )}

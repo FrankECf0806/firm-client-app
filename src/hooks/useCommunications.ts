@@ -16,7 +16,6 @@ export function useCommunications() {
       ...input,
       id: Date.now().toString(),
       status: "UNREAD",
-      unread: true,
       time: "Just now",
       createdAt: now,
       updatedAt: now,
@@ -34,8 +33,6 @@ export function useCommunications() {
                 ...c,
                 ...updates,
                 updatedAt: new Date().toISOString(),
-                ...(updates.unread === false && { status: "READ" }),
-                ...(updates.unread === true && { status: "UNREAD" }),
               }
             : c,
         ),
@@ -64,7 +61,7 @@ export function useCommunications() {
   );
 
   const getUnreadCommunications = useCallback(
-    () => communications.filter((c) => c.unread),
+    () => communications.filter((c) => c.status === "UNREAD"),
     [communications],
   );
 
@@ -74,7 +71,6 @@ export function useCommunications() {
         c.id === id
           ? {
               ...c,
-              unread: false,
               status: "READ",
               updatedAt: new Date().toISOString(),
             }
@@ -89,7 +85,6 @@ export function useCommunications() {
         c.id === id
           ? {
               ...c,
-              unread: true,
               status: "UNREAD",
               updatedAt: new Date().toISOString(),
             }

@@ -48,7 +48,6 @@ export type CreateCommunicationInput = CommunicationBase;
 export interface Communication extends CommunicationBase {
   id: string;
   status: CommunicationStatusKey;
-  unread: boolean;
   time: string; // Relative time display (e.g., "2 hours ago")
   createdAt: string; // ISO timestamp
   updatedAt?: string; // ISO timestamp

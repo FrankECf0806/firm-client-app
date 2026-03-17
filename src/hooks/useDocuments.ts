@@ -47,8 +47,33 @@ export function useDocuments() {
     [documents],
   );
 
+  const getDocumentsByClient = useCallback(
+    (clientId: string) => documents.filter((d) => d.clientId === clientId),
+    [documents],
+  );
+
   const getDocumentsByType = useCallback(
     (type: string) => documents.filter((d) => d.type === type),
+    [documents],
+  );
+
+  const getRecentDocuments = useCallback(
+    (limit: number = 5) =>
+      [...documents]
+        .sort(
+          (a, b) =>
+            new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
+        )
+        .slice(0, limit),
+    [documents],
+  );
+
+  const getDocumentsByDateRange = useCallback(
+    (startDate: Date, endDate: Date) =>
+      documents.filter((d) => {
+        const uploadDate = new Date(d.uploadDate);
+        return uploadDate >= startDate && uploadDate <= endDate;
+      }),
     [documents],
   );
 
@@ -59,7 +84,10 @@ export function useDocuments() {
     deleteDocument,
     getDocumentById,
     getDocumentsByCase,
+    getDocumentsByClient,
     getDocumentsByType,
+    getRecentDocuments,
+    getDocumentsByDateRange,
     resetDocuments,
   };
 }

@@ -1,7 +1,10 @@
+import { ALL_DOCUMENT_TYPES } from "@/utils/constant/document";
+
 /** Base Document - shared fields for forms and creation */
 export interface DocumentBase {
   name: string;
   caseId: string;
+  clientId: string;
   type: string;
   description?: string;
 }
@@ -20,3 +23,7 @@ export interface Document extends DocumentBase {
   uploadDate: string;
   size: string;
 }
+
+// Document type filter for UI
+export type DocumentTypeKey = string; // "PDF" | "DOC" | "XLS" | etc.
+export type DocumentTypeFilter = DocumentTypeKey | typeof ALL_DOCUMENT_TYPES;

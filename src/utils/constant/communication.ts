@@ -1,9 +1,32 @@
-import { CommunicationType, CommunicationStatus } from "@/enums/communication";
+// src/utils/constant/communication.ts
+
+import {
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+  Chat as ChatIcon,
+  Markunread as UnreadIcon,
+  MarkEmailRead as ReadIcon,
+  Archive as ArchiveIcon,
+  CallReceived as InboundIcon,
+  CallMade as OutboundIcon,
+} from "@mui/icons-material";
+import {
+  CommunicationType,
+  CommunicationStatus,
+  CommunicationDirection,
+} from "@/enums/communication";
 import {
   CommunicationTypeKey,
   CommunicationStatusKey,
   CommunicationDirectionKey,
+  TableCommunicationSortKey,
+  CommunicationFilterType,
+  CommunicationFilterStatus,
+  CommunicationFilterDirection,
 } from "@/types/communication";
+import { TableColumn } from "@/types/table";
+import { ConfigItem } from "@/types/ui";
+import { SvgIconComponent } from "@mui/icons-material";
 
 // ============ Constants ============
 export const ALL_COMMUNICATION_TYPES = "ALL_TYPES";
@@ -12,106 +35,125 @@ export const ALL_COMMUNICATION_DIRECTIONS = "ALL_DIRECTIONS";
 
 export const TABLE_TOTAL_WIDTH = 1200;
 
+// ============ Type Icons ============
+export const COMMUNICATION_TYPE_ICONS: Record<
+  CommunicationTypeKey,
+  SvgIconComponent
+> = {
+  EMAIL: EmailIcon,
+  CALL: PhoneIcon,
+  MESSAGE: ChatIcon,
+};
+
+// ============ Status Icons ============
+export const COMMUNICATION_STATUS_ICONS: Record<
+  CommunicationStatusKey,
+  SvgIconComponent
+> = {
+  UNREAD: UnreadIcon,
+  READ: ReadIcon,
+  ARCHIVED: ArchiveIcon,
+};
+
+// ============ Direction Icons ============
+export const COMMUNICATION_DIRECTION_ICONS: Record<
+  CommunicationDirectionKey,
+  SvgIconComponent
+> = {
+  INBOUND: InboundIcon,
+  OUTBOUND: OutboundIcon,
+};
+
 // ============ Status Config ============
 export const COMMUNICATION_STATUS_CONFIG: Record<
   CommunicationStatusKey,
-  {
-    label: string;
-    styling: {
-      color?:
-        | "default"
-        | "primary"
-        | "secondary"
-        | "error"
-        | "info"
-        | "success"
-        | "warning";
-      selectedClass?: string;
-      unselectedClass?: string;
-    };
-  }
+  ConfigItem<CommunicationFilterStatus>
 > = {
   UNREAD: {
     label: "Unread",
     styling: {
-      color: "info",
       selectedClass: "bg-blue-600 text-white",
-      unselectedClass:
-        "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100",
+      unselectedClass: "bg-blue-600 text-white", // Bold blue for unread
+      icon: COMMUNICATION_STATUS_ICONS.UNREAD,
     },
+    onClick: (setStatus) => setStatus(CommunicationStatus.UNREAD),
   },
   READ: {
     label: "Read",
     styling: {
-      color: "success",
-      selectedClass: "bg-green-600 text-white",
-      unselectedClass:
-        "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100",
+      selectedClass: "bg-gray-600 text-white",
+      unselectedClass: "bg-gray-100 text-gray-600 border border-gray-200", // Light gray for read
+      icon: COMMUNICATION_STATUS_ICONS.READ,
     },
+    onClick: (setStatus) => setStatus(CommunicationStatus.READ),
   },
   ARCHIVED: {
     label: "Archived",
     styling: {
-      color: "default",
-      selectedClass: "bg-gray-600 text-white",
-      unselectedClass:
-        "bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100",
+      selectedClass: "bg-amber-600 text-white",
+      unselectedClass: "bg-amber-50 text-amber-700 border border-amber-200", // Warm amber for archived
+      icon: COMMUNICATION_STATUS_ICONS.ARCHIVED,
     },
+    onClick: (setStatus) => setStatus(CommunicationStatus.ARCHIVED),
   },
 };
 
 // ============ Type Config ============
 export const COMMUNICATION_TYPE_CONFIG: Record<
   CommunicationTypeKey,
-  {
-    label: string;
-    styling: {
-      selectedClass: string;
-      unselectedClass: string;
-    };
-  }
+  ConfigItem<CommunicationFilterType>
 > = {
   EMAIL: {
     label: "Email",
     styling: {
       selectedClass: "bg-blue-600 text-white",
-      unselectedClass:
-        "bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100",
+      unselectedClass: "bg-blue-50 text-blue-700 border border-blue-200", // Light blue for email
+      icon: COMMUNICATION_TYPE_ICONS.EMAIL,
     },
+    onClick: (setType) => setType(CommunicationType.EMAIL),
   },
   CALL: {
     label: "Call",
     styling: {
       selectedClass: "bg-green-600 text-white",
-      unselectedClass:
-        "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100",
+      unselectedClass: "bg-green-50 text-green-700 border border-green-200", // Green for calls
+      icon: COMMUNICATION_TYPE_ICONS.CALL,
     },
+    onClick: (setType) => setType(CommunicationType.CALL),
   },
   MESSAGE: {
     label: "Message",
     styling: {
       selectedClass: "bg-purple-600 text-white",
-      unselectedClass:
-        "bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100",
+      unselectedClass: "bg-purple-50 text-purple-700 border border-purple-200", // Purple for messages
+      icon: COMMUNICATION_TYPE_ICONS.MESSAGE,
     },
+    onClick: (setType) => setType(CommunicationType.MESSAGE),
   },
 };
 
 // ============ Direction Config ============
 export const COMMUNICATION_DIRECTION_CONFIG: Record<
   CommunicationDirectionKey,
-  {
-    label: string;
-    icon: string;
-  }
+  ConfigItem<CommunicationFilterDirection>
 > = {
   INBOUND: {
     label: "Inbound",
-    icon: "⬇️",
+    styling: {
+      selectedClass: "bg-green-600 text-white",
+      unselectedClass: "bg-green-50 text-green-700 border border-green-200",
+      icon: COMMUNICATION_DIRECTION_ICONS.INBOUND,
+    },
+    onClick: (setDirection) => setDirection(CommunicationDirection.INBOUND),
   },
   OUTBOUND: {
     label: "Outbound",
-    icon: "⬆️",
+    styling: {
+      selectedClass: "bg-blue-600 text-white",
+      unselectedClass: "bg-blue-50 text-blue-700 border border-blue-200",
+      icon: COMMUNICATION_DIRECTION_ICONS.OUTBOUND,
+    },
+    onClick: (setDirection) => setDirection(CommunicationDirection.OUTBOUND),
   },
 };
 
@@ -147,11 +189,21 @@ export const QUICK_FILTER_COMMUNICATION_TYPE = [
   },
 ];
 
-// ============ Table Columns ============
-import { TableColumn } from "@/types/table";
-import { Communication } from "@/types/communication";
+export const QUICK_FILTER_COMMUNICATION_DIRECTION = [
+  {
+    value: CommunicationDirection.INBOUND,
+    label: COMMUNICATION_DIRECTION_CONFIG.INBOUND.label,
+    styling: COMMUNICATION_DIRECTION_CONFIG.INBOUND.styling,
+  },
+  {
+    value: CommunicationDirection.OUTBOUND,
+    label: COMMUNICATION_DIRECTION_CONFIG.OUTBOUND.label,
+    styling: COMMUNICATION_DIRECTION_CONFIG.OUTBOUND.styling,
+  },
+];
 
-export const COLUMNS: TableColumn<keyof Communication>[] = [
+// ============ Table Columns ============
+export const COLUMNS: TableColumn<TableCommunicationSortKey>[] = [
   {
     field: "id",
     label: "ID",
@@ -177,7 +229,7 @@ export const COLUMNS: TableColumn<keyof Communication>[] = [
     align: "left",
   },
   {
-    field: "clientName",
+    field: "clientId",
     label: "Client",
     minWidth: 150,
     sortable: true,
@@ -185,7 +237,7 @@ export const COLUMNS: TableColumn<keyof Communication>[] = [
     align: "left",
   },
   {
-    field: "caseName",
+    field: "caseId",
     label: "Case",
     minWidth: 150,
     sortable: true,

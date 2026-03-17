@@ -160,9 +160,17 @@ export default function UploadFileForm({
       return;
     }
 
+    // Find the selected case to get clientId
+    const selectedCase = mockCases.find((c) => c.id === data.caseId);
+    if (!selectedCase) {
+      setFileError("Selected case not found.");
+      return;
+    }
+
     const documents: Document[] = validated.map(({ file, type }) => ({
       id: crypto.randomUUID(),
       name: file.name,
+      clientId: selectedCase.clientId,
       size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
       uploadDate: new Date().toISOString(),
       caseId: data.caseId,
