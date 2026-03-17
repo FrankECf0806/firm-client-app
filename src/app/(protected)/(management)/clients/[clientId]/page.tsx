@@ -28,6 +28,8 @@ import { FileItem } from "@/components/ui/row/FileItem";
 import { DeadlineItem } from "@/components/ui/row/DeadlineItem";
 import { formatDate } from "@/utils/date";
 
+const ITEMS_PER_CARD = 5;
+
 export default function ClientOverviewPage() {
   const params = useParams();
   const clientId = params.clientId as string;
@@ -131,7 +133,7 @@ export default function ClientOverviewPage() {
   const unreadCount = clientCommunications.filter(
     (c) => c.status === "UNREAD",
   ).length;
-  const recentCommunications = clientCommunications.slice(0, 5);
+  const recentCommunications = clientCommunications.slice(0, ITEMS_PER_CARD);
 
   // Get deadlines from cases and tasks
   const caseDeadlines = clientCases
@@ -160,7 +162,7 @@ export default function ClientOverviewPage() {
     .sort(
       (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
     )
-    .slice(0, 5);
+    .slice(0, ITEMS_PER_CARD);
 
   // Recent files
   const recentFiles = [...clientDocuments]
@@ -168,7 +170,7 @@ export default function ClientOverviewPage() {
       (a, b) =>
         new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
     )
-    .slice(0, 5);
+    .slice(0, ITEMS_PER_CARD);
 
   // Currency formatter
   const formatCurrency = (amount: number) =>
@@ -180,7 +182,7 @@ export default function ClientOverviewPage() {
     }).format(amount);
 
   return (
-    <Box className="p-1 max-w-screen-2xl mx-auto space-y-4">
+    <Box className="p-1 mb-10 md:mb-2 max-w-screen-2xl mx-auto space-y-4">
       {/* Priority Alerts */}
       {hasPriority && (
         <Box>
@@ -291,7 +293,11 @@ export default function ClientOverviewPage() {
       <Grid container spacing={3}>
         {/* Contact Info */}
         <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-          <BaseCard title="Contact Information" titleIcon={PersonIcon}>
+          <BaseCard
+            title="Contact Information"
+            titleIcon={PersonIcon}
+            className="h-full"
+          >
             <Box className="space-y-1 text-xs">
               <InfoRow icon={EmailIcon} href={`mailto:${client.email}`}>
                 {client.email}
@@ -322,6 +328,7 @@ export default function ClientOverviewPage() {
           <BaseCard
             title="Invoice Summary"
             titleIcon={ReceiptIcon}
+            className="h-full"
             action={
               <Button
                 size="small"
@@ -463,9 +470,10 @@ export default function ClientOverviewPage() {
                 View All ({clientTasks.length})
               </Button>
             }
+            className="h-full"
           >
-            <Box className="space-y-2">
-              {clientTasks.slice(0, 5).map((task) => (
+            <Box className="space-y-2 h-52 overflow-y-auto">
+              {clientTasks.slice(0, ITEMS_PER_CARD).map((task) => (
                 <TaskItem
                   key={task.id}
                   title={task.title}
@@ -488,6 +496,7 @@ export default function ClientOverviewPage() {
           <BaseCard
             title="Recent Messages"
             titleIcon={ChatIcon}
+            className="h-full"
             action={
               <Button
                 size="small"
@@ -499,7 +508,7 @@ export default function ClientOverviewPage() {
               </Button>
             }
           >
-            <Box className="space-y-1 max-h-64 overflow-y-auto">
+            <Box className="space-y-2 h-52 overflow-y-auto">
               {recentCommunications.length > 0 ? (
                 recentCommunications.map((msg) => (
                   <MessageItem
@@ -526,6 +535,7 @@ export default function ClientOverviewPage() {
           <BaseCard
             title="Recent Files"
             titleIcon={DescriptionIcon}
+            className="h-full"
             action={
               <Button
                 size="small"
@@ -537,7 +547,7 @@ export default function ClientOverviewPage() {
               </Button>
             }
           >
-            <Box className="space-y-1 max-h-64 overflow-y-auto">
+            <Box className="space-y-2 h-52">
               {recentFiles.length > 0 ? (
                 recentFiles.map((file) => (
                   <FileItem
@@ -561,6 +571,7 @@ export default function ClientOverviewPage() {
           <BaseCard
             title="Upcoming Deadlines"
             titleIcon={ScheduleIcon}
+            className="h-full"
             action={
               <Button
                 size="small"
@@ -572,7 +583,7 @@ export default function ClientOverviewPage() {
               </Button>
             }
           >
-            <Box className="space-y-2 max-h-64 overflow-y-auto">
+            <Box className="space-y-2 h-52">
               {allDeadlines.length > 0 ? (
                 allDeadlines.map((item) => (
                   <DeadlineItem
@@ -594,18 +605,56 @@ export default function ClientOverviewPage() {
       </Grid>
 
       {/* Summary Footer */}
-      <Box className="bg-linear-to-r from-primary/5 to-transparent p-3 rounded-lg border border-primary/10">
-        <Typography className="text-gray-600 text-xs flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-primary">📊 Summary:</span>
-          <span>
-            {activeCases} active · {pendingCases} pending · {urgentCases} urgent
-            · {formatCurrency(totalBilled)} billed ·
-            {outstanding > 0
-              ? `${unpaidInvoices.length} unpaid (${formatCurrency(outstanding)})`
-              : "All paid"}{" "}
-            · {unreadCount} unread
+      {/* Summary Footer */}
+      <Box className="bg-linear-to-r from-primary/5 to-transparent p-4 rounded-lg border border-primary/10 mt-4">
+        <Box className="flex flex-wrap gap-4 items-center">
+          <span className="font-semibold text-primary flex items-center gap-1">
+            <span>📊</span> Summary:
           </span>
-        </Typography>
+
+          <Box className="flex flex-wrap gap-3 text-sm">
+            <Box className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-green-500" />
+              <span className="text-gray-700">{activeCases} active</span>
+            </Box>
+
+            <Box className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="text-gray-700">{pendingCases} pending</span>
+            </Box>
+
+            <Box className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-red-500" />
+              <span className="text-gray-700">{urgentCases} urgent</span>
+            </Box>
+
+            <Box className="flex items-center gap-1">
+              <span className="text-green-600">$</span>
+              <span className="text-gray-700">
+                {formatCurrency(totalBilled)} billed
+              </span>
+            </Box>
+
+            {outstanding > 0 ? (
+              <Box className="flex items-center gap-1">
+                <span className="text-red-600">⚠️</span>
+                <span className="text-gray-700">
+                  {unpaidInvoices.length} unpaid ({formatCurrency(outstanding)})
+                </span>
+              </Box>
+            ) : (
+              <Box className="flex items-center gap-1">
+                <span className="text-green-600">✓</span>
+                <span className="text-gray-700">All paid</span>
+              </Box>
+            )}
+
+            <Box className="flex items-center gap-1">
+              <span className="text-blue-600">✉️</span>
+              <span className="text-gray-700">{unreadCount} unread</span>
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
