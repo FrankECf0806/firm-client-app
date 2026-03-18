@@ -182,7 +182,7 @@ export default function ClientOverviewPage() {
     }).format(amount);
 
   return (
-    <Box className="p-1 mb-10 md:mb-2 max-w-screen-2xl mx-auto space-y-4">
+    <Box className="pb-10 xs:-pb-10 md:pb-5 max-w-screen-2xl mx-auto space-y-4">
       {/* Priority Alerts */}
       {hasPriority && (
         <Box>
@@ -342,20 +342,18 @@ export default function ClientOverviewPage() {
           >
             <Box className="space-y-2">
               <Box className="flex justify-between text-xs">
-                <span className="text-gray-500">Total Invoices:</span>
-                <span className="font-medium">{totalInvoices}</span>
+                <Box className="text-gray-500">Total Invoices:</Box>
+                <Box className="font-medium">{totalInvoices}</Box>
               </Box>
               <Box className="flex justify-between text-xs">
-                <span className="text-gray-500">Total Billed:</span>
-                <span className="font-medium">
-                  {formatCurrency(totalBilled)}
-                </span>
+                <Box className="text-gray-500">Total Billed:</Box>
+                <Box className="font-medium">{formatCurrency(totalBilled)}</Box>
               </Box>
               <Box className="flex justify-between text-xs">
-                <span className="text-gray-500">Outstanding:</span>
-                <span className="font-medium text-red-600">
+                <Box className="text-gray-500">Outstanding:</Box>
+                <Box className="font-medium text-red-600">
                   {formatCurrency(outstanding)}
-                </span>
+                </Box>
               </Box>
 
               <Divider />
@@ -365,34 +363,34 @@ export default function ClientOverviewPage() {
               </Typography>
               {overdueUnpaid.length > 0 && (
                 <Box className="flex justify-between text-xs">
-                  <span className="text-red-600">Overdue</span>
-                  <span className="font-medium">
+                  <Box className="text-red-600">Overdue</Box>
+                  <Box className="font-medium">
                     {overdueUnpaid.length} ({formatCurrency(overdueAmount)})
-                  </span>
+                  </Box>
                 </Box>
               )}
               {dueThisWeek.length > 0 && (
                 <Box className="flex justify-between text-xs">
-                  <span className="text-amber-600">Due this week</span>
-                  <span className="font-medium">
+                  <Box className="text-amber-600">Due this week</Box>
+                  <Box className="font-medium">
                     {dueThisWeek.length} ({formatCurrency(dueThisWeekAmount)})
-                  </span>
+                  </Box>
                 </Box>
               )}
               {dueLater.length > 0 && (
                 <Box className="flex justify-between text-xs">
-                  <span className="text-blue-600">Due later</span>
-                  <span className="font-medium">
+                  <Box className="text-blue-600">Due later</Box>
+                  <Box className="font-medium">
                     {dueLater.length} ({formatCurrency(dueLaterAmount)})
-                  </span>
+                  </Box>
                 </Box>
               )}
               {noDueDate.length > 0 && (
                 <Box className="flex justify-between text-xs">
-                  <span className="text-gray-500">No due date</span>
-                  <span className="font-medium">
+                  <Box className="text-gray-500">No due date</Box>
+                  <Box className="font-medium">
                     {noDueDate.length} ({formatCurrency(noDueDateAmount)})
-                  </span>
+                  </Box>
                 </Box>
               )}
               {unpaidInvoices.length === 0 && (
@@ -605,56 +603,68 @@ export default function ClientOverviewPage() {
       </Grid>
 
       {/* Summary Footer */}
-      {/* Summary Footer */}
-      <Box className="bg-linear-to-r from-primary/5 to-transparent p-4 rounded-lg border border-primary/10 mt-4">
-        <Box className="flex flex-wrap gap-4 items-center">
-          <span className="font-semibold text-primary flex items-center gap-1">
-            <span>📊</span> Summary:
-          </span>
-
-          <Box className="flex flex-wrap gap-3 text-sm">
-            <Box className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-gray-700">{activeCases} active</span>
+      <Box className="pb-4 md:pb-6 lg:pb-0">
+        <BaseCard className="bg-linear-to-r from-primary/5 to-transparent p-0.5 md:p-1">
+          <Box className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
+            <Box className="font-semibold text-primary flex items-center gap-1 text-sm md:text-base">
+              <Box>📊</Box> Summary:
             </Box>
 
-            <Box className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
-              <span className="text-gray-700">{pendingCases} pending</span>
-            </Box>
-
-            <Box className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-gray-700">{urgentCases} urgent</span>
-            </Box>
-
-            <Box className="flex items-center gap-1">
-              <span className="text-green-600">$</span>
-              <span className="text-gray-700">
-                {formatCurrency(totalBilled)} billed
-              </span>
-            </Box>
-
-            {outstanding > 0 ? (
+            <Box className="flex flex-wrap gap-3 text-xs md:text-sm">
               <Box className="flex items-center gap-1">
-                <span className="text-red-600">⚠️</span>
-                <span className="text-gray-700">
-                  {unpaidInvoices.length} unpaid ({formatCurrency(outstanding)})
-                </span>
+                <Box className="w-2 h-2 rounded-full bg-green-500" />
+                <Box className="text-gray-700 whitespace-nowrap">
+                  {activeCases} active
+                </Box>
               </Box>
-            ) : (
-              <Box className="flex items-center gap-1">
-                <span className="text-green-600">✓</span>
-                <span className="text-gray-700">All paid</span>
-              </Box>
-            )}
 
-            <Box className="flex items-center gap-1">
-              <span className="text-blue-600">✉️</span>
-              <span className="text-gray-700">{unreadCount} unread</span>
+              <Box className="flex items-center gap-1">
+                <Box className="w-2 h-2 rounded-full bg-amber-500" />
+                <Box className="text-gray-700 whitespace-nowrap">
+                  {pendingCases} pending
+                </Box>
+              </Box>
+
+              <Box className="flex items-center gap-1">
+                <Box className="w-2 h-2 rounded-full bg-red-500" />
+                <Box className="text-gray-700 whitespace-nowrap">
+                  {urgentCases} urgent
+                </Box>
+              </Box>
+
+              <Box className="flex items-center gap-1">
+                <Box className="text-green-600 font-medium">$</Box>
+                <Box className="text-gray-700 whitespace-nowrap">
+                  {formatCurrency(totalBilled)} billed
+                </Box>
+              </Box>
+
+              {outstanding > 0 ? (
+                <Box className="flex items-center gap-1">
+                  <Box className="text-red-600">⚠️</Box>
+                  <Box className="text-gray-700 whitespace-nowrap">
+                    {unpaidInvoices.length} unpaid (
+                    {formatCurrency(outstanding)})
+                  </Box>
+                </Box>
+              ) : (
+                <Box className="flex items-center gap-1">
+                  <Box className="text-green-600">✓</Box>
+                  <Box className="text-gray-700 whitespace-nowrap">
+                    All paid
+                  </Box>
+                </Box>
+              )}
+
+              <Box className="flex items-center gap-1">
+                <Box className="text-blue-600">✉️</Box>
+                <Box className="text-gray-700 whitespace-nowrap">
+                  {unreadCount} unread
+                </Box>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        </BaseCard>
       </Box>
     </Box>
   );

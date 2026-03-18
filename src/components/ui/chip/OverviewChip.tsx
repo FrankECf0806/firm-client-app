@@ -18,16 +18,43 @@ export function OverviewChip({
   className = "",
   ...props
 }: OverviewChipProps) {
-  const sizeClasses = {
-    small: "text-[9px] h-4 w-16",
-    medium: "text-xs h-6 w-20 ",
+  const sizeConfig = {
+    small: {
+      height: 18,
+      fontSize: "10px",
+      px: 1,
+    },
+    medium: {
+      height: 24,
+      fontSize: "12px",
+      px: 1.5,
+    },
   };
+
+  const config = sizeConfig[size];
 
   return (
     <MuiChip
       label={label}
-      size={size}
-      className={`${sizeClasses[size]} ${color} ${className}`}
+      className={`w-16 ${color} ${className}`}
+      sx={{
+        height: config.height,
+        borderRadius: "8px",
+
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        "& .MuiChip-label": {
+          px: config.px,
+          py: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          lineHeight: 1,
+          fontSize: config.fontSize,
+        },
+      }}
       {...props}
     />
   );

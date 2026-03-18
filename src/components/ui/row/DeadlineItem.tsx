@@ -56,6 +56,13 @@ export function DeadlineItem({
   const iconBgColor = type === "case" ? "bg-blue-50" : "bg-purple-50";
   const iconColor = type === "case" ? "text-blue-500" : "text-purple-500";
 
+  const PRIORITY_TYPE: Record<string, string> = {
+    URGENT: "Urgent",
+    HIGH: "High",
+    MEDIUM: "Medium",
+    LOW: "Low",
+  };
+
   return (
     <ListRow
       icon={Icon}
@@ -65,7 +72,7 @@ export function DeadlineItem({
         <Box className="flex items-center gap-1 shrink-0">
           {priority && (
             <OverviewChip
-              label={priority}
+              label={PRIORITY_TYPE[priority]}
               size="small"
               className={priorityColors[priority]}
             />

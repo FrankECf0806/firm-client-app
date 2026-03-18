@@ -29,16 +29,16 @@ export const DOCUMENT_TYPE_ICONS: Record<string, SvgIconComponent> = {
 
 // Document type colors for UI badges
 export const DOCUMENT_TYPE_COLORS: Record<string, string> = {
-  PDF: "bg-red-100 text-red-700 border-red-200",
-  DOC: "bg-primary/15 text-blue-700 border-blue-200",
-  DOCX: "bg-primary/15  text-blue-700 border-blue-200",
-  XLS: "bg-green-100 text-green-700 border-green-200",
-  XLSX: "bg-green-100 text-green-700 border-green-200",
-  JPG: "bg-purple-100 text-purple-700 border-purple-200",
-  JPEG: "bg-purple-100 text-purple-700 border-purple-200",
-  PNG: "bg-purple-100 text-purple-700 border-purple-200",
-  TXT: "bg-gray-100 text-gray-700 border-gray-200",
-  DEFAULT: "bg-gray-100 text-gray-700 border-gray-200",
+  PDF: "bg-red-100 text-red-700 border border-red-200",
+  DOC: "bg-primary/15 text-blue-700 border border-blue-200",
+  DOCX: "bg-primary/15  text-blue-700 border border-blue-200",
+  XLS: "bg-green-100 text-green-700 border border-green-200",
+  XLSX: "bg-green-100 text-green-700 border border-green-200",
+  JPG: "bg-purple-100 text-purple-700 border border-purple-200",
+  JPEG: "bg-purple-100 text-purple-700 border border-purple-200",
+  PNG: "bg-purple-100 text-purple-700 border border-purple-200",
+  TXT: "bg-gray-100 text-gray-700 border border-gray-200",
+  DEFAULT: "bg-gray-100 text-gray-700 border border-gray-200",
 };
 
 // Document type display labels
