@@ -15,6 +15,7 @@ import {
 } from "@/utils/constant/case";
 import { Case, TableCaseSortKey } from "@/types/case";
 import { TableAction, TableSortOrder } from "@/types/table";
+import { formatDate } from "@/utils/date";
 
 export interface CaseTableProps {
   data: Case[];
@@ -97,7 +98,7 @@ export function CaseTable({
     openedAt: (row: Case) => (
       <Box className="flex items-center gap-1">
         <ScheduleIcon className="text-gray-400 text-sm" />
-        <Typography variant="body2">{row.openedAt}</Typography>
+        <Typography variant="body2">{formatDate(row.openedAt)}</Typography>
       </Box>
     ),
   };

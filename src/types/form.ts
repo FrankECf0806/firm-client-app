@@ -10,5 +10,5 @@ export interface QuickAcessFormProps<T extends object> {
 export interface FormState<T extends object> {
   mode: FormMode;
   open: boolean;
-  formData?: T;
+  formData?: Partial<T>;
 }

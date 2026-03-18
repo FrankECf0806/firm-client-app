@@ -58,7 +58,7 @@ export default function ManagementLayout({
 
       {/* Header with Title, Subtitle, and Actions */}
       {showHeader && (
-        <Box className="mb-6 md:mb-8">
+        <Box className="mb-4">
           {/* Title Row */}
           <Box className="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-3">
             <Box className="flex-1">

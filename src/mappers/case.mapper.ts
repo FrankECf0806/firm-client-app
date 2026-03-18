@@ -2,7 +2,7 @@ import { Case, CaseFormValues } from "@/types/case";
 
 export function caseToFormValues(caseItem: Case): CaseFormValues {
   return {
-    id: caseItem.id, // ✅ Include the ID for edit mode
+    id: caseItem.id,
     title: caseItem.title,
     clientId: caseItem.clientId,
     practiceArea: caseItem.practiceArea,
