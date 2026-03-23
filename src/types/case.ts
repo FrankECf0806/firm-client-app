@@ -46,3 +46,8 @@ export type TableCaseSortKey =
   | "priority"
   | "openedAt"
   | "nextDeadline";
+
+export interface CasesManagerProps {
+  clientId?: string;
+  searchPlaceholder?: string;
+}

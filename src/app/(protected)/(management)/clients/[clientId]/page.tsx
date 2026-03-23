@@ -26,7 +26,7 @@ import { TaskItem } from "@/components/ui/row/TaskItem";
 import { MessageItem } from "@/components/ui/row/MessageItem";
 import { FileItem } from "@/components/ui/row/FileItem";
 import { DeadlineItem } from "@/components/ui/row/DeadlineItem";
-import { formatDate } from "@/utils/date";
+import { formatDate, formatRelativeTimeFromNow } from "@/utils/date";
 
 const ITEMS_PER_CARD = 5;
 
@@ -168,7 +168,7 @@ export default function ClientOverviewPage() {
   const recentFiles = [...clientDocuments]
     .sort(
       (a, b) =>
-        new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     .slice(0, ITEMS_PER_CARD);
 
@@ -551,7 +551,7 @@ export default function ClientOverviewPage() {
                   <FileItem
                     key={file.id}
                     name={file.name}
-                    date={formatDate(file.uploadDate)}
+                    date={formatRelativeTimeFromNow(file.createdAt)}
                     size={file.size}
                   />
                 ))

@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CaseForm } from "@/components/forms/CaseForm";
 import { ClientForm } from "@/components/forms/ClientForm";
-import UploadFileForm from "@/components/forms/UploadFileForm";
+import { UploadFileForm } from "@/components/forms/UploadFileForm";
 
 export function QuickActions() {
   const [newCaseOpen, setNewCaseOpen] = useState(false);

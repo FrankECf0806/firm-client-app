@@ -120,11 +120,6 @@ export default function ClientDetailLayout({
             href={`/clients/${clientId}/cases`}
           />
           <Tab
-            label="Invoices"
-            component={Link}
-            href={`/clients/${clientId}/invoices`}
-          />
-          <Tab
             label="Documents"
             component={Link}
             href={`/clients/${clientId}/documents`}
@@ -133,6 +128,11 @@ export default function ClientDetailLayout({
             label="Communications"
             component={Link}
             href={`/clients/${clientId}/communications`}
+          />
+          <Tab
+            label="Invoices"
+            component={Link}
+            href={`/clients/${clientId}/invoices`}
           />
         </Tabs>
       </Box>

@@ -21,16 +21,12 @@ import { FormState } from "@/types/form";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { TableSortOrder } from "@/types/table";
 import { CaseTable } from "@/components/table/CaseTable";
-
-interface CasesManagerProps {
-  clientId?: string;
-  searchPlaceholder?: string;
-}
+import { ViewManagerProps } from "@/types/shared";
 
 export function CasesManager({
   clientId,
   searchPlaceholder = "Search by case, client, or case type...",
-}: CasesManagerProps) {
+}: ViewManagerProps) {
   const { cases, clients } = useAppContext();
   const { cases: casesList } = cases;
   const { clientNamesMap } = clients;
@@ -258,8 +254,8 @@ export function CasesManager({
                   className="button-firm bg-primary hover:bg-primary-dark shadow-sm w-full"
                   onClick={handleNewCase}
                 >
-                  <span className="hidden sm:inline">New</span>
-                  <span className="sm:hidden">New Case</span>
+                  <Box className="hidden sm:inline">New</Box>
+                  <Box className="sm:hidden">New Case</Box>
                 </Button>
               </Grid>
             </Grid>

@@ -1,29 +1,45 @@
 import { ALL_DOCUMENT_TYPES } from "@/utils/constant/document";
+import {
+  DocumentType,
+  FileExtension,
+  FileExtensionGroup,
+} from "@/enums/document";
 
-/** Base Document - shared fields for forms and creation */
+export type DocumentTypeKey = keyof typeof DocumentType; // "CONTRACT" | "PLEADING" | "MOTION" | "BRIEF" | "CORRESPONDENCE" | "EVIDENCE" | "COURT_ORDER" | "OTHER"
+export type FileExtensionKey = keyof typeof FileExtension; // "PDF" | "DOC" | "DOCX" | "XLS" | "XLSX" | "JPG" | "JPEG" | "PNG" | "TXT" | "DEFAULT"
+
+export type FileExtensionFilter = FileExtensionKey | typeof ALL_DOCUMENT_TYPES; // "ALL_TYPES" | "PDF" | "DOC" | "DOCX" | "XLS" | "XLSX" | "JPG" | "JPEG" | "PNG" | "TXT" | "DEFAULT"
+export type FileExtensionGroupKey = keyof typeof FileExtensionGroup; // "OTHER" | "PDF" | "WORD" | "EXCEL" | "IMAGE" | "TEXT"
+
+export type FileExtensionGroupFilter =
+  | FileExtensionGroupKey
+  | typeof ALL_DOCUMENT_TYPES; // ALL_TYPES" | "WORD" | "PDF" | "EXCEL" | "IMAGE" | "TEXT" | "OTHER"
+
 export interface DocumentBase {
   name: string;
   caseId: string;
   clientId: string;
-  type: string;
+  type: DocumentTypeKey;
   description?: string;
+  isStarred?: boolean;
 }
 
-// Form values - extends base with file for upload
-export type DocumentFormValues = Omit<DocumentBase, "name" | "caseId"> & {
+export interface DocumentFormValues extends DocumentBase {
   file?: File;
-};
+}
 
-// Create input (same as base)
 export type CreateDocumentInput = DocumentBase;
 
-/** Full Document Entity - stored in AppProvider */
 export interface Document extends DocumentBase {
   id: string;
-  uploadDate: string;
   size: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// Document type filter for UI
-export type DocumentTypeKey = string; // "PDF" | "DOC" | "XLS" | etc.
-export type DocumentTypeFilter = DocumentTypeKey | typeof ALL_DOCUMENT_TYPES;
+export type TableDocumentSortKey =
+  | "name"
+  | "size"
+  | "createdAt"
+  | "caseId"
+  | "fileExt";

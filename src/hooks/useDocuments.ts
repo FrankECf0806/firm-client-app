@@ -17,7 +17,8 @@ export function useDocuments() {
     const newDocument: CaseDocument = {
       ...input,
       id: crypto.randomUUID(),
-      uploadDate: now,
+      createdAt: now,
+      updatedAt: now,
       size: "0 MB",
     };
     setDocuments((prev) => [...prev, newDocument]);
@@ -62,7 +63,7 @@ export function useDocuments() {
       [...documents]
         .sort(
           (a, b) =>
-            new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime(),
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )
         .slice(0, limit),
     [documents],
@@ -71,7 +72,7 @@ export function useDocuments() {
   const getDocumentsByDateRange = useCallback(
     (startDate: Date, endDate: Date) =>
       documents.filter((d) => {
-        const uploadDate = new Date(d.uploadDate);
+        const uploadDate = new Date(d.createdAt);
         return uploadDate >= startDate && uploadDate <= endDate;
       }),
     [documents],

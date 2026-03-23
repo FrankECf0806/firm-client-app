@@ -1,22 +1,15 @@
-// Helper function to extract file extension from filename
-export const getFileExtension = (filename: string): string => {
-  const parts = filename.split(".");
-  return parts.length > 1 ? parts.pop()?.toUpperCase() || "DEFAULT" : "DEFAULT";
-};
+import { FileExtension } from "@/enums/document";
+import { FileExtensionKey } from "@/types/document";
 
-// Helper function to get document type from filename
-export const getDocumentTypeFromFilename = (filename: string): string => {
-  const ext = getFileExtension(filename);
-  const typeMap: Record<string, string> = {
-    PDF: "PDF",
-    DOC: "DOC",
-    DOCX: "DOCX",
-    XLS: "XLS",
-    XLSX: "XLSX",
-    JPG: "JPG",
-    JPEG: "JPEG",
-    PNG: "PNG",
-    TXT: "TXT",
-  };
-  return typeMap[ext] || "DEFAULT";
+export const getDocumentTypeFromFilename = (
+  filename: string,
+): FileExtensionKey => {
+  const parts = filename.split(".");
+  const ext = parts.length > 1 ? parts.pop()?.toUpperCase() : "DEFAULT";
+
+  if (ext && ext in FileExtension) {
+    return ext as FileExtensionKey;
+  }
+
+  return "DEFAULT" as FileExtensionKey;
 };

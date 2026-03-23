@@ -43,3 +43,11 @@ export function formatRelativeTime(date: string | Date) {
 
   return `${days}d ago`;
 }
+
+export function formatRelativeTimeFromNow(date: string | Date): string {
+  const now = Date.now();
+
+  const uploadTime = new Date(date).getTime();
+  const isRecent = now - uploadTime < 7 * 24 * 60 * 60 * 1000;
+  return isRecent ? formatRelativeTime(date) : formatDate(date);
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Box,
@@ -11,15 +11,13 @@ import {
 } from "@mui/material";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-
+import { useParams } from "next/navigation";
+import { useAppContext } from "@/providers/AppProvider";
 import { DialogForm } from "@/components/dialogs/DialogForm";
 import { QuickAcessFormProps } from "@/types/form";
 import { DocumentType } from "@/enums/document";
-import { mockCases } from "@/mock_data";
 import { Document } from "@/types/document";
 import { MAX_FILES } from "@/utils/constant";
-
-/* -------------------------------- Types -------------------------------- */
 
 type UploadItem = {
   file: File;
@@ -32,12 +30,25 @@ type UploadFormValues = {
   description: string;
 };
 
-export default function UploadFileForm({
+export function UploadFileForm({
   mode,
   open,
   onClose,
-  formData,
 }: QuickAcessFormProps<UploadFormValues>) {
+  const params = useParams();
+  const clientId = params.clientId as string | undefined;
+  const { documents, cases } = useAppContext();
+  const { addDocument } = documents;
+  const { cases: casesList } = cases;
+
+  // Filter cases by current client if we are on a client page
+  const filteredCases = useMemo(() => {
+    if (clientId) {
+      return casesList.filter((c) => c.clientId === clientId);
+    }
+    return casesList;
+  }, [casesList, clientId]);
+
   const {
     control,
     handleSubmit,
@@ -53,24 +64,20 @@ export default function UploadFileForm({
 
   useEffect(() => {
     if (!open) return;
-
     reset({
       caseId: "",
       description: "",
-      ...formData,
     });
-  }, [open, formData, reset]);
+  }, [open, reset]);
 
   const title = mode === "create" ? "Upload Documents" : "Edit Upload";
   const subtitle =
     mode === "create"
       ? "Upload documents and associate them with a case."
       : "Update the details of this upload.";
-
-  const summitLabel = mode === "create" ? "Upload" : "Save";
+  const submitLabel = mode === "create" ? "Upload" : "Save";
 
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [items, setItems] = useState<UploadItem[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -143,7 +150,7 @@ export default function UploadFileForm({
 
   /* ---------------- Submit ---------------- */
 
-  const handleSubmitForm = async (data: UploadFormValues) => {
+  const onSubmit = async (data: UploadFormValues) => {
     if (items.length === 0) {
       setFileError("Please upload at least one document.");
       return;
@@ -160,29 +167,32 @@ export default function UploadFileForm({
       return;
     }
 
-    // Find the selected case to get clientId
-    const selectedCase = mockCases.find((c) => c.id === data.caseId);
+    const selectedCase = filteredCases.find((c) => c.id === data.caseId);
     if (!selectedCase) {
       setFileError("Selected case not found.");
       return;
     }
 
-    const documents: Document[] = validated.map(({ file, type }) => ({
+    const effectiveClientId = clientId || selectedCase.clientId;
+
+    const newDocuments: Document[] = validated.map(({ file, type }) => ({
       id: crypto.randomUUID(),
       name: file.name,
-      clientId: selectedCase.clientId,
+      clientId: effectiveClientId,
       size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-      uploadDate: new Date().toISOString(),
       caseId: data.caseId,
-      caseName: mockCases.find((c) => c.id === data.caseId)?.title ?? "",
-      type,
+      type: type as keyof typeof DocumentType,
       description: data.description,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }));
 
-    console.log("UPLOAD", documents);
+    // Add each document to the context
+    for (const doc of newDocuments) {
+      await addDocument(doc);
+    }
 
-    await new Promise((r) => setTimeout(r, 800));
-
+    // Reset form and close
     reset();
     setItems([]);
     setFileError(null);
@@ -204,9 +214,9 @@ export default function UploadFileForm({
       onClose={handleCancel}
       title={title}
       subtitle={subtitle}
-      submitLabel={summitLabel}
+      submitLabel={submitLabel}
       isSubmitting={isSubmitting}
-      onSubmit={handleSubmit(handleSubmitForm)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       {/* Dropzone */}
       <Box
@@ -287,9 +297,9 @@ export default function UploadFileForm({
                     },
                   }}
                 >
-                  {Object.keys(DocumentType).map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {DocumentType[type as keyof typeof DocumentType]}
+                  {Object.entries(DocumentType).map(([key, label]) => (
+                    <MenuItem key={key} value={key}>
+                      {label}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -330,7 +340,7 @@ export default function UploadFileForm({
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
           >
-            {mockCases.map((c) => (
+            {filteredCases.map((c) => (
               <MenuItem key={c.id} value={c.id}>
                 {c.title}
               </MenuItem>

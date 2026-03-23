@@ -23,6 +23,7 @@ export interface ConfigItem<K extends string = string> {
     sx?: ChipProps["sx"];
     // OR use an icon
     icon?: SvgIconComponent;
+    iconBg?: string;
   };
 }
 
@@ -51,3 +52,5 @@ export type ResettableSelectProps<T extends OptionsMap> = {
   className?: string;
   disabled?: boolean;
 };
+
+export type ViewMode = "grid" | "table";
