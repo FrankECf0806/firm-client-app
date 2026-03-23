@@ -4,7 +4,7 @@ import {
   Edit as EditIcon,
   Description as FileTextIcon,
 } from "@mui/icons-material";
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/table/DataTable";
 import { AppChip } from "@/components/ui/chip/AppChip";
@@ -61,26 +61,22 @@ export function ClientTable({
   ];
 
   const customRenderers = {
-    id: (row: Client) => (
-      <Typography className="font-mono text-gray-600">#{row.id}</Typography>
-    ),
     name: (row: Client) => (
-      <>
-        <Link href={`/clients/${row.id}`}>
-          <Typography className="font-medium text-primary hover:underline">
+      <Box className="space-y-0">
+        <Link
+          href={`/clients/${row.id}`}
+          className="hover:underline decoration-primary"
+        >
+          <Typography className="font-medium text-primary leading-tight">
             {row.firstName} {row.lastName}
           </Typography>
         </Link>
         {row.company && (
-          <Typography
-            variant="caption"
-            display="block"
-            className="text-gray-500"
-          >
+          <Typography className="text-xs text-gray-500 leading-tight">
             {row.company}
           </Typography>
         )}
-      </>
+      </Box>
     ),
     type: (row: Client) => (
       <Grid container spacing={2} alignItems="center">
@@ -88,6 +84,7 @@ export function ClientTable({
           <AppChip
             config={CLIENT_TYPE_CONFIG[row.type]}
             selected={false}
+            size="small"
             className="w-full"
           />
         </Grid>
@@ -95,10 +92,11 @@ export function ClientTable({
     ),
     status: (row: Client) => (
       <Grid container spacing={2} alignItems="center">
-        <Grid size={{ xs: 12, md: 10 }}>
+        <Grid size={{ xs: 12, md: 10, lg: 9 }}>
           <AppChip
             config={CLIENT_STATUS_CONFIG[row.status]}
             selected={true}
+            size="small"
             className="w-full"
           />
         </Grid>

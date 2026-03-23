@@ -30,7 +30,7 @@ export default function Clients() {
   const [statusFilter, setStatusFilter] = useState<string>(ALL_CLIENT_STATUS);
   const [typeFilter, setTypeFilter] = useState<string>(ALL_CLIENT_TYPES);
 
-  const [sortKey, setSortKey] = useState<TableClientSortKey>("id");
+  const [sortKey, setSortKey] = useState<TableClientSortKey>("name");
   const [sortOrder, setSortOrder] = useState<TableSortOrder>("asc");
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);

@@ -43,7 +43,7 @@ export function CasesManager({
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
-  const [sortKey, setSortKey] = useState<TableCaseSortKey>("id");
+  const [sortKey, setSortKey] = useState<TableCaseSortKey>("title");
   const [sortOrder, setSortOrder] = useState<TableSortOrder>("asc");
 
   const [caseFormState, setCaseFormState] = useState<FormState<CaseFormValues>>(

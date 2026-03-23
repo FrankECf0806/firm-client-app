@@ -16,6 +16,7 @@ import {
 import { Case, TableCaseSortKey } from "@/types/case";
 import { TableAction, TableSortOrder } from "@/types/table";
 import { formatDate } from "@/utils/date";
+import Link from "next/link";
 
 export interface CaseTableProps {
   data: Case[];
@@ -64,21 +65,23 @@ export function CaseTable({
   ];
 
   const customRenderers = {
-    id: (row: Case) => (
-      <Typography className="font-mono text-gray-600">#{row.id}</Typography>
-    ),
     client: (row: Case) => (
-      <Typography>{clientNamesMap.get(row.clientId)}</Typography>
+      <Link href={`/clients/${row.clientId}`}>
+        <Typography className="font-medium text-primary hover:underline">
+          {clientNamesMap.get(row.clientId)}
+        </Typography>
+      </Link>
     ),
     title: (row: Case) => (
       <Typography className="font-medium">{row.title}</Typography>
     ),
     practiceArea: (row: Case) => (
       <Grid container spacing={2} alignItems="center">
-        <Grid size={{ xs: 12, md: 10 }}>
+        <Grid size={{ xs: 12, md: 9 }}>
           <AppChip
             config={CASE_TYPE_CONFIG[row.practiceArea]}
             selected={false}
+            size="small"
             className="w-full"
           />
         </Grid>
@@ -86,10 +89,11 @@ export function CaseTable({
     ),
     status: (row: Case) => (
       <Grid container spacing={2} alignItems="center">
-        <Grid size={{ xs: 12, md: 10 }}>
+        <Grid size={{ xs: 12, md: 10, lg: 9 }}>
           <AppChip
             config={CASE_STATUS_CONFIG[row.status]}
             selected={true}
+            size="small"
             className="w-full"
           />
         </Grid>

@@ -12,7 +12,6 @@ export const ALL_CASE_STATUS = "ALL_STATUS";
 export const ALL_CASE_PRACTICE_AREAS = "ALL_PRACTICE_AREAS";
 
 export const COLUMNS: TableColumn<TableCaseSortKey>[] = [
-  { field: "id", label: "ID", minWidth: 80, sortable: true, sortKey: "id" },
   {
     field: "title",
     label: "Title",

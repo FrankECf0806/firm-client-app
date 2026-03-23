@@ -38,7 +38,6 @@ export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;
 export type CaseFilterPracticeArea = CasePracticeAreaKey;
 
 export type TableCaseSortKey =
-  | "id"
   | "title"
   | "clientId"
   | "status"

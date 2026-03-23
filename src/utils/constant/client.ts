@@ -28,7 +28,6 @@ export const ALL_CLIENT_TYPES = "ALL_CLIENT_TYPES";
 
 /** Client Table Columns */
 export const COLUMNS: TableColumn<TableClientSortKey>[] = [
-  { field: "id", label: "ID", minWidth: 80, sortable: true, sortKey: "id" },
   {
     field: "name",
     label: "Name",
