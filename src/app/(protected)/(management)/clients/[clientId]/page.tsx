@@ -266,10 +266,7 @@ export default function ClientOverviewPage() {
             change={`${paidInvoices.length} paid`}
             changeType={paidInvoices.length > 0 ? "positive" : "neutral"}
             icon={AttachMoneyIcon}
-            iconBgColor="bg-purple-500/10"
-            iconColor="text-purple-500"
             sparkline={billedTrend}
-            chartColor="#8b5cf6"
           />
         </Grid>
         <Grid size={{ xs: 6, sm: 3 }}>
@@ -282,7 +279,7 @@ export default function ClientOverviewPage() {
                 ? `${unpaidInvoices.length} unpaid`
                 : "All paid"
             }
-            changeType={unpaidInvoices.length > 0 ? "negative" : "positive"}
+            changeType={unpaidInvoices.length > 0 ? "negative" : "neutral"}
             icon={ScheduleIcon}
             sparkline={outstandingTrend}
           />

@@ -43,10 +43,10 @@ export function DataCard({
         };
       default:
         return {
-          sparkline: chartColor || "#3b82f6",
-          iconBg: iconBgColor || "bg-blue-500/10",
-          iconText: iconColor || "text-blue-500",
-          trendIconColor: "text-gray-500",
+          sparkline: chartColor || "#9E9E9E",
+          iconBg: iconBgColor || "bg-gray-400/10",
+          iconText: iconColor || "text-gray-400",
+          trendIconColor: "text-gray-400",
         };
     }
   };
@@ -110,7 +110,7 @@ export function DataCard({
           </Typography>
           <Typography
             variant="h4"
-            className={`font-bold text-gray-900 ${classes.valueSize} leading-tight`}
+            className={`font-bold ${colors.trendIconColor} ${classes.valueSize} leading-tight`}
           >
             {value}
           </Typography>
