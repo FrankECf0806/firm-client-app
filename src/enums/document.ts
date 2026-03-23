@@ -15,6 +15,7 @@ export enum FileExtension {
   DOCX = "DOCX",
   XLS = "XLS",
   XLSX = "XLSX",
+  CSV = "CSV",
   JPG = "JPG",
   JPEG = "JPEG",
   PNG = "PNG",
