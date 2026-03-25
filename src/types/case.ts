@@ -1,5 +1,5 @@
 import { CasePriority, CaseStatus, CasePracticeArea } from "@/enums/case";
-import { ALL_CASE_STATUS } from "@/utils/constant/case";
+import { ALL_CASE_PRIORITY, ALL_CASE_STATUS } from "@/utils/constant/case";
 import { Note } from "@/types/note";
 
 // Types for enum keys
@@ -36,6 +36,7 @@ export interface Case extends CaseBase {
 
 export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;
 export type CaseFilterPracticeArea = CasePracticeAreaKey;
+export type CaseFilterPriority = CasePriorityKey | typeof ALL_CASE_PRIORITY;
 
 export type TableCaseSortKey =
   | "title"

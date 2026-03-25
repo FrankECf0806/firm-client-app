@@ -8,33 +8,34 @@ import { useAppContext } from "@/providers/AppProvider";
 import Management from "@/components/layout/Management";
 import { rootSourcePath } from "@/utils/constant";
 import {
-  CLIENT_STATUS_CONFIG,
-  CLIENT_TYPE_CONFIG,
-} from "@/utils/constant/client";
+  CASE_PRIORITY_CONFIG,
+  CASE_STATUS_CONFIG,
+  CASE_TYPE_CONFIG,
+} from "@/utils/constant/case";
 import { MetaDataItem } from "@/types/layout";
 import { TabApp } from "@/components/ui/tab/TabApp";
 import { TabItem } from "@/types/ui/tab";
 
-export default function ClientDetailLayout({
+export default function CaseDetailLayout({
   children,
 }: {
   children: ReactNode;
 }) {
   const params = useParams();
-  const clientId = params.clientId as string;
+  const caseId = params.caseId as string;
 
-  const { clients } = useAppContext();
-  const { getClientById } = clients;
+  const { cases } = useAppContext();
+  const { getCaseById } = cases;
 
-  const client = getClientById(clientId);
+  const caseItem = getCaseById(caseId);
 
-  if (!client) {
+  if (!caseItem) {
     return (
       <Management
         title=""
         breadcrumbs={[
           { ...rootSourcePath },
-          { label: "Clients", href: "/clients" },
+          { label: "Cases", href: "/cases" },
         ]}
       >
         <Card
@@ -44,12 +45,12 @@ export default function ClientDetailLayout({
             rounded-lg mb-20 mt-10"
         >
           <CardHeader
-            title="Client Not Found"
-            subheader="The client you are looking for does not exist."
+            title="Case Not Found"
+            subheader="The case you are looking for does not exist."
           />
           <CardContent className="mt-2 sm:mt-4 pb-20 mb-32">
-            <Link href="/clients" className="text-primary hover:underline">
-              Back to Clients List
+            <Link href="/cases" className="text-primary hover:underline">
+              Back to Cases List
             </Link>
           </CardContent>
         </Card>
@@ -59,46 +60,46 @@ export default function ClientDetailLayout({
 
   const breadcrumbs = [
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Clients", href: "/clients" },
-    {
-      label: `${client.firstName} ${client.lastName}`,
-      href: undefined,
-    },
+    { label: "Cases", href: "/cases" },
+    { label: caseItem.title, href: undefined },
   ];
 
   const metadata: MetaDataItem[] = [
     {
-      label: `${CLIENT_STATUS_CONFIG[client.status].label}`,
-      color: `${CLIENT_STATUS_CONFIG[client.status].styling?.color ?? "default"}`,
+      label: CASE_STATUS_CONFIG[caseItem.status].label,
+      color: CASE_STATUS_CONFIG[caseItem.status].styling?.color,
       size: "small",
     },
     {
-      label: `${CLIENT_TYPE_CONFIG[client.type].label}`,
-      className: `${CLIENT_TYPE_CONFIG[client.type].styling?.unselectedClass ?? "default"}`,
+      label: CASE_TYPE_CONFIG[caseItem.practiceArea].label,
+      className:
+        CASE_TYPE_CONFIG[caseItem.practiceArea].styling?.unselectedClass,
       size: "small",
-      icon: CLIENT_TYPE_CONFIG[client.type].styling?.icon ?? undefined,
+    },
+    {
+      label: CASE_PRIORITY_CONFIG[caseItem.priority].label,
+      color: CASE_PRIORITY_CONFIG[caseItem.priority].styling?.color,
+      size: "small",
     },
   ];
 
   const tabs: TabItem[] = [
     { label: "Overview", path: "" },
-    { label: "Cases", path: "/cases" },
+    { label: "Tasks", path: "/tasks" },
     { label: "Documents", path: "/documents" },
-    { label: "Communications", path: "/communications" },
-    { label: "Invoices", path: "/invoices" },
   ];
 
   return (
     <Management
-      title={`${client.firstName} ${client.lastName}`}
-      subtitle={client.company}
+      title={caseItem.title}
+      subtitle={`Description: ${caseItem.description}`}
       breadcrumbs={breadcrumbs}
       metadata={metadata}
       metadataPosition="inline"
     >
       {/* Tabs Navigation */}
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-        <TabApp basePath={`/clients/${clientId}`} tabs={tabs} />
+        <TabApp basePath={`/cases/${caseId}`} tabs={tabs} />
       </Box>
 
       {/* Page Content */}

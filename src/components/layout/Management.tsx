@@ -94,7 +94,7 @@ export default function ManagementLayout({
               {subtitle && (
                 <Typography
                   variant="body1"
-                  className="text-gray-500 text-sm md:text-base"
+                  className="text-gray-500 text-sm md:text-base truncate"
                 >
                   {subtitle}
                 </Typography>

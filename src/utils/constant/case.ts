@@ -1,15 +1,17 @@
 import {
   CaseFilterPracticeArea,
+  CaseFilterPriority,
   CaseFilterStatus,
   TableCaseSortKey,
 } from "@/types/case";
 import { ConfigItem } from "@/types/ui";
-import { CasePracticeArea, CaseStatus } from "@/enums/case";
+import { CasePracticeArea, CaseStatus, CasePriority } from "@/enums/case";
 import { TableColumn } from "@/types/table";
 
 // Status and Practice Area
 export const ALL_CASE_STATUS = "ALL_STATUS";
 export const ALL_CASE_PRACTICE_AREAS = "ALL_PRACTICE_AREAS";
+export const ALL_CASE_PRIORITY = "ALL_CASE_PRIORITY";
 
 export const COLUMNS: TableColumn<TableCaseSortKey>[] = [
   {
@@ -260,4 +262,63 @@ export const QUICK_FILTER_CASE_STATUS = Object.entries(
   CASE_STATUS_CONFIG,
 ).filter(([key]) =>
   QUICK_FILTER_CASE_STATUS_KEYS.includes(key as CaseFilterStatus),
+);
+
+/**
+ * Case Priority
+ * */
+export const CASE_PRIORITY_CONFIG: Record<
+  CaseFilterPriority,
+  ConfigItem<CaseFilterPriority>
+> = {
+  [ALL_CASE_PRIORITY]: {
+    label: "All Priority",
+    styling: {
+      color: "primary",
+    },
+    onClick: (setStatus) => setStatus(ALL_CASE_PRIORITY),
+  },
+  LOW: {
+    label: CasePriority.LOW,
+    styling: {
+      color: "success",
+    },
+    onClick: (setPriority) => setPriority("LOW"),
+  },
+  MEDIUM: {
+    label: CasePriority.MEDIUM,
+    styling: {
+      color: "warning",
+    },
+    onClick: (setPriority) => setPriority("MEDIUM"),
+  },
+  HIGH: {
+    label: CasePriority.HIGH,
+    styling: {
+      color: "error",
+    },
+    onClick: (setPriority) => setPriority("HIGH"),
+  },
+  URGENT: {
+    label: CasePriority.URGENT,
+    styling: {
+      color: "error",
+      selectedClass: "bg-red-600 text-white",
+      unselectedClass:
+        "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100",
+    },
+    onClick: (setPriority) => setPriority("URGENT"),
+  },
+};
+
+export const QUICK_FILTER_CASE_PRIORITY_KEYS: CaseFilterPriority[] = [
+  ALL_CASE_PRIORITY,
+  "HIGH",
+  "URGENT",
+] as const;
+
+export const QUICK_FILTER_CASE_PRIORITY = Object.entries(
+  CASE_PRIORITY_CONFIG,
+).filter(([key]) =>
+  QUICK_FILTER_CASE_PRIORITY_KEYS.includes(key as CaseFilterPriority),
 );

@@ -65,15 +65,22 @@ export function CaseTable({
   ];
 
   const customRenderers = {
-    client: (row: Case) => (
-      <Link href={`/clients/${row.clientId}`}>
+    title: (row: Case) => (
+      <Link href={`/cases/${row.id}`}>
         <Typography className="font-medium text-primary hover:underline">
-          {clientNamesMap.get(row.clientId)}
+          {row.title}
         </Typography>
       </Link>
     ),
-    title: (row: Case) => (
-      <Typography className="font-medium">{row.title}</Typography>
+    client: (row: Case) => (
+      <Link href={`/clients/${row.clientId}`}>
+        <Typography
+          variant="body2"
+          className="font-medium text-primary hover:underline"
+        >
+          {clientNamesMap.get(row.clientId)}
+        </Typography>
+      </Link>
     ),
     practiceArea: (row: Case) => (
       <Grid container spacing={2} alignItems="center">
