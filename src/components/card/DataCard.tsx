@@ -9,6 +9,7 @@ import { Box, Typography } from "@mui/material";
 import { SparkLineChart } from "@mui/x-charts";
 import { BaseCard } from "./BaseCard";
 import { DataCardProps } from "@/types/ui/card";
+import { useResponsiveSize } from "@/hooks/useResponsiveSize";
 
 export function DataCard({
   title,
@@ -22,9 +23,17 @@ export function DataCard({
   tooltip,
   sparkline,
   chartColor,
-  size = "md",
+  size: propSize,
 }: DataCardProps) {
-  // Determine colors based on changeType
+  const responsiveSize = useResponsiveSize();
+
+  let size = propSize;
+  if (!size) {
+    if (responsiveSize === "xs" || responsiveSize === "sm") size = "sm";
+    else if (responsiveSize === "md") size = "md";
+    else size = "lg";
+  }
+
   const getColorsByType = () => {
     switch (changeType) {
       case "positive":
@@ -63,30 +72,30 @@ export function DataCard({
   // Size-based classes
   const sizeClasses = {
     sm: {
-      cardPadding: "p-2",
+      cardPadding: "p-0.5",
       titleSize: "text-xs",
       valueSize: "text-lg",
-      iconContainer: "w-8 h-8",
+      iconContainer: "w-7 h-7",
       iconSize: 16,
       sparklineHeight: 20,
       changeTextSize: "text-[10px]",
       trendIconSize: "w-3 h-3",
     },
     md: {
-      cardPadding: "p-3",
+      cardPadding: "p-0.5",
       titleSize: "text-sm",
-      valueSize: "text-2xl",
-      iconContainer: "w-11 h-11",
+      valueSize: "text-xl",
+      iconContainer: "w-9 h-9",
       iconSize: 20,
       sparklineHeight: 24,
       changeTextSize: "text-xs",
       trendIconSize: "w-3.5 h-3.5",
     },
     lg: {
-      cardPadding: "p-4",
+      cardPadding: "p-1",
       titleSize: "text-base",
-      valueSize: "text-3xl",
-      iconContainer: "w-14 h-14",
+      valueSize: "text-xl",
+      iconContainer: "w-10 h-10",
       iconSize: 24,
       sparklineHeight: 30,
       changeTextSize: "text-sm",
@@ -94,7 +103,7 @@ export function DataCard({
     },
   };
 
-  const classes = sizeClasses[size];
+  const classes = sizeClasses[size as keyof typeof sizeClasses];
 
   return (
     <BaseCard linkTo={linkTo} tooltip={tooltip} className={classes.cardPadding}>
