@@ -106,10 +106,10 @@ export function CaseTable({
         </Grid>
       </Grid>
     ),
-    openedAt: (row: Case) => (
+    createdAt: (row: Case) => (
       <Box className="flex items-center gap-1">
         <ScheduleIcon className="text-gray-400 text-sm" />
-        <Typography variant="body2">{formatDate(row.openedAt)}</Typography>
+        <Typography variant="body2">{formatDate(row.createdAt)}</Typography>
       </Box>
     ),
   };

@@ -14,9 +14,10 @@ export interface CaseBase {
   practiceArea: CasePracticeAreaKey;
   priority: CasePriorityKey;
   status: CaseStatusKey;
-  openedAt: string;
   nextDeadline?: string;
   description?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 // Form values
@@ -30,8 +31,6 @@ export type CreateCaseInput = CaseBase;
 export interface Case extends CaseBase {
   id: string;
   notes: Note[];
-  createdAt?: string; // Optional timestamp
-  updatedAt?: string; // Optional timestamp
 }
 
 export type CaseFilterStatus = CaseStatusKey | typeof ALL_CASE_STATUS;
@@ -44,7 +43,7 @@ export type TableCaseSortKey =
   | "status"
   | "practiceArea"
   | "priority"
-  | "openedAt"
+  | "createdAt"
   | "nextDeadline";
 
 export interface CasesManagerProps {

@@ -80,9 +80,9 @@ export function Metric() {
 
   return (
     <Box>
-      <Grid container spacing={2} className="my-4">
+      <Grid container spacing={{ xs: 2, sm: 1, md: 1.5 }} className="my-4">
         {metrics.map((metric) => (
-          <Grid key={metric.title} size={{ xs: 6, sm: 4, md: 4, lg: 2.4 }}>
+          <Grid key={metric.title} size={{ xs: 6, sm: 2.4 }}>
             <DataCard {...metric} />
           </Grid>
         ))}

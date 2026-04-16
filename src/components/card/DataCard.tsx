@@ -74,7 +74,6 @@ export function DataCard({
     sm: {
       cardPadding: "p-0.5",
       titleSize: "text-xs",
-      valueSize: "text-lg",
       iconContainer: "w-7 h-7",
       iconSize: 16,
       sparklineHeight: 20,
@@ -84,7 +83,6 @@ export function DataCard({
     md: {
       cardPadding: "p-0.5",
       titleSize: "text-sm",
-      valueSize: "text-xl",
       iconContainer: "w-9 h-9",
       iconSize: 20,
       sparklineHeight: 24,
@@ -94,7 +92,6 @@ export function DataCard({
     lg: {
       cardPadding: "p-1",
       titleSize: "text-base",
-      valueSize: "text-xl",
       iconContainer: "w-10 h-10",
       iconSize: 24,
       sparklineHeight: 30,
@@ -108,23 +105,23 @@ export function DataCard({
   return (
     <BaseCard linkTo={linkTo} tooltip={tooltip} className={classes.cardPadding}>
       {/* Two-column layout */}
-      <Box className="flex justify-between h-full">
+      <Box className="flex justify-center h-full">
         {/* Left column: title + value + sparkline */}
-        <Box className="flex flex-col flex-1 min-w-0">
-          <Typography
-            variant="body2"
-            className={`text-gray-500 font-medium ${classes.titleSize} mb-0.5`}
-          >
-            {title}
-          </Typography>
-          <Typography
-            variant="h4"
-            className={`font-bold ${colors.trendIconColor} ${classes.valueSize} leading-tight`}
-          >
-            {value}
-          </Typography>
+        <Box className="flex flex-col flex-1 min-w-0 justify-between">
+          <Box>
+            <Typography
+              className={`text-gray-500 font-medium ${classes.titleSize} mb-0.5 whitespace-nowrap lg:whitespace-normal`}
+            >
+              {title}
+            </Typography>
+            <Typography
+              className={`text-sm sm:text-sm lg:text-xl font-bold ${colors.trendIconColor} leading-tight whitespace-nowrap lg:whitespace-normal`}
+            >
+              {value}
+            </Typography>
+          </Box>
           {sparkline && sparkline.length > 0 && (
-            <Box className="h-6 w-full mt-1">
+            <Box className="w-full mt-1">
               <SparkLineChart
                 data={sparkline}
                 height={classes.sparklineHeight}
@@ -150,7 +147,7 @@ export function DataCard({
             />
           </Box>
           {change && (
-            <Box className="flex items-center gap-1">
+            <Box className="flex items-center gap-1 mt-2">
               {(!sparkline || sparkline.length === 0) && (
                 <TrendIcon
                   className={`${classes.trendIconSize} ${colors.trendIconColor}`}

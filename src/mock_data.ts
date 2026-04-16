@@ -1112,7 +1112,6 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CIVIL_LITIGATION",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 200).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 30).toISOString(),
     description:
       "Civil litigation case involving breach of contract dispute with Johnson Corporation.",
@@ -1147,6 +1146,8 @@ export const mockCases: Case[] = [
         isPrivate: true,
       },
     ],
+    createdAt: new Date(Date.now() - 86400000 * 200).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 200).toISOString(),
   },
   {
     id: "2",
@@ -1155,7 +1156,7 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "ESTATE_PLANNING",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 10).toISOString(),
     description:
       "Estate planning and will preparation for the Williams family - completed.",
@@ -1170,6 +1171,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "3",
@@ -1178,7 +1180,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 240).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 240).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 15).toISOString(),
     description:
       "Handling merger and acquisition documentation for Davis Corporation.",
@@ -1202,6 +1204,7 @@ export const mockCases: Case[] = [
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 240).toISOString(),
   },
   {
     id: "4",
@@ -1210,7 +1213,7 @@ export const mockCases: Case[] = [
     status: "ARCHIVED",
     practiceArea: "FAMILY_LAW",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 350).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 350).toISOString(),
     nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(),
     description:
       "Divorce proceedings and asset division - finalized and archived.",
@@ -1225,6 +1228,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 350).toISOString(),
   },
   {
     id: "5",
@@ -1233,7 +1237,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "IMMIGRATION",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 20).toISOString(),
     description: "Immigration visa application and documentation.",
     notes: [
@@ -1247,6 +1251,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "6",
@@ -1255,7 +1260,7 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "REAL_ESTATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 120).toISOString(),
     nextDeadline: new Date(Date.now() - 86400000 * 60).toISOString(),
     description: "Commercial property sale - closed successfully.",
     notes: [
@@ -1269,6 +1274,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
   },
   {
     id: "7",
@@ -1277,7 +1283,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CRIMINAL_DEFENSE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 170).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 170).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 45).toISOString(),
     description:
       "Criminal defense case for charges of alleged financial fraud.",
@@ -1292,6 +1298,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 170).toISOString(),
   },
   {
     id: "8",
@@ -1300,11 +1307,12 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "ESTATE_PLANNING",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 160).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 160).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 20).toISOString(),
     description:
       "Creation of a complex family trust fund with multiple beneficiaries.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 160).toISOString(),
   },
   {
     id: "9",
@@ -1313,7 +1321,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "IMMIGRATION",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 140).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 30).toISOString(),
     description: "H-1B visa application for specialized engineer position.",
     notes: [
@@ -1327,6 +1335,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
   },
   {
     id: "10",
@@ -1335,7 +1344,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 210).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 210).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 15).toISOString(),
     description: "International adoption legal proceedings and documentation.",
     notes: [
@@ -1350,6 +1359,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 210).toISOString(),
   },
   {
     id: "11",
@@ -1358,7 +1368,7 @@ export const mockCases: Case[] = [
     status: "ARCHIVED",
     practiceArea: "IMMIGRATION",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 180).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 60).toISOString(),
     description: "Defense against deportation proceedings - asylum granted.",
     notes: [
@@ -1372,6 +1382,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
   },
   {
     id: "12",
@@ -1380,7 +1391,7 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "PERSONAL_INJURY",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 180).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 15).toISOString(),
     description: "Personal injury lawsuit - settled.",
     notes: [
@@ -1394,6 +1405,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
   },
   {
     id: "13",
@@ -1402,11 +1414,12 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "CIVIL_LITIGATION",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 25).toISOString(),
     description:
       "Property boundary dispute and nuisance claim against neighbor.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
   },
   {
     id: "14",
@@ -1415,7 +1428,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 190).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 190).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 5).toISOString(),
     description: "Child custody and visitation rights modification case.",
     notes: [
@@ -1430,6 +1443,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 190).toISOString(),
   },
   {
     id: "15",
@@ -1438,7 +1452,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(),
     description:
       "Employee stock option plan and equity distribution legal structuring.",
@@ -1453,6 +1467,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "16",
@@ -1461,7 +1476,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "EMPLOYMENT",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 180).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 40).toISOString(),
     description: "Employment discrimination case against former employer.",
     notes: [
@@ -1475,6 +1490,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
   },
   {
     id: "17",
@@ -1483,7 +1499,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 230).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 230).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 20).toISOString(),
     description: "Series A funding round and investor agreements.",
     notes: [
@@ -1497,6 +1513,7 @@ export const mockCases: Case[] = [
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 230).toISOString(),
   },
   {
     id: "18",
@@ -1505,7 +1522,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 60).toISOString(),
     description: "Data privacy compliance and GDPR implementation.",
     notes: [
@@ -1520,6 +1537,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "19",
@@ -1528,7 +1546,7 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "EMPLOYMENT",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 130).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 130).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 15).toISOString(),
     description: "OSHA compliance and workplace safety program development.",
     notes: [
@@ -1542,6 +1560,7 @@ export const mockCases: Case[] = [
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 130).toISOString(),
   },
   {
     id: "20",
@@ -1550,7 +1569,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "REAL_ESTATE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 25).toISOString(),
     description: "Commercial real estate zoning variance application.",
     notes: [
@@ -1565,6 +1584,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "21",
@@ -1573,7 +1593,7 @@ export const mockCases: Case[] = [
     status: "ARCHIVED",
     practiceArea: "GOVERNMENT",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 140).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 70).toISOString(),
     description: "Review and update of state education policies - completed.",
     notes: [
@@ -1588,6 +1608,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
   },
   {
     id: "22",
@@ -1596,7 +1617,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "NON_PROFIT",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 120).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 45).toISOString(),
     description: "Federal grant compliance and reporting requirements.",
     notes: [
@@ -1611,6 +1632,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
   },
   {
     id: "23",
@@ -1619,7 +1641,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ENVIRONMENTAL",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 90).toISOString(),
     description:
       "Environmental pollution lawsuit against industrial manufacturer.",
@@ -1634,6 +1656,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "24",
@@ -1642,11 +1665,12 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "ESTATE_PLANNING",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 45).toISOString(),
     description:
       "Contest of will and estate distribution among multiple heirs.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
   },
   {
     id: "25",
@@ -1655,7 +1679,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 140).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 25).toISOString(),
     description: "SEC filing preparation and regulatory compliance review.",
     notes: [
@@ -1670,6 +1694,7 @@ export const mockCases: Case[] = [
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
   },
   {
     id: "26",
@@ -1678,8 +1703,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 180).toISOString(), // ~Sept 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 180).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(),
     description: "Patent portfolio management for AI software company.",
     notes: [
       {
@@ -1688,11 +1713,12 @@ export const mockCases: Case[] = [
           "Filed 3 provisional patents. Preparing non-provisional applications.",
         author: "Michael IP",
         authorId: "attorney3",
-        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 180).toISOString(),
   },
   {
     id: "27",
@@ -1701,8 +1727,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CIVIL_LITIGATION",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 120).toISOString(), // ~Nov 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 120).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(),
     description: "Contract dispute with former business partner.",
     notes: [
       {
@@ -1710,11 +1736,12 @@ export const mockCases: Case[] = [
         content: "Demand letter sent. Awaiting response.",
         author: "John Attorney",
         authorId: "attorney1",
-        createdAt: new Date(Date.now() - 86400000 * 100).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 100).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 100).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
   },
   {
     id: "28",
@@ -1723,8 +1750,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 260).toISOString(), // ~June 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 400).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 260).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 400).toISOString(),
     description: "Patent litigation defense for biologic drug compound.",
     notes: [
       {
@@ -1732,11 +1759,12 @@ export const mockCases: Case[] = [
         content: "Markman hearing scheduled for March.",
         author: "Michael IP",
         authorId: "attorney3",
-        createdAt: new Date(Date.now() - 86400000 * 120).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 120).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 120).toISOString(),
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 260).toISOString(),
   },
   {
     id: "29",
@@ -1745,8 +1773,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CRIMINAL_DEFENSE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 220).toISOString(), // ~Aug 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 220).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(),
     description: "Medical malpractice defense for county hospital system.",
     notes: [
       {
@@ -1754,11 +1782,12 @@ export const mockCases: Case[] = [
         content: "Two active cases in discovery phase.",
         author: "Lisa Defense",
         authorId: "attorney6",
-        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         isPrivate: true,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 220).toISOString(),
   },
   {
     id: "30",
@@ -1767,8 +1796,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 150).toISOString(), // ~Oct 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 150).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Divorce proceeding with complex asset division.",
     notes: [
       {
@@ -1777,11 +1806,12 @@ export const mockCases: Case[] = [
           "Financial disclosures submitted. Settlement conference scheduled.",
         author: "Sarah FamilyLaw",
         authorId: "attorney8",
-        createdAt: new Date(Date.now() - 86400000 * 100).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 100).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 100).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 150).toISOString(),
   },
   {
     id: "31",
@@ -1790,8 +1820,8 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "EMPLOYMENT",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 140).toISOString(), // ~Oct 2024
-    nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(), // ~Dec 2024 (past)
+    createdAt: new Date(Date.now() - 86400000 * 140).toISOString(),
+    nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(),
     description: "Employment handbook review and compliance.",
     notes: [
       {
@@ -1799,11 +1829,12 @@ export const mockCases: Case[] = [
         content: "Employment handbook review completed. Case closed.",
         author: "Richard Labor",
         authorId: "attorney4",
-        createdAt: new Date(Date.now() - 86400000 * 90).toISOString(), // ~Dec 2024
+        createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 90).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
   },
   {
     id: "32",
@@ -1812,8 +1843,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ESTATE_PLANNING",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 130).toISOString(), // ~Nov 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 130).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(),
     description: "Elder law and Medicaid planning for parent.",
     notes: [
       {
@@ -1821,11 +1852,12 @@ export const mockCases: Case[] = [
         content: "Medicaid application submitted. Awaiting determination.",
         author: "Emily Attorney",
         authorId: "attorney2",
-        createdAt: new Date(Date.now() - 86400000 * 95).toISOString(), // ~Dec 2024
+        createdAt: new Date(Date.now() - 86400000 * 95).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 95).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 130).toISOString(),
   },
   {
     id: "33",
@@ -1834,8 +1866,8 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "REAL_ESTATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 240).toISOString(), // ~July 2024
-    nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(), // ~Dec 2024 (past)
+    createdAt: new Date(Date.now() - 86400000 * 240).toISOString(),
+    nextDeadline: new Date(Date.now() - 86400000 * 90).toISOString(),
     description: "Commercial lease negotiation for downtown property.",
     notes: [
       {
@@ -1843,11 +1875,12 @@ export const mockCases: Case[] = [
         content: "Successfully negotiated lease modification. Case closed.",
         author: "John Attorney",
         authorId: "attorney1",
-        createdAt: new Date(Date.now() - 86400000 * 90).toISOString(), // ~Dec 2024
+        createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 90).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 240).toISOString(),
   },
   {
     id: "34",
@@ -1856,8 +1889,8 @@ export const mockCases: Case[] = [
     status: "ARCHIVED",
     practiceArea: "ESTATE_PLANNING",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 950).toISOString(), // ~Aug 2023
-    nextDeadline: new Date(Date.now() - 86400000 * 860).toISOString(), // ~Oct 2023 (past)
+    createdAt: new Date(Date.now() - 86400000 * 950).toISOString(),
+    nextDeadline: new Date(Date.now() - 86400000 * 860).toISOString(),
     description: "Trust administration following death of grantor - completed.",
     notes: [
       {
@@ -1866,11 +1899,12 @@ export const mockCases: Case[] = [
           "Trust administration completed. Assets distributed. Archived.",
         author: "Emily Attorney",
         authorId: "attorney2",
-        createdAt: new Date(Date.now() - 86400000 * 860).toISOString(), // ~Oct 2023
+        createdAt: new Date(Date.now() - 86400000 * 860).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 860).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 950).toISOString(),
   },
   {
     id: "35",
@@ -1879,8 +1913,8 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 90).toISOString(), // ~Dec 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 310).toISOString(), // ~Jan 2026
+    createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 310).toISOString(),
     description: "Trademark registration for fashion brand.",
     notes: [
       {
@@ -1888,11 +1922,12 @@ export const mockCases: Case[] = [
         content: "Trademark search completed. Preparing application.",
         author: "Michael IP",
         authorId: "attorney3",
-        createdAt: new Date(Date.now() - 86400000 * 80).toISOString(), // ~Dec 2024
+        createdAt: new Date(Date.now() - 86400000 * 80).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 80).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 90).toISOString(),
   },
   {
     id: "36",
@@ -1901,10 +1936,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "CORPORATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 80).toISOString(), // ~Dec 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 80).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "International trade compliance and customs issues.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 80).toISOString(),
   },
   {
     id: "37",
@@ -1913,8 +1949,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 140).toISOString(), // ~Oct 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 310).toISOString(), // ~Jan 2026
+    createdAt: new Date(Date.now() - 86400000 * 140).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 310).toISOString(),
     description:
       "Drafting software licensing agreements for enterprise clients.",
     notes: [
@@ -1923,11 +1959,12 @@ export const mockCases: Case[] = [
         content: "First draft completed. Client review in progress.",
         author: "Michael IP",
         authorId: "attorney3",
-        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 140).toISOString(),
   },
   {
     id: "38",
@@ -1936,8 +1973,8 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "REAL_ESTATE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 130).toISOString(), // ~Nov 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 130).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(),
     description: "Commercial property acquisition and due diligence.",
     notes: [
       {
@@ -1945,11 +1982,12 @@ export const mockCases: Case[] = [
         content: "Purchase agreement drafted. Title search in progress.",
         author: "John Attorney",
         authorId: "attorney1",
-        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(), // ~Nov 2024
+        createdAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 110).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 130).toISOString(),
   },
   {
     id: "39",
@@ -1958,10 +1996,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "ESTATE_PLANNING",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 80).toISOString(), // ~Dec 2024
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 80).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "Estate planning for blended family situation.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 80).toISOString(),
   },
   {
     id: "40",
@@ -1970,8 +2009,8 @@ export const mockCases: Case[] = [
     status: "ARCHIVED",
     practiceArea: "ESTATE_PLANNING",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 1250).toISOString(), // ~Nov 2022
-    nextDeadline: new Date(Date.now() - 86400000 * 1180).toISOString(), // ~Dec 2022 (past)
+    createdAt: new Date(Date.now() - 86400000 * 1250).toISOString(),
+    nextDeadline: new Date(Date.now() - 86400000 * 1180).toISOString(),
     description: "Estate plan completion - archived.",
     notes: [
       {
@@ -1979,15 +2018,13 @@ export const mockCases: Case[] = [
         content: "Estate plan complete. Case archived.",
         author: "Emily Attorney",
         authorId: "attorney2",
-        createdAt: new Date(Date.now() - 86400000 * 1180).toISOString(), // ~Dec 2022
+        createdAt: new Date(Date.now() - 86400000 * 1180).toISOString(),
         updatedAt: new Date(Date.now() - 86400000 * 1180).toISOString(),
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 1250).toISOString(),
   },
-
-  // Additional cases 26-69 would follow the same pattern, but for brevity I'll include a few examples.
-  // In a real implementation, all cases would have similar dynamic date fields.
   {
     id: "41",
     title: "Smith Commercial Lease Dispute",
@@ -1995,7 +2032,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "REAL_ESTATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 45).toISOString(),
     description: "Dispute over commercial lease terms with landlord.",
     notes: [
@@ -2009,6 +2046,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "42",
@@ -2017,10 +2055,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 70).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 70).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 150).toISOString(),
     description: "Filing patent for innovative mobile app feature.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 70).toISOString(),
   },
   {
     id: "43",
@@ -2029,7 +2068,7 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "EMPLOYMENT",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 25).toISOString(),
     description: "Wrongful termination lawsuit.",
     notes: [
@@ -2043,6 +2082,7 @@ export const mockCases: Case[] = [
         isPrivate: false,
       },
     ],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "44",
@@ -2051,10 +2091,11 @@ export const mockCases: Case[] = [
     status: "CLOSED",
     practiceArea: "PERSONAL_INJURY",
     priority: "LOW",
-    openedAt: new Date(Date.now() - 86400000 * 130).toISOString(), // ~Nov 2024
-    nextDeadline: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025 (past)
+    createdAt: new Date(Date.now() - 86400000 * 130).toISOString(),
+    nextDeadline: new Date(Date.now() - 86400000 * 50).toISOString(),
     description: "Settlement reached for minor injury.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 130).toISOString(),
   },
   {
     id: "45",
@@ -2063,10 +2104,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "CRIMINAL_DEFENSE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(),
     description: "Appeal of conviction on fraud charges.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "46",
@@ -2075,10 +2117,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ESTATE_PLANNING",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 45).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(),
     description: "Modify trust terms due to change in beneficiaries.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 45).toISOString(),
   },
   {
     id: "47",
@@ -2087,10 +2130,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 320).toISOString(), // ~Jan 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 320).toISOString(),
     description: "Final court hearing for adoption.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "48",
@@ -2099,10 +2143,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "IMMIGRATION",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 55).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 55).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(),
     description: "Application for permanent residency.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 55).toISOString(),
   },
   {
     id: "49",
@@ -2111,10 +2156,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "CIVIL_LITIGATION",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 55).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 55).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "Mediation session scheduled.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 55).toISOString(),
   },
   {
     id: "50",
@@ -2123,10 +2169,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Modify visitation schedule.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "51",
@@ -2135,10 +2182,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 45).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(),
     description: "Update employee stock option plan.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 45).toISOString(),
   },
   {
     id: "52",
@@ -2147,10 +2195,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "EMPLOYMENT",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "Mediation with EEOC.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "53",
@@ -2159,10 +2208,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Finalize Series A funding documents.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "54",
@@ -2171,10 +2221,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 370).toISOString(),
     description: "Advise on internal corporate restructuring.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "55",
@@ -2183,10 +2234,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 55).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 55).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(),
     description: "Update privacy policy for CCPA compliance.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 55).toISOString(),
   },
   {
     id: "56",
@@ -2195,10 +2247,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ENVIRONMENTAL",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "Respond to EPA audit findings.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "57",
@@ -2207,10 +2260,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CORPORATE",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 45).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(), // ~Jan 2026
+    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 330).toISOString(),
     description: "Prepare and file Form 8-K for material event.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 45).toISOString(),
   },
   {
     id: "58",
@@ -2219,10 +2273,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "GOVERNMENT",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 350).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 350).toISOString(),
     description: "Review contract for public works project.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "59",
@@ -2231,10 +2286,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "GOVERNMENT",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 360).toISOString(),
     description: "Update education policies for new legislation.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "60",
@@ -2243,10 +2299,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "NON_PROFIT",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 45).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Prepare quarterly grant report.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 45).toISOString(),
   },
   {
     id: "61",
@@ -2255,10 +2312,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ENVIRONMENTAL",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 70).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 400).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 70).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 400).toISOString(),
     description: "Trial preparation for pollution lawsuit.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 70).toISOString(),
   },
   {
     id: "62",
@@ -2267,10 +2325,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 420).toISOString(), // ~May 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 420).toISOString(),
     description: "File patent for AI algorithm.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "63",
@@ -2279,10 +2338,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CIVIL_LITIGATION",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 55).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 55).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Negotiate settlement agreement.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 55).toISOString(),
   },
   {
     id: "64",
@@ -2291,10 +2351,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "INTELLECTUAL_PROPERTY",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 380).toISOString(), // ~March 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 380).toISOString(),
     description: "Defend against patent infringement claims.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "65",
@@ -2303,10 +2364,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "CRIMINAL_DEFENSE",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 60).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(), // ~April 2026
+    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 390).toISOString(),
     description: "Defend against medical malpractice lawsuit.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
     id: "66",
@@ -2315,10 +2377,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "FAMILY_LAW",
     priority: "HIGH",
-    openedAt: new Date(Date.now() - 86400000 * 55).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 55).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 355).toISOString(),
     description: "Finalize divorce decree.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 55).toISOString(),
   },
   {
     id: "67",
@@ -2327,10 +2390,11 @@ export const mockCases: Case[] = [
     status: "PENDING",
     practiceArea: "EMPLOYMENT",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 350).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 350).toISOString(),
     description: "Mediation with former employee.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "68",
@@ -2339,10 +2403,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "ESTATE_PLANNING",
     priority: "URGENT",
-    openedAt: new Date(Date.now() - 86400000 * 50).toISOString(), // ~Jan 2025
-    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(), // ~Feb 2026
+    createdAt: new Date(Date.now() - 86400000 * 50).toISOString(),
+    nextDeadline: new Date(Date.now() + 86400000 * 340).toISOString(),
     description: "Appeal denied Medicaid application.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 50).toISOString(),
   },
   {
     id: "69",
@@ -2351,10 +2416,11 @@ export const mockCases: Case[] = [
     status: "ACTIVE",
     practiceArea: "REAL_ESTATE",
     priority: "MEDIUM",
-    openedAt: new Date(Date.now() - 86400000 * 40).toISOString(),
+    createdAt: new Date(Date.now() - 86400000 * 40).toISOString(),
     nextDeadline: new Date(Date.now() + 86400000 * 50).toISOString(),
     description: "Negotiate new lease for retail space.",
     notes: [],
+    updatedAt: new Date(Date.now() - 86400000 * 40).toISOString(),
   },
 ];
 
@@ -4562,6 +4628,248 @@ export const mockTasks: Task[] = [
     createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
     updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
+  // ============ Additional tasks for Case 49: Anderson vs. Neighbor (Mediation) ============
+  // At least 6 tasks per column: TODO, IN_PROGRESS, DONE
+  {
+    id: "t43",
+    title: "Draft mediation position statement",
+    description:
+      "Prepare detailed position statement for the mediator summarizing our client's stance.",
+    dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
+    priority: "HIGH",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+  },
+  {
+    id: "t44",
+    title: "Gather property survey and boundary documents",
+    description:
+      "Collect all relevant surveys, deeds, and prior boundary agreements.",
+    dueDate: new Date(Date.now() + 86400000 * 3).toISOString(),
+    priority: "MEDIUM",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "Sarah Paralegal",
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: "t45",
+    title: "Interview neighbor's previous tenants",
+    description:
+      "Contact former tenants to gather evidence about the disputed property line.",
+    dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
+    priority: "MEDIUM",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "Private Investigator",
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+  },
+  {
+    id: "t46",
+    title: "Prepare exhibit binder for mediation",
+    description:
+      "Organize all key documents into a mediator-friendly exhibit binder.",
+    dueDate: new Date(Date.now() + 86400000 * 4).toISOString(),
+    priority: "LOW",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "Sarah Paralegal",
+    createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+  },
+  {
+    id: "t47",
+    title: "Draft proposed settlement terms",
+    description:
+      "Outline acceptable settlement ranges and key terms for negotiation.",
+    dueDate: new Date(Date.now() + 86400000 * 6).toISOString(),
+    priority: "HIGH",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+  },
+  {
+    id: "t48",
+    title: "Schedule mediation session with neutral",
+    description:
+      "Coordinate date, time, and location with the mediator and opposing counsel.",
+    dueDate: new Date(Date.now() + 86400000 * 1).toISOString(),
+    priority: "URGENT",
+    status: "TODO",
+    caseId: "49",
+    assignedTo: "Case Manager",
+    createdAt: new Date(Date.now() - 86400000 * 6).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 6).toISOString(),
+  },
+  // IN_PROGRESS tasks
+  {
+    id: "t49",
+    title: "Review title insurance policy",
+    description: "Analyze title policy for coverage of boundary disputes.",
+    dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
+    priority: "HIGH",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "Title Specialist",
+    createdAt: new Date(Date.now() - 86400000 * 7).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+  },
+  {
+    id: "t50",
+    title: "Draft mediation opening statement",
+    description:
+      "Prepare persuasive opening remarks for the mediation session.",
+    dueDate: new Date(Date.now() + 86400000 * 3).toISOString(),
+    priority: "MEDIUM",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: "t51",
+    title: "Compile photographic evidence",
+    description: "Collect and label all photos showing the encroachment.",
+    dueDate: new Date(Date.now() + 86400000 * 1).toISOString(),
+    priority: "HIGH",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "Legal Assistant",
+    createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+  },
+  {
+    id: "t52",
+    title: "Correspond with opposing counsel about pre-mediation exchange",
+    description: "Exchange position statements and exhibits before mediation.",
+    dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
+    priority: "MEDIUM",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 6).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+  },
+  {
+    id: "t53",
+    title: "Calculate potential damages and costs",
+    description: "Estimate financial impact of boundary loss and legal fees.",
+    dueDate: new Date(Date.now() + 86400000 * 4).toISOString(),
+    priority: "LOW",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "Paralegal",
+    createdAt: new Date(Date.now() - 86400000 * 8).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+  },
+  {
+    id: "t54",
+    title: "Prepare client for mediation (role play)",
+    description:
+      "Conduct a mock mediation session with client to set expectations.",
+    dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
+    priority: "HIGH",
+    status: "IN_PROGRESS",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 9).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+  },
+  // DONE tasks
+  {
+    id: "t55",
+    title: "Initial client intake and case assessment",
+    description: "Gathered facts, reviewed deed, and discussed strategy.",
+    dueDate: new Date(Date.now() - 86400000 * 30).toISOString(),
+    priority: "HIGH",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 40).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 30).toISOString(),
+  },
+  {
+    id: "t56",
+    title: "Send preservation letter to neighbor",
+    description: "Requested that neighbor preserve all relevant evidence.",
+    dueDate: new Date(Date.now() - 86400000 * 25).toISOString(),
+    priority: "MEDIUM",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 35).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 25).toISOString(),
+  },
+  {
+    id: "t57",
+    title: "Obtain certified copy of property deed",
+    description: "Retrieved official deed from county recorder's office.",
+    dueDate: new Date(Date.now() - 86400000 * 20).toISOString(),
+    priority: "LOW",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "Sarah Paralegal",
+    createdAt: new Date(Date.now() - 86400000 * 28).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 20).toISOString(),
+  },
+  {
+    id: "t58",
+    title: "Initial consultation with surveyor",
+    description: "Met with licensed surveyor to discuss property lines.",
+    dueDate: new Date(Date.now() - 86400000 * 18).toISOString(),
+    priority: "MEDIUM",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "Case Manager",
+    createdAt: new Date(Date.now() - 86400000 * 25).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 18).toISOString(),
+  },
+  {
+    id: "t59",
+    title: "Review HOA covenants and restrictions",
+    description: "Checked HOA rules for any dispute resolution requirements.",
+    dueDate: new Date(Date.now() - 86400000 * 15).toISOString(),
+    priority: "LOW",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "Legal Assistant",
+    createdAt: new Date(Date.now() - 86400000 * 22).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 15).toISOString(),
+  },
+  {
+    id: "t60",
+    title: "Send demand letter to neighbor",
+    description:
+      "Formal demand to cease encroachment and restore property line.",
+    dueDate: new Date(Date.now() - 86400000 * 10).toISOString(),
+    priority: "HIGH",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 10).toISOString(),
+  },
+  {
+    id: "t61",
+    title: "File initial complaint in court",
+    description:
+      "Filed lawsuit against neighbor alleging boundary encroachment and seeking damages.",
+    dueDate: new Date(Date.now() - 86400000 * 2).toISOString(),
+    priority: "URGENT",
+    status: "DONE",
+    caseId: "49",
+    assignedTo: "John Attorney",
+    createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 30).toISOString(),
+  },
 ];
 
 // ============ Communications ============
@@ -4577,6 +4885,8 @@ export const mockCommunications: Communication[] = [
     time: "30 min ago",
     caseId: "1",
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm2",
@@ -4589,6 +4899,8 @@ export const mockCommunications: Communication[] = [
     time: "2 hours ago",
     caseId: "3",
     createdAt: new Date(Date.now() - 7200000).toISOString(),
+    updatedAt: new Date(Date.now() - 7200000).toISOString(),
+    author: "John Attorney", // firm user
   },
   {
     id: "cm3",
@@ -4601,6 +4913,8 @@ export const mockCommunications: Communication[] = [
     time: "Yesterday",
     caseId: "5",
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "Maria Garcia",
   },
   {
     id: "cm4",
@@ -4613,6 +4927,8 @@ export const mockCommunications: Communication[] = [
     time: "Yesterday",
     caseId: "6",
     createdAt: new Date(Date.now() - 90000000).toISOString(),
+    updatedAt: new Date(Date.now() - 90000000).toISOString(),
+    author: "Emily Brown",
   },
   {
     id: "cm5",
@@ -4625,6 +4941,8 @@ export const mockCommunications: Communication[] = [
     time: "3 hours ago",
     caseId: "25",
     createdAt: new Date(Date.now() - 10800000).toISOString(),
+    updatedAt: new Date(Date.now() - 10800000).toISOString(),
+    author: "Securities Attorney",
   },
   {
     id: "cm6",
@@ -4637,6 +4955,8 @@ export const mockCommunications: Communication[] = [
     time: "Yesterday",
     caseId: "20",
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "Springfield City Government", // client name (entity)
   },
   {
     id: "cm7",
@@ -4649,6 +4969,8 @@ export const mockCommunications: Communication[] = [
     time: "Today",
     caseId: "2",
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    author: "Sarah Williams",
   },
   {
     id: "cm8",
@@ -4661,6 +4983,8 @@ export const mockCommunications: Communication[] = [
     time: "Today",
     caseId: "24",
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    author: "Sarah Williams",
   },
   {
     id: "cm15",
@@ -4673,6 +4997,8 @@ export const mockCommunications: Communication[] = [
     content: "We have filed the provisional application. Next steps.",
     time: "2 days ago",
     createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    author: "Michael IP",
   },
   {
     id: "cm16",
@@ -4685,6 +5011,8 @@ export const mockCommunications: Communication[] = [
     content: "Client called to ask about deposition prep.",
     time: "1 day ago",
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "Michael Thompson",
   },
   {
     id: "cm17",
@@ -4697,6 +5025,8 @@ export const mockCommunications: Communication[] = [
     content: "Have you heard anything from the court?",
     time: "3 hours ago",
     createdAt: new Date(Date.now() - 10800000).toISOString(),
+    updatedAt: new Date(Date.now() - 10800000).toISOString(),
+    author: "Carlos Rodriguez",
   },
   {
     id: "cm18",
@@ -4709,6 +5039,8 @@ export const mockCommunications: Communication[] = [
     content: "Your hearing is scheduled for [date].",
     time: "5 days ago",
     createdAt: new Date(Date.now() - 432000000).toISOString(),
+    updatedAt: new Date(Date.now() - 432000000).toISOString(),
+    author: "Sarah FamilyLaw",
   },
   {
     id: "cm19",
@@ -4721,6 +5053,8 @@ export const mockCommunications: Communication[] = [
     content: "I have gathered documents for mediation.",
     time: "1 week ago",
     createdAt: new Date(Date.now() - 604800000).toISOString(),
+    updatedAt: new Date(Date.now() - 604800000).toISOString(),
+    author: "Thomas Anderson",
   },
   {
     id: "cm20",
@@ -4733,6 +5067,8 @@ export const mockCommunications: Communication[] = [
     content: "Left voicemail about scheduling restructuring meeting.",
     time: "4 hours ago",
     createdAt: new Date(Date.now() - 14400000).toISOString(),
+    updatedAt: new Date(Date.now() - 14400000).toISOString(),
+    author: "M&A Specialist",
   },
   {
     id: "cm21",
@@ -4745,6 +5081,8 @@ export const mockCommunications: Communication[] = [
     content: "Please find attached the draft response for review.",
     time: "30 minutes ago",
     createdAt: new Date(Date.now() - 1800000).toISOString(),
+    updatedAt: new Date(Date.now() - 1800000).toISOString(),
+    author: "Global Manufacturing Corporation",
   },
   {
     id: "cm22",
@@ -4757,6 +5095,8 @@ export const mockCommunications: Communication[] = [
     content: "Your 8-K has been filed successfully.",
     time: "2 hours ago",
     createdAt: new Date(Date.now() - 7200000).toISOString(),
+    updatedAt: new Date(Date.now() - 7200000).toISOString(),
+    author: "Securities Attorney",
   },
   {
     id: "cm23",
@@ -4769,6 +5109,8 @@ export const mockCommunications: Communication[] = [
     content: "We have compiled the trial exhibits.",
     time: "1 day ago",
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "Green Earth Environmental Alliance",
   },
   {
     id: "cm24",
@@ -4781,6 +5123,8 @@ export const mockCommunications: Communication[] = [
     content: "Received office action; need to discuss.",
     time: "3 days ago",
     createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
+    author: "Raymond Kim",
   },
   {
     id: "cm25",
@@ -4793,6 +5137,8 @@ export const mockCommunications: Communication[] = [
     content: "Opposing counsel sent a settlement offer.",
     time: "1 hour ago",
     createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+    author: "Marcus Wright",
   },
   {
     id: "cm26",
@@ -4805,6 +5151,8 @@ export const mockCommunications: Communication[] = [
     content: "Court set Markman hearing for March 15.",
     time: "5 hours ago",
     createdAt: new Date(Date.now() - 18000000).toISOString(),
+    updatedAt: new Date(Date.now() - 18000000).toISOString(),
+    author: "Michael IP",
   },
   {
     id: "cm27",
@@ -4817,6 +5165,8 @@ export const mockCommunications: Communication[] = [
     content: "New discovery documents received.",
     time: "2 days ago",
     createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    author: "County Public Health Department",
   },
   {
     id: "cm28",
@@ -4829,6 +5179,8 @@ export const mockCommunications: Communication[] = [
     content: "Client signed divorce papers.",
     time: "1 week ago",
     createdAt: new Date(Date.now() - 604800000).toISOString(),
+    updatedAt: new Date(Date.now() - 604800000).toISOString(),
+    author: "Rebecca Nelson",
   },
   {
     id: "cm29",
@@ -4841,6 +5193,8 @@ export const mockCommunications: Communication[] = [
     content: "Mediation scheduled for next Thursday.",
     time: "45 minutes ago",
     createdAt: new Date(Date.now() - 2700000).toISOString(),
+    updatedAt: new Date(Date.now() - 2700000).toISOString(),
+    author: "Community Food Bank of Ohio",
   },
   {
     id: "cm30",
@@ -4853,6 +5207,8 @@ export const mockCommunications: Communication[] = [
     content: "We have submitted the appeal.",
     time: "3 days ago",
     createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
+    author: "Emily Attorney",
   },
   {
     id: "cm31",
@@ -4865,6 +5221,8 @@ export const mockCommunications: Communication[] = [
     content: "Landlord sent revised lease draft.",
     time: "1 day ago",
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "Steven Caldwell",
   },
   {
     id: "cm32",
@@ -4877,7 +5235,9 @@ export const mockCommunications: Communication[] = [
     content:
       "I found documents that could change our strategy. Please call me.",
     time: "10 minutes ago",
-    createdAt: new Date(Date.now() - 600000).toISOString(), // 10 minutes ago
+    createdAt: new Date(Date.now() - 600000).toISOString(),
+    updatedAt: new Date(Date.now() - 600000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm33",
@@ -4890,19 +5250,23 @@ export const mockCommunications: Communication[] = [
     content:
       "Left voicemail about the new evidence and potential settlement impact.",
     time: "1 hour ago",
-    createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm34",
     clientId: "1",
-    caseId: "41", // Smith Commercial Lease Dispute
+    caseId: "41",
     type: "EMAIL",
     status: "READ",
     direction: "INBOUND",
     subject: "Lease document uploaded",
     content: "I've uploaded the signed lease amendment to the portal.",
     time: "3 hours ago",
-    createdAt: new Date(Date.now() - 10800000).toISOString(), // 3 hours ago
+    createdAt: new Date(Date.now() - 10800000).toISOString(),
+    updatedAt: new Date(Date.now() - 10800000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm35",
@@ -4915,7 +5279,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Thanks for letting me know. I'll review the documents and call you tomorrow.",
     time: "15 minutes ago",
-    createdAt: new Date(Date.now() - 900000).toISOString(), // 15 minutes ago
+    createdAt: new Date(Date.now() - 900000).toISOString(),
+    updatedAt: new Date(Date.now() - 900000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm36",
@@ -4928,7 +5294,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Landlord wants to discuss parking allocation. Called while you were away.",
     time: "25 minutes ago",
-    createdAt: new Date(Date.now() - 1500000).toISOString(), // 25 minutes ago
+    createdAt: new Date(Date.now() - 1500000).toISOString(),
+    updatedAt: new Date(Date.now() - 1500000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm37",
@@ -4941,7 +5309,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Here are the notes from our first meeting about the Johnson Corp case.",
     time: "3 months ago",
-    createdAt: new Date(Date.now() - 7776000000).toISOString(), // 90 days ago
+    createdAt: new Date(Date.now() - 7776000000).toISOString(),
+    updatedAt: new Date(Date.now() - 7776000000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm38",
@@ -4954,7 +5324,9 @@ export const mockCommunications: Communication[] = [
     content:
       "The revised lease amendment is ready for your review. I've sent it via secure portal.",
     time: "5 minutes ago",
-    createdAt: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+    createdAt: new Date(Date.now() - 300000).toISOString(),
+    updatedAt: new Date(Date.now() - 300000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm39",
@@ -4966,7 +5338,9 @@ export const mockCommunications: Communication[] = [
     subject: "Expert witness availability",
     content: "Expert witness confirmed availability for deposition next month.",
     time: "2 days ago",
-    createdAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm40",
@@ -4979,7 +5353,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Landlord sent formal proposal for parking allocation. Need your input.",
     time: "45 minutes ago",
-    createdAt: new Date(Date.now() - 2700000).toISOString(), // 45 minutes ago
+    createdAt: new Date(Date.now() - 2700000).toISOString(),
+    updatedAt: new Date(Date.now() - 2700000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm41",
@@ -4991,7 +5367,9 @@ export const mockCommunications: Communication[] = [
     subject: "Document request",
     content: "Called to request financial statements for 2023. Left voicemail.",
     time: "1 day ago",
-    createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm42",
@@ -5004,7 +5382,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Discussed initial lease terms with Robert. He's interested in a 5-year term.",
     time: "2 weeks ago",
-    createdAt: new Date(Date.now() - 1209600000).toISOString(), // 14 days ago
+    createdAt: new Date(Date.now() - 1209600000).toISOString(),
+    updatedAt: new Date(Date.now() - 1209600000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm43",
@@ -5017,7 +5397,9 @@ export const mockCommunications: Communication[] = [
     content:
       "The court has scheduled the hearing for June 15. Please confirm your availability.",
     time: "4 hours ago",
-    createdAt: new Date(Date.now() - 14400000).toISOString(), // 4 hours ago
+    createdAt: new Date(Date.now() - 14400000).toISOString(),
+    updatedAt: new Date(Date.now() - 14400000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm44",
@@ -5030,7 +5412,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Robert called to say landlord accepted our counter-proposal on parking.",
     time: "30 minutes ago",
-    createdAt: new Date(Date.now() - 1800000).toISOString(), // 30 minutes ago
+    createdAt: new Date(Date.now() - 1800000).toISOString(),
+    updatedAt: new Date(Date.now() - 1800000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm45",
@@ -5042,7 +5426,9 @@ export const mockCommunications: Communication[] = [
     subject: "Missed call - urgent",
     content: "Robert called regarding settlement offer. Please return asap.",
     time: "20 minutes ago",
-    createdAt: new Date(Date.now() - 1200000).toISOString(), // 20 minutes ago
+    createdAt: new Date(Date.now() - 1200000).toISOString(),
+    updatedAt: new Date(Date.now() - 1200000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm46",
@@ -5055,7 +5441,9 @@ export const mockCommunications: Communication[] = [
     content:
       "I've reviewed the latest offer and prepared a counter. See attached.",
     time: "2 hours ago",
-    createdAt: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
+    createdAt: new Date(Date.now() - 7200000).toISOString(),
+    updatedAt: new Date(Date.now() - 7200000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm47",
@@ -5067,7 +5455,9 @@ export const mockCommunications: Communication[] = [
     subject: "Lease signing scheduled",
     content: "Confirmed lease signing for next Tuesday at 2pm.",
     time: "2 days ago",
-    createdAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm48",
@@ -5079,7 +5469,9 @@ export const mockCommunications: Communication[] = [
     subject: "Discovery documents",
     content: "Sent discovery documents for review. Please confirm receipt.",
     time: "5 hours ago",
-    createdAt: new Date(Date.now() - 18000000).toISOString(), // 5 hours ago
+    createdAt: new Date(Date.now() - 18000000).toISOString(),
+    updatedAt: new Date(Date.now() - 18000000).toISOString(),
+    author: "John Attorney",
   },
   {
     id: "cm49",
@@ -5092,7 +5484,9 @@ export const mockCommunications: Communication[] = [
     content:
       "Robert called about an urgent issue with the lease. Please call back.",
     time: "15 minutes ago",
-    createdAt: new Date(Date.now() - 900000).toISOString(), // 15 minutes ago
+    createdAt: new Date(Date.now() - 900000).toISOString(),
+    updatedAt: new Date(Date.now() - 900000).toISOString(),
+    author: "Robert Smith",
   },
   {
     id: "cm50",
@@ -5104,7 +5498,9 @@ export const mockCommunications: Communication[] = [
     subject: "Old correspondence",
     content: "Initial email chain from case opening.",
     time: "6 months ago",
-    createdAt: new Date(Date.now() - 15552000000).toISOString(), // 180 days ago
+    createdAt: new Date(Date.now() - 15552000000).toISOString(),
+    updatedAt: new Date(Date.now() - 15552000000).toISOString(),
+    author: "Robert Smith",
   },
 ];
 

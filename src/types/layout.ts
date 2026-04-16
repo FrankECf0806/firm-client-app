@@ -35,7 +35,7 @@ export interface MetaDataItem {
 export interface ManagementProps {
   children: ReactNode;
   title: string;
-  subtitle?: string;
+  subtitle?: string | ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   actions?: ReactNode;
   showHeader?: boolean;

@@ -34,7 +34,7 @@ export function CaseForm({
       practiceArea: undefined,
       priority: undefined,
       status: "ACTIVE",
-      openedAt: "",
+      createdAt: "",
       nextDeadline: "",
       description: "",
     },
@@ -49,7 +49,7 @@ export function CaseForm({
       practiceArea: undefined,
       priority: undefined,
       status: "ACTIVE",
-      openedAt: new Date().toISOString().split("T")[0],
+      createdAt: new Date().toISOString().split("T")[0],
       nextDeadline: "",
       description: "",
       ...formData,
@@ -238,14 +238,14 @@ export function CaseForm({
       {/* Dates */}
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Controller
-          name="openedAt"
+          name="createdAt"
           control={control}
-          rules={{ required: "Filing date is required" }}
+          rules={{ required: "Create date is required" }}
           render={({ field, fieldState }) => (
             <TextField
               {...field}
               className={`input-rounded-firm ${mode === "edit" ? "bg-gray-100 rounded-2xl" : ""}`}
-              label="Filing Date"
+              label="Open Date"
               type="date"
               size="small"
               required

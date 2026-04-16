@@ -139,3 +139,22 @@ export const QUICK_FILTER_TASK_STATUS_KEYS: TaskStatusFilter[] = [
   TaskStatus.TODO,
   TaskStatus.IN_PROGRESS,
 ] as const;
+
+export const QUICK_FILTER_TASK_STATUS = Object.entries(
+  TASK_STATUS_CONFIG,
+).filter(([key]) =>
+  QUICK_FILTER_TASK_STATUS_KEYS.includes(key as TaskStatusFilter),
+);
+
+// Overview page presets (similar to CLIENT patterns)
+export const OVERVIEW_FILTER_TASK_STATUS_KEYS: TaskStatusFilter[] = [
+  TaskStatus.TODO,
+  TaskStatus.IN_PROGRESS,
+  TaskStatus.DONE,
+] as const;
+
+export const OVERVIEW_FILTER_TASK_STATUS = Object.entries(
+  TASK_STATUS_CONFIG,
+).filter(([key]) =>
+  OVERVIEW_FILTER_TASK_STATUS_KEYS.includes(key as TaskStatusFilter),
+);

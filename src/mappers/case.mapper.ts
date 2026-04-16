@@ -8,7 +8,7 @@ export function caseToFormValues(caseItem: Case): CaseFormValues {
     practiceArea: caseItem.practiceArea,
     status: caseItem.status,
     priority: caseItem.priority,
-    openedAt: caseItem.openedAt,
+    createdAt: caseItem.createdAt,
     nextDeadline: caseItem.nextDeadline ?? "",
     description: caseItem.description ?? "",
   };
@@ -23,7 +23,7 @@ export function formValuesToCaseUpdate(
     practiceArea: caseItem.practiceArea,
     priority: caseItem.priority,
     status: "ACTIVE",
-    openedAt: caseItem.openedAt,
+    createdAt: caseItem.createdAt,
     nextDeadline: caseItem.nextDeadline || undefined,
     description: caseItem.description || undefined,
   };

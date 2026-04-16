@@ -3,7 +3,8 @@
 import { ReactNode } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Box, Card, CardContent, CardHeader } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { CalendarMonthRounded } from "@mui/icons-material";
 import { useAppContext } from "@/providers/AppProvider";
 import Management from "@/components/layout/Management";
 import { rootSourcePath } from "@/utils/constant";
@@ -15,6 +16,7 @@ import {
 import { MetaDataItem } from "@/types/layout";
 import { TabApp } from "@/components/ui/tab/TabApp";
 import { TabItem } from "@/types/ui/tab";
+import { formatDate } from "@/utils/date";
 
 export default function CaseDetailLayout({
   children,
@@ -89,10 +91,19 @@ export default function CaseDetailLayout({
     { label: "Documents", path: "/documents" },
   ];
 
+  const subtitle = (
+    <Box className="flex items-center gap-1">
+      <CalendarMonthRounded className="text-base text-gray-500" />
+      <Typography variant="body2" className="text-gray-400 truncate">
+        Opened {formatDate(caseItem.createdAt)}
+      </Typography>
+    </Box>
+  );
+
   return (
     <Management
       title={caseItem.title}
-      subtitle={`Description: ${caseItem.description}`}
+      subtitle={subtitle}
       breadcrumbs={breadcrumbs}
       metadata={metadata}
       metadataPosition="inline"

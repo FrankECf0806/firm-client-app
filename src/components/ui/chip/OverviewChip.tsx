@@ -1,11 +1,13 @@
 import { Chip as MuiChip, ChipProps as MuiChipProps } from "@mui/material";
 import { ReactNode } from "react";
+import { SvgIconComponent } from "@mui/icons-material";
 
 interface OverviewChipProps extends Omit<
   MuiChipProps,
-  "size" | "className" | "color"
+  "size" | "className" | "color" | "icon"
 > {
   label: ReactNode;
+  icon?: SvgIconComponent;
   color?: string;
   size?: "small" | "medium";
   className?: string;
@@ -13,6 +15,7 @@ interface OverviewChipProps extends Omit<
 
 export function OverviewChip({
   label,
+  icon: Icon,
   color = "bg-gray-100 text-gray-700",
   size = "small",
   className = "",
@@ -22,11 +25,13 @@ export function OverviewChip({
     small: {
       height: 18,
       fontSize: "10px",
+      iconSize: 12,
       px: 1,
     },
     medium: {
       height: 24,
       fontSize: "12px",
+      iconSize: 12,
       px: 1.5,
     },
   };
@@ -36,6 +41,7 @@ export function OverviewChip({
   return (
     <MuiChip
       label={label}
+      icon={Icon ? <Icon className="text-sm" /> : undefined}
       className={`w-16 ${color} ${className}`}
       sx={{
         height: config.height,

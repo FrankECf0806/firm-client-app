@@ -35,6 +35,7 @@ export interface CommunicationBase {
   caseId?: string;
   caseName?: string;
   type: CommunicationTypeKey;
+  author?: string;
   direction: CommunicationDirectionKey;
 }
 

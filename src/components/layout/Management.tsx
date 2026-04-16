@@ -91,14 +91,17 @@ export default function ManagementLayout({
                 )}
               </Box>
 
-              {subtitle && (
-                <Typography
-                  variant="body1"
-                  className="text-gray-500 text-sm md:text-base truncate"
-                >
-                  {subtitle}
-                </Typography>
-              )}
+              {subtitle &&
+                (typeof subtitle === "string" ? (
+                  <Typography
+                    variant="body2"
+                    className="text-gray-400 truncate"
+                  >
+                    {subtitle}
+                  </Typography>
+                ) : (
+                  subtitle
+                ))}
             </Box>
 
             {/* Actions - Right side on desktop, full width on mobile */}

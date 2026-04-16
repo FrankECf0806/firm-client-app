@@ -129,7 +129,7 @@ export function CasesManager({
         return (aPriority - bPriority) * direction;
       }
 
-      if (sortKey === "openedAt" || sortKey === "nextDeadline") {
+      if (sortKey === "createdAt" || sortKey === "nextDeadline") {
         const aDate = a[sortKey] ? new Date(a[sortKey]).getTime() : null;
         const bDate = b[sortKey] ? new Date(b[sortKey]).getTime() : null;
 

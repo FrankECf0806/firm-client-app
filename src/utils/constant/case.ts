@@ -36,11 +36,11 @@ export const COLUMNS: TableColumn<TableCaseSortKey>[] = [
     sortKey: "practiceArea",
   },
   {
-    field: "openedAt",
-    label: "Open Date",
+    field: "createdAt",
+    label: "Create Date",
     minWidth: 140,
     sortable: true,
-    sortKey: "openedAt",
+    sortKey: "createdAt",
   },
   {
     field: "status",
