@@ -182,7 +182,7 @@ export default function ClientOverviewPage() {
     }).format(amount);
 
   return (
-    <Box className="pb-10 xs:-pb-10 md:pb-5 max-w-screen-2xl mx-auto space-y-4">
+    <Box className="max-w-screen-2xl mx-auto space-y-4">
       {/* Priority Alerts */}
       {hasPriority && (
         <Box>

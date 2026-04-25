@@ -26,7 +26,7 @@ export default function ManagementLayout({
     breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
 
   return (
-    <Box className="p-1 md:p-2">
+    <Box>
       {/* Breadcrumbs */}
       {breadcrumbsList.length > 0 && (
         <Breadcrumbs

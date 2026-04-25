@@ -160,14 +160,14 @@ export default function CaseOverviewPage() {
   // Early return after all hooks (but must return consistent UI)
   if (!caseItem) {
     return (
-      <Box className="pb-10 xs:-pb-10 md:pb-5 max-w-screen-2xl mx-auto space-y-4">
+      <Box className="max-w-screen-2xl mx-auto space-y-4 bg-red-500">
         <Typography>Case not found.</Typography>
       </Box>
     );
   }
 
   return (
-    <Box className="pb-10 xs:-pb-10 md:pb-5 max-w-screen-2xl mx-auto space-y-4">
+    <Box className="max-w-screen-2xl mx-auto space-y-4">
       {/* KPI Cards */}
       <Grid container spacing={2}>
         <Grid size={{ xs: 6, sm: 3 }}>

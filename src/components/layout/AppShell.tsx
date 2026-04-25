@@ -29,6 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             p-2 md:p-4
             bg-primary-light/10 dark:bg-primary-dark/10
             min-w-0
+			pb-18 md:pb-18 lg:pb-2
             overflow-y-auto
           "
         >

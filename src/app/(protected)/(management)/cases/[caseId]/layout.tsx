@@ -50,7 +50,7 @@ export default function CaseDetailLayout({
             title="Case Not Found"
             subheader="The case you are looking for does not exist."
           />
-          <CardContent className="mt-2 sm:mt-4 pb-20 mb-32">
+          <CardContent className="mt-2 sm:mt-4">
             <Link href="/cases" className="text-primary hover:underline">
               Back to Cases List
             </Link>

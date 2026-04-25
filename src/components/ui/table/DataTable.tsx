@@ -119,7 +119,7 @@ export function DataTable<T extends object, K extends string>({
 
   return (
     <Paper
-      className={`p-2 mb-12 rounded-xl border border-gray-200 shadow-sm overflow-hidden ${className}`}
+      className={`p-2 rounded-xl border border-gray-200 shadow-sm overflow-hidden ${className}`}
     >
       <TableContainer>
         <Table className={tableClassName}>
