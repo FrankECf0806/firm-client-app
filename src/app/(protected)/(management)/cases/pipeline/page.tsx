@@ -9,15 +9,17 @@ import {
 import { useMemo, useState, useRef } from "react";
 import { useAppContext } from "@/providers/AppProvider";
 import { BaseCard } from "@/components/card/BaseCard";
+import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { BusinessCenter } from "@mui/icons-material";
 import { CaseCard } from "@/components/card/cases/CaseCard";
 import { DroppableColumn } from "@/components/card/cases/DroppableColumn";
 import { useHelperFunctions } from "@/utils/helper/global";
 import { Case } from "@/types/case";
 import { DragDropProvider } from "@dnd-kit/react";
+import { CasePracticeArea } from "@/enums/case";
 
 export default function CasesPipelinePage() {
-  const [filterArea] = useState(ALL_CASE_STATUS);
+  const [filterArea, setFilterArea] = useState(ALL_CASE_STATUS);
   const { cases, clients } = useAppContext();
   const [draggedCaseId, setDraggedCaseId] = useState<string | null>(null);
   const { getThemeColor } = useHelperFunctions();
@@ -114,6 +116,24 @@ export default function CasesPipelinePage() {
         updateCase(sourceCaseId, { status: targetColumnId } as Partial<Case>);
       }}
     >
+      <Grid
+        className="md:px-6 justify-end align-center"
+        container
+        spacing={2}
+        direction="row"
+      >
+        <Grid size={{ xs: 6, sm: 5, md: 5, lg: 2 }}>
+          <ResettableSelect
+            className="input-rounded-firm w-full"
+            label="Practice Area"
+            value={filterArea}
+            onChange={setFilterArea}
+            options={CasePracticeArea}
+            resetValue={ALL_CASE_STATUS}
+            resetLabel="All Practice Area"
+          />
+        </Grid>
+      </Grid>
       <Box className="p-4 md:p-6 space-y-4">
         {/* Top stats cards */}
         <Box
