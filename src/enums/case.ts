@@ -17,6 +17,8 @@ export enum CasePracticeArea {
 export enum CaseStatus {
   ACTIVE = "Active",
   PENDING = "Pending",
+  TRIAL = "Trial",
+  SETTLEMENT = "Settlement",
   CLOSED = "Closed",
   ARCHIVED = "Archived",
 }

@@ -5,8 +5,7 @@ import { navItems } from "./Sidebar/config";
 
 export function MobileSidebar() {
   const pathname = usePathname();
-  const isActive = (p: string) =>
-    pathname === p || pathname?.startsWith(`${p}/`);
+  const isActive = (path: string) => pathname === path;
 
   return (
     <Box

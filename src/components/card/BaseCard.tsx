@@ -22,6 +22,7 @@ export function BaseCard({
   linkTo,
   tooltip,
   className = "",
+  style,
   contentClassName = "",
   onClick,
 }: BaseCardProps) {
@@ -43,6 +44,7 @@ export function BaseCard({
           "cursor-pointer hover:shadow-lg hover:-translate-y-0.5",
         className,
       )}
+      style={style}
       onClick={handleClick}
     >
       <CardContent className={`${contentClassName} p-2 h-full flex flex-col`}>

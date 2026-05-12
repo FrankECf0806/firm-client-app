@@ -220,30 +220,42 @@ export const CASE_STATUS_CONFIG: Record<
     },
     onClick: (setStatus) => setStatus(ALL_CASE_STATUS),
   },
-
-  ["ACTIVE"]: {
-    label: CaseStatus.ACTIVE,
-    styling: {
-      color: "success",
-    },
-    onClick: (setStatus) => setStatus("ACTIVE"),
-  },
-
-  ["PENDING"]: {
+  PENDING: {
     label: CaseStatus.PENDING,
     styling: {
       color: "warning",
     },
     onClick: (setStatus) => setStatus("PENDING"),
   },
-  ["CLOSED"]: {
+  ACTIVE: {
+    label: CaseStatus.ACTIVE,
+    styling: {
+      color: "success",
+    },
+    onClick: (setStatus) => setStatus("ACTIVE"),
+  },
+  TRIAL: {
+    label: CaseStatus.TRIAL,
+    styling: {
+      color: "warning",
+    },
+    onClick: (setStatus) => setStatus("TRIAL"),
+  },
+  SETTLEMENT: {
+    label: CaseStatus.SETTLEMENT,
+    styling: {
+      color: "success",
+    },
+    onClick: (setStatus) => setStatus("SETTLEMENT"),
+  },
+  CLOSED: {
     label: CaseStatus.CLOSED,
     styling: {
       color: "error",
     },
     onClick: (setStatus) => setStatus("CLOSED"),
   },
-  ["ARCHIVED"]: {
+  ARCHIVED: {
     label: CaseStatus.ARCHIVED,
     styling: {
       color: "info",
@@ -262,6 +274,10 @@ export const QUICK_FILTER_CASE_STATUS = Object.entries(
   CASE_STATUS_CONFIG,
 ).filter(([key]) =>
   QUICK_FILTER_CASE_STATUS_KEYS.includes(key as CaseFilterStatus),
+);
+
+export const CASE_STATUS_PIPELINE = Object.entries(CASE_STATUS_CONFIG).filter(
+  ([key]) => key !== ALL_CASE_STATUS && key !== "ARCHIVED",
 );
 
 /**

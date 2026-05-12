@@ -6,6 +6,7 @@ export interface CardProps {
   linkTo?: string;
   tooltip?: string;
   className?: string;
+  style?: React.CSSProperties;
   onClick?: () => void;
 }
 

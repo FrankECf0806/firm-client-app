@@ -12,8 +12,7 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
 
-  const isActive = (path: string) =>
-    pathname === path || pathname?.startsWith(`${path}/`);
+  const isActive = (path: string) => pathname === path;
 
   return (
     <Box

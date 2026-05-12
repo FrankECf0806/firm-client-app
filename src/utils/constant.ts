@@ -12,6 +12,10 @@ export const pageConfig: Record<string, PageItem> = {
     title: "Cases",
     subtitle: "Manage and track all your legal cases",
   },
+  "/cases/pipeline": {
+    title: "Cases Pipeline",
+    subtitle: "Drag and drop cases between stages to update their status",
+  },
   "/clients": {
     title: "Clients",
     subtitle: "Manage your client relationships",

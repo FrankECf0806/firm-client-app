@@ -600,69 +600,64 @@ export default function ClientOverviewPage() {
       </Grid>
 
       {/* Summary Footer */}
-      <Box className="pb-4 md:pb-6 lg:pb-0">
-        <BaseCard className="bg-linear-to-r from-primary/5 to-transparent p-0.5 md:p-1">
-          <Box className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
-            <Box className="font-semibold text-primary flex items-center gap-1 text-sm md:text-base">
-              <Box>📊</Box> Summary:
+      <BaseCard className="bg-linear-to-r from-primary/5 to-transparent p-0.5 md:p-1">
+        <Box className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
+          <Box className="font-semibold text-primary flex items-center gap-1 text-sm md:text-base">
+            <Box>📊</Box> Summary:
+          </Box>
+
+          <Box className="flex flex-wrap gap-3 text-xs md:text-sm">
+            <Box className="flex items-center gap-1">
+              <Box className="w-2 h-2 rounded-full bg-green-500" />
+              <Box className="text-gray-700 whitespace-nowrap">
+                {activeCases} active
+              </Box>
             </Box>
 
-            <Box className="flex flex-wrap gap-3 text-xs md:text-sm">
+            <Box className="flex items-center gap-1">
+              <Box className="w-2 h-2 rounded-full bg-amber-500" />
+              <Box className="text-gray-700 whitespace-nowrap">
+                {pendingCases} pending
+              </Box>
+            </Box>
+
+            <Box className="flex items-center gap-1">
+              <Box className="w-2 h-2 rounded-full bg-red-500" />
+              <Box className="text-gray-700 whitespace-nowrap">
+                {urgentCases} urgent
+              </Box>
+            </Box>
+
+            <Box className="flex items-center gap-1">
+              <Box className="text-green-600 font-medium">$</Box>
+              <Box className="text-gray-700 whitespace-nowrap">
+                {formatCurrency(totalBilled)} billed
+              </Box>
+            </Box>
+
+            {outstanding > 0 ? (
               <Box className="flex items-center gap-1">
-                <Box className="w-2 h-2 rounded-full bg-green-500" />
+                <Box className="text-red-600">⚠️</Box>
                 <Box className="text-gray-700 whitespace-nowrap">
-                  {activeCases} active
+                  {unpaidInvoices.length} unpaid ({formatCurrency(outstanding)})
                 </Box>
               </Box>
-
+            ) : (
               <Box className="flex items-center gap-1">
-                <Box className="w-2 h-2 rounded-full bg-amber-500" />
-                <Box className="text-gray-700 whitespace-nowrap">
-                  {pendingCases} pending
-                </Box>
+                <Box className="text-green-600">✓</Box>
+                <Box className="text-gray-700 whitespace-nowrap">All paid</Box>
               </Box>
+            )}
 
-              <Box className="flex items-center gap-1">
-                <Box className="w-2 h-2 rounded-full bg-red-500" />
-                <Box className="text-gray-700 whitespace-nowrap">
-                  {urgentCases} urgent
-                </Box>
-              </Box>
-
-              <Box className="flex items-center gap-1">
-                <Box className="text-green-600 font-medium">$</Box>
-                <Box className="text-gray-700 whitespace-nowrap">
-                  {formatCurrency(totalBilled)} billed
-                </Box>
-              </Box>
-
-              {outstanding > 0 ? (
-                <Box className="flex items-center gap-1">
-                  <Box className="text-red-600">⚠️</Box>
-                  <Box className="text-gray-700 whitespace-nowrap">
-                    {unpaidInvoices.length} unpaid (
-                    {formatCurrency(outstanding)})
-                  </Box>
-                </Box>
-              ) : (
-                <Box className="flex items-center gap-1">
-                  <Box className="text-green-600">✓</Box>
-                  <Box className="text-gray-700 whitespace-nowrap">
-                    All paid
-                  </Box>
-                </Box>
-              )}
-
-              <Box className="flex items-center gap-1">
-                <Box className="text-blue-600">✉️</Box>
-                <Box className="text-gray-700 whitespace-nowrap">
-                  {unreadCount} unread
-                </Box>
+            <Box className="flex items-center gap-1">
+              <Box className="text-blue-600">✉️</Box>
+              <Box className="text-gray-700 whitespace-nowrap">
+                {unreadCount} unread
               </Box>
             </Box>
           </Box>
-        </BaseCard>
-      </Box>
+        </Box>
+      </BaseCard>
     </Box>
   );
 }

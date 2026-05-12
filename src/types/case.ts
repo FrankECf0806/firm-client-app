@@ -3,7 +3,7 @@ import { ALL_CASE_PRIORITY, ALL_CASE_STATUS } from "@/utils/constant/case";
 import { Note } from "@/types/note";
 
 // Types for enum keys
-export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "CLOSED" | "ARCHIVED"
+export type CaseStatusKey = keyof typeof CaseStatus; // "ACTIVE" | "PENDING" | "TRIAL" | "SETTLEMENT" | "CLOSED" | "ARCHIVED"
 export type CasePracticeAreaKey = keyof typeof CasePracticeArea; // "CIVIL_LITIGATION" | "CORPORATE" | ...
 export type CasePriorityKey = keyof typeof CasePriority; // "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 
