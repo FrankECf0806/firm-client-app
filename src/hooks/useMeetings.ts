@@ -47,7 +47,7 @@ export function useMeetings() {
   );
 
   const getMeetingsByDate = useCallback(
-    (date: string) => meetings.filter((m) => m.date === date),
+    (date: string) => meetings.filter((m) => m.start === date),
     [meetings],
   );
 
@@ -59,11 +59,11 @@ export function useMeetings() {
 
       return meetings
         .filter((m) => {
-          const meetingDate = new Date(m.date);
+          const meetingDate = new Date(m.start);
           return meetingDate >= today && meetingDate <= futureDate;
         })
         .sort(
-          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+          (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
         );
     },
     [meetings],

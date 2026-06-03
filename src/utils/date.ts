@@ -12,7 +12,7 @@ export const SHORT_DATE_FORMAT: Intl.DateTimeFormatOptions = {
 };
 
 export const LONG_DATE_FORMAT: Intl.DateTimeFormatOptions = {
-  weekday: "long",
+  weekday: "short",
   year: "numeric",
   month: "long",
   day: "numeric",
@@ -29,6 +29,17 @@ export function formatDate(date: string | Date) {
 
 export function formatShortDate(date: string | Date) {
   return new Date(date).toLocaleDateString(LANGUAGE_FORMAT, SHORT_DATE_FORMAT);
+}
+
+export function formatLongDate(date: string | Date) {
+  return new Date(date).toLocaleDateString(LANGUAGE_FORMAT, LONG_DATE_FORMAT);
+}
+
+export function formatTime(date: string | Date) {
+  return new Date(date).toLocaleTimeString(LANGUAGE_FORMAT, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export function formatRelativeTime(date: string | Date) {

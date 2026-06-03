@@ -7,12 +7,15 @@ import {
   Typography,
   Tooltip,
   Divider,
+  CardHeader,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { BaseCardProps } from "@/types/ui/card";
 
 export function BaseCard({
+  cardHeaderIcons,
+  cardHeaderClassName,
   title,
   titleIcon: Icon,
   titleVariant = "h6",
@@ -47,27 +50,35 @@ export function BaseCard({
       style={style}
       onClick={handleClick}
     >
+      {cardHeaderIcons && (
+        <CardHeader
+          action={cardHeaderIcons}
+          className={`${cardHeaderClassName} gap-2`}
+        />
+      )}
       <CardContent className={`${contentClassName} p-2 h-full flex flex-col`}>
         {/* Header with title and action */}
         {(title || action) && (
           <>
-            <Box className="flex justify-between items-center mb-1">
+            <Box className="flex justify-between items-start gap-2 mb-1 w-full">
               {title && (
-                <Box className="flex items-center gap-1">
+                <Box className="flex items-center gap-1 flex-1 min-w-0">
                   {Icon && (
                     <Icon
-                      className={`text-lg text-primary ${titleIconClassName}`}
+                      className={`text-lg text-primary shrink-0 ${titleIconClassName}`}
                     />
                   )}
                   <Typography
                     variant={titleVariant}
-                    className="font-bold truncate max-w-full"
+                    className="font-bold flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     {title}
                   </Typography>
                 </Box>
               )}
-              {action && <Box>{action}</Box>}
+              {action && (
+                <Box className="shrink-0 flex items-start">{action}</Box>
+              )}
             </Box>
             <Divider className="mb-3" />
           </>

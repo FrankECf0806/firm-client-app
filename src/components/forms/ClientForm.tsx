@@ -1,7 +1,6 @@
 "use client";
 
-import { Box, TextField, Button } from "@mui/material";
-import { DeleteOutline } from "@mui/icons-material";
+import { Box, TextField } from "@mui/material";
 import { QuickAcessFormProps } from "@/types/form";
 import { Controller, useForm } from "react-hook-form";
 import { ClientFormValues } from "@/types/client";
@@ -84,34 +83,15 @@ export function ClientForm({
   const handleDelete = async () => {
     if (!formData?.id) return;
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete client "${formData.firstName} ${formData.lastName}"? This action cannot be undone.`,
-    );
-
-    if (confirmed) {
-      try {
-        await deleteClient(formData.id);
-        onClose();
-      } catch (error) {
-        console.error("Error deleting client:", error);
-      }
+    try {
+      await deleteClient(formData.id);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting client:", error);
     }
   };
 
-  // Delete button component (only in edit mode)
-  const dangerAction =
-    mode === "edit" ? (
-      <Button
-        color="error"
-        startIcon={<DeleteOutline />}
-        onClick={handleDelete}
-        disabled={isSubmitting}
-        variant="outlined"
-        className="button-firm w-full hover:bg-red-500 hover:text-white"
-      >
-        {isSubmitting ? "Deleting..." : "Delete Client"}
-      </Button>
-    ) : undefined;
+  const onDelete = mode === "edit" ? handleDelete : undefined;
 
   return (
     <DialogForm
@@ -122,7 +102,8 @@ export function ClientForm({
       submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
-      dangerAction={dangerAction}
+      onDelete={onDelete}
+      deleteEntityName="client"
     >
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* First Name */}

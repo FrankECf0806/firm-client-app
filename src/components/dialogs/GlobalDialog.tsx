@@ -17,9 +17,10 @@ export function GlobalDialog({
   onClose,
   title,
   subtitle,
+  headerChip,
+  headerMenu,
   children,
-  actions,
-  dangerAction,
+  footerActions,
   maxWidth = "sm",
   formProps,
   disableBackdropClose = false,
@@ -50,54 +51,50 @@ export function GlobalDialog({
         },
       }}
     >
-      {/* Wrap the entire dialog paper in form if formProps provided */}
       <Box
         {...wrapperProps}
-        className="h-full flex flex-col text-primary rounded-xl overflow-hidden "
+        className="h-full flex flex-col text-primary rounded-xl overflow-hidden"
       >
-        {/* Header */}
-        <DialogTitle className="relative shrink-0">
-          <Box className="flex flex-col pr-10">
-            {title && (
-              <Typography variant="h6" className="font-semibold">
-                {title}
-              </Typography>
-            )}
-            {subtitle && (
-              <Typography
-                className="leading-none"
-                variant="caption"
-                color="text.secondary"
-              >
-                {subtitle}
-              </Typography>
-            )}
+        <DialogTitle className="shrink-0 p-4 pb-1">
+          {/* First row: title + chip + menu + close */}
+          <Box className="flex justify-between items-center gap-2">
+            <Box className="flex items-center gap-2 min-w-0">
+              {title && (
+                <Typography
+                  variant="h6"
+                  className="font-semibold leading-tight truncate"
+                >
+                  {title}
+                </Typography>
+              )}
+              {headerChip}
+            </Box>
+            <Box className="flex items-center gap-1 shrink-0">
+              {headerMenu}
+              <IconButton onClick={onClose} size="small">
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Box>
           </Box>
-          {/* Close Button */}
-          <IconButton
-            onClick={onClose}
-            className="hover:bg-primary/10 absolute top-3 right-3"
-          >
-            <CloseIcon />
-          </IconButton>
+          {/* Second row: subtitle – directly below, no extra margin */}
+          {subtitle && (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              className="block leading-tight mt-0.5"
+            >
+              {subtitle}
+            </Typography>
+          )}
         </DialogTitle>
 
-        {/* Body */}
         <DialogContent className="px-6 py-5 overflow-y-auto grow" dividers>
           <Box className="flex flex-col gap-3.5 h-full">{children}</Box>
         </DialogContent>
 
-        {/* Actions */}
-        {actions && (
+        {footerActions && (
           <DialogActions className="px-6 py-4 shrink-0">
-            {actions}
-          </DialogActions>
-        )}
-
-        {/* Danger Action (Delete etc.) */}
-        {dangerAction && (
-          <DialogActions className=" flex items-start px-6 pb-6 pt-4 shrink-0 border-t border-gray-300">
-            {dangerAction}
+            {footerActions}
           </DialogActions>
         )}
       </Box>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, TextField, MenuItem, Box } from "@mui/material";
-import { PersonAddAltOutlined, DeleteOutline } from "@mui/icons-material";
+import { PersonAddAltOutlined } from "@mui/icons-material";
 import { CaseFormValues } from "@/types/case";
 import { useForm, Controller } from "react-hook-form";
 import { QuickAcessFormProps } from "@/types/form";
@@ -89,36 +89,16 @@ export function CaseForm({
 
   const handleDelete = async () => {
     if (!formData?.id) return;
-
-    const confirmed = window.confirm(
-      `Are you sure you want to delete case "${formData.title}"? This action cannot be undone.`,
-    );
-
-    if (confirmed) {
-      try {
-        await deleteCase(formData.id);
-        onClose();
-      } catch (error) {
-        console.error("Error deleting case:", error);
-      }
+    try {
+      await deleteCase(formData.id);
+      onClose();
+    } catch (error) {
+      console.error("Error deleting case:", error);
     }
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
-  // Delete button component
-  const dangerAction =
-    mode === "edit" ? (
-      <Button
-        variant="outlined"
-        color="error"
-        startIcon={<DeleteOutline />}
-        onClick={handleDelete}
-        disabled={isSubmitting}
-        className="button-firm w-full hover:bg-red-500 hover:text-white"
-      >
-        {isSubmitting ? "Deleting..." : "Delete Case"}
-      </Button>
-    ) : undefined;
+  const onDelete = mode === "edit" ? handleDelete : undefined;
 
   return (
     <DialogForm
@@ -129,7 +109,8 @@ export function CaseForm({
       submitLabel={submitLabel}
       isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
-      dangerAction={dangerAction}
+      onDelete={onDelete}
+      deleteEntityName="case"
     >
       {/* Case Title */}
       <Controller
