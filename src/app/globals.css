@@ -180,3 +180,78 @@ body {
 .select-clear-btn.Mui-disabled {
   @apply hidden;
 }
+
+/* ==========================================================
+   FULLCALENDAR THEME
+   ========================================================== */
+
+.fc .fc-button {
+  @apply bg-primary border-white text-white font-medium capitalize transition-all duration-200 rounded-md px-4 py-2 text-sm;
+}
+.fc .fc-button:hover {
+  @apply bg-primary-dark border-white shadow-none;
+  transform: translateY(-1px);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:active {
+  @apply bg-primary-dark border-white;
+}
+.fc .fc-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Remove box shadow from all FullCalendar buttons */
+.fc .fc-button,
+.fc .fc-button:focus,
+.fc .fc-button:active,
+.fc .fc-button-primary:focus,
+.fc .fc-button-primary:active {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Today button */
+.fc .fc-today-button {
+  @apply bg-primary-dark border-white text-white font-medium capitalize transition-all duration-200 rounded-md px-4 py-2 text-sm;
+}
+
+/* Calendar title */
+.fc .fc-toolbar-title {
+  @apply text-lg sm:text-2xl font-semibold text-gray-800;
+}
+
+/* List view – make titles and dates readable */
+.fc-list-day-cushion {
+  @apply bg-primary/5! text-primary font-semibold;
+}
+
+.fc-list-event-title {
+  @apply text-gray-900;
+}
+.fc-list-event-time {
+  @apply text-gray-600 font-medium;
+}
+
+/* Fix list view overflow */
+.fc-list-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Responsive toolbar – stack buttons on small screens */
+@media (max-width: 768px) {
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .fc .fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .fc .fc-button {
+    @apply px-2 py-1 text-xs;
+  }
+}

@@ -22,7 +22,7 @@ import { MeetingPopover } from "@/components/popover/MeetingPopover";
 
 export default function Calendar() {
   const { meetings } = useAppContext();
-  const { meetings: meetingList, getMeetingById } = meetings;
+  const { meetings: meetingList, getMeetingById, updateMeeting } = meetings;
 
   // Click popover state
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
@@ -66,6 +66,7 @@ export default function Calendar() {
   // ----------------------------------------------------------------------
   const handleEventClick = useCallback(
     ({ event, el }: EventClickArg) => {
+      setHoverMeeting(null);
       const targetEl = el as HTMLElement;
       if (targetEl) {
         const meeting = getMeetingById(event.id);
@@ -109,6 +110,7 @@ export default function Calendar() {
   // Edit meeting from click popover
   // ----------------------------------------------------------------------
   const handleEditMeeting = useCallback(() => {
+    setHoverMeeting(null);
     if (selectedMeeting) {
       setMeetingFormState({
         open: true,
@@ -119,6 +121,23 @@ export default function Calendar() {
       setClickPopoverAnchor(null);
     }
   }, [selectedMeeting]);
+
+  const handleEventDragStart = useCallback(() => {
+    setHoverMeeting(null);
+    setHoverPopoverAnchor(null);
+  }, []);
+
+  const handleEventDragDrop = useCallback(
+    ({ event }: EventClickArg) => {
+      const updatedMeeting = {
+        ...getMeetingById(event.id),
+        start: event.start ? event.start.toISOString() : undefined,
+        end: event.end ? event.end.toISOString() : undefined,
+      };
+      updateMeeting(event.id, updatedMeeting);
+    },
+    [getMeetingById, updateMeeting],
+  );
 
   return (
     <>
@@ -207,6 +226,8 @@ export default function Calendar() {
                 eventClick={handleEventClick}
                 eventMouseEnter={handleEventMouseEnter}
                 eventMouseLeave={handleEventMouseLeave}
+                eventDragStart={handleEventDragStart}
+                eventDrop={handleEventDragDrop}
               />
             </Paper>
           </Grid>
