@@ -55,7 +55,7 @@ export function MeetingForm({
     defaultValue: "SCHEDULED",
   });
 
-  const chipConfig: DialogChipConfig<MeetingFilterStatus> = {
+  const chipConfigStatus: DialogChipConfig<MeetingFilterStatus> = {
     value: status,
     config: MEETING_STATUS_CONFIG,
     onChange: (key: MeetingFilterStatus) =>
@@ -128,6 +128,7 @@ export function MeetingForm({
   const submitLabel = mode === "create" ? "Create Meeting" : "Save Changes";
 
   const onDelete = mode === "edit" ? handleDelete : undefined;
+  const chipConfig = mode === "edit" ? chipConfigStatus : undefined;
 
   return (
     <DialogForm<MeetingFilterStatus>

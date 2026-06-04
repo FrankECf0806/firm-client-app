@@ -11,14 +11,16 @@ import type {
   EventClickArg,
   EventContentArg,
   EventHoveringArg,
+  EventDropArg,
 } from "@fullcalendar/core";
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useMemo } from "react";
 import { useAppContext } from "@/providers/AppProvider";
 import { formatTime } from "@/utils/date";
 import { MeetingForm } from "@/components/forms/MeetingForm";
 import { Meeting, MeetingFormValues } from "@/types/meeting";
 import { FormState } from "@/types/form";
 import { MeetingPopover } from "@/components/popover/MeetingPopover";
+import { BaseCard } from "@/components/card/BaseCard";
 
 export default function Calendar() {
   const { meetings } = useAppContext();
@@ -60,6 +62,44 @@ export default function Calendar() {
       </Box>
     );
   }, []);
+
+  const upcomingMeetings = useMemo(() => {
+    const now = new Date();
+
+    return [...meetingList]
+      .filter((meeting) => new Date(meeting.start).getTime() >= now.getTime())
+      .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+      .slice(0, 5);
+  }, [meetingList]);
+
+  const stats = useMemo(() => {
+    const now = new Date();
+
+    const today = meetingList.filter((meeting) => {
+      const date = new Date(meeting.start);
+
+      return (
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear()
+      );
+    });
+
+    const weekEnd = new Date();
+    weekEnd.setDate(now.getDate() + 7);
+
+    const thisWeek = meetingList.filter((meeting) => {
+      const date = new Date(meeting.start);
+
+      return date >= now && date <= weekEnd;
+    });
+
+    return {
+      today: today.length,
+      week: thisWeek.length,
+      month: meetingList.length,
+    };
+  }, [meetingList]);
 
   // ----------------------------------------------------------------------
   // Click handler – opens full popover
@@ -128,7 +168,7 @@ export default function Calendar() {
   }, []);
 
   const handleEventDragDrop = useCallback(
-    ({ event }: EventClickArg) => {
+    ({ event }: EventDropArg) => {
       const updatedMeeting = {
         ...getMeetingById(event.id),
         start: event.start ? event.start.toISOString() : undefined,
@@ -232,14 +272,58 @@ export default function Calendar() {
             </Paper>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }}>
-            <Paper
-              elevation={2}
-              className="p-2 sm:p-4 border border-gray-200 rounded-lg"
+          <Grid size={{ xs: 12, md: 3 }} gap={2} className="flex flex-col">
+            <BaseCard
+              title="Upcoming Meetings"
+              className="h-min"
+              contentClassName="p-0 h-full text-primary"
             >
-              {/* Sidebar content – can be extended later */}
-              Hola
-            </Paper>
+              <Box className="p-3 space-y-2">
+                {upcomingMeetings.map((meeting) => (
+                  <Paper
+                    key={meeting.id}
+                    variant="outlined"
+                    className="
+						p-2 rounded-lg
+						shadow-lg
+						hover:bg-primary/10 hover:shadow-xl
+						transition-colors duration-150
+						border-2 border-primary/10"
+                  >
+                    <Box className="font-medium text-sm truncate">
+                      {meeting.title}
+                    </Box>
+
+                    <Box className="text-xs text-gray-500">
+                      {formatTime(meeting.start)} -{" "}
+                      {new Date(meeting.start).toLocaleDateString()}
+                    </Box>
+                  </Paper>
+                ))}
+              </Box>
+            </BaseCard>
+            <BaseCard
+              title="Quick Stats"
+              className="h-min"
+              contentClassName="p-0 h-full text-primary"
+            >
+              <Box className="p-4 space-y-3 text-gray-500">
+                <Box className="flex justify-between">
+                  <span>Today</span>
+                  <strong>{stats.today}</strong>
+                </Box>
+
+                <Box className="flex justify-between">
+                  <span>This Week</span>
+                  <strong>{stats.week}</strong>
+                </Box>
+
+                <Box className="flex justify-between">
+                  <span>Total Meetings</span>
+                  <strong>{stats.month}</strong>
+                </Box>
+              </Box>
+            </BaseCard>
           </Grid>
         </Grid>
       </Box>

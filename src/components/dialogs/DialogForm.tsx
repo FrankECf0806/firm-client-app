@@ -14,6 +14,7 @@ import { GlobalDialog } from "@/components/dialogs/GlobalDialog";
 import { useRef, useState } from "react";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { DialogFormProps, headerMenuItem } from "@/types/global";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export function DialogForm<T extends string = string>({
   open,
@@ -32,6 +33,9 @@ export function DialogForm<T extends string = string>({
   const formRef = useRef<HTMLFormElement>(null);
   const [statusAnchor, setStatusAnchor] = useState<null | HTMLElement>(null);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const hasMenu =
     (headerMenuItems && headerMenuItems.length > 0) || Boolean(onDelete);
 
@@ -42,13 +46,16 @@ export function DialogForm<T extends string = string>({
 
   const handleDeleteClick = () => {
     setMenuAnchor(null);
+    setConfirmOpen(true);
+  };
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete this ${deleteEntityName ?? "item"}? This action cannot be undone.`,
-    );
-
-    if (confirmed) {
-      onDelete?.();
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete?.();
+    } finally {
+      setIsDeleting(false);
+      setConfirmOpen(false);
     }
   };
 
@@ -171,22 +178,34 @@ export function DialogForm<T extends string = string>({
   );
 
   return (
-    <GlobalDialog
-      open={open}
-      onClose={onClose}
-      title={title}
-      subtitle={subtitle}
-      footerActions={footerActions}
-      headerChip={headerChip}
-      headerMenu={headerMenu}
-      formProps={{
-        ref: formRef,
-        onSubmit,
-        noValidate: true,
-      }}
-      disableBackdropClose
-    >
-      {children}
-    </GlobalDialog>
+    <>
+      <GlobalDialog
+        open={open}
+        onClose={onClose}
+        title={title}
+        subtitle={subtitle}
+        footerActions={footerActions}
+        headerChip={headerChip}
+        headerMenu={headerMenu}
+        formProps={{
+          ref: formRef,
+          onSubmit,
+          noValidate: true,
+        }}
+        disableBackdropClose
+      >
+        {children}
+      </GlobalDialog>
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={`Delete ${deleteEntityName ?? "item"}`}
+        description={`Are you sure you want to delete this ${deleteEntityName ?? "item"}? This action cannot be undone.`}
+        confirmText="Delete"
+        confirmColor="error"
+        loading={isDeleting}
+      />
+    </>
   );
 }
