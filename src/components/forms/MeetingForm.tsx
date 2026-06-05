@@ -15,6 +15,7 @@ import {
   MeetingStatusKey,
 } from "@/types/meeting";
 import { DialogChipConfig } from "@/types/global";
+import { fromDateTimeLocal, toDateTimeLocal } from "@/utils/date";
 
 export function MeetingForm({
   mode,
@@ -67,13 +68,20 @@ export function MeetingForm({
     if (!open) return;
 
     if (mode === "create") {
-      const today = new Date().toISOString().split("T")[0];
+      const now = new Date();
+
+      const start = new Date(now);
+      start.setHours(10, 0, 0, 0);
+
+      const end = new Date(now);
+      end.setHours(11, 0, 0, 0);
+
       reset({
         title: "",
         caseId: "",
         status: "SCHEDULED",
-        start: `${today}T10:00:00`,
-        end: `${today}T11:00:00`,
+        start: toDateTimeLocal(start),
+        end: toDateTimeLocal(end),
         type: "CLIENT_MEETING",
         meetingLink: "",
         location: "",
@@ -84,6 +92,8 @@ export function MeetingForm({
     } else if (mode === "edit" && formData) {
       reset({
         ...formData,
+        start: formData.start ? toDateTimeLocal(formData.start) : "",
+        end: formData.end ? toDateTimeLocal(formData.end) : "",
         attendees: formData.attendees || [],
       });
     }
@@ -92,6 +102,8 @@ export function MeetingForm({
   const onSubmit = async (data: MeetingFormValues) => {
     const meetingPayload = {
       ...data,
+      start: fromDateTimeLocal(data.start),
+      end: fromDateTimeLocal(data.end),
       attendees: data.attendees || [],
       location: data.location || "",
       agenda: data.agenda || "",
@@ -206,7 +218,7 @@ export function MeetingForm({
               required
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           )}
         />
@@ -227,7 +239,7 @@ export function MeetingForm({
               required
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           )}
         />

@@ -50,3 +50,9 @@ export interface DialogChipConfig<T extends string = string> {
   config: Record<T, ConfigItem<T>>;
   onChange: (value: T) => void;
 }
+
+export type CalendarStats = {
+  today: number;
+  week: number;
+  month: number;
+};

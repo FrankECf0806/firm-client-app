@@ -13,7 +13,7 @@ import type {
   EventHoveringArg,
   EventDropArg,
 } from "@fullcalendar/core";
-import { useCallback, useState, useRef, useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useAppContext } from "@/providers/AppProvider";
 import { formatTime } from "@/utils/date";
 import { MeetingForm } from "@/components/forms/MeetingForm";
@@ -21,10 +21,13 @@ import { Meeting, MeetingFormValues } from "@/types/meeting";
 import { FormState } from "@/types/form";
 import { MeetingPopover } from "@/components/popover/MeetingPopover";
 import { BaseCard } from "@/components/card/BaseCard";
+import { CalendarStats } from "@/types/global";
 
 export default function Calendar() {
   const { meetings } = useAppContext();
   const { meetings: meetingList, getMeetingById, updateMeeting } = meetings;
+
+  const calendarEvents = useMemo(() => meetingList, [meetingList]);
 
   // Click popover state
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
@@ -35,7 +38,8 @@ export default function Calendar() {
   const [hoverMeeting, setHoverMeeting] = useState<Meeting | null>(null);
   const [hoverPopoverAnchor, setHoverPopoverAnchor] =
     useState<HTMLElement | null>(null);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Meeting form state
   const [meetingFormState, setMeetingFormState] = useState<
@@ -45,6 +49,15 @@ export default function Calendar() {
     mode: "create",
   });
 
+  const calendarRef = useRef<FullCalendar | null>(null);
+  const isDraggingRef = useRef(false);
+  const recentlyDraggedRef = useRef(false);
+
+  const isTouchDevice = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  }, []);
+
   // ----------------------------------------------------------------------
   // Memoized event renderer
   // ----------------------------------------------------------------------
@@ -53,6 +66,7 @@ export default function Calendar() {
     const endTime = event.end ? formatTime(event.end.toISOString()) : "";
     const timeStr =
       startTime && endTime ? `${startTime} – ${endTime}` : startTime;
+
     return (
       <Box>
         <Box className="text-[0.65rem] font-semibold opacity-90! text-black/60">
@@ -72,12 +86,11 @@ export default function Calendar() {
       .slice(0, 5);
   }, [meetingList]);
 
-  const stats = useMemo(() => {
+  const stats = useMemo<CalendarStats>(() => {
     const now = new Date();
 
     const today = meetingList.filter((meeting) => {
       const date = new Date(meeting.start);
-
       return (
         date.getDate() === now.getDate() &&
         date.getMonth() === now.getMonth() &&
@@ -85,12 +98,11 @@ export default function Calendar() {
       );
     });
 
-    const weekEnd = new Date();
+    const weekEnd = new Date(now);
     weekEnd.setDate(now.getDate() + 7);
 
     const thisWeek = meetingList.filter((meeting) => {
       const date = new Date(meeting.start);
-
       return date >= now && date <= weekEnd;
     });
 
@@ -106,40 +118,51 @@ export default function Calendar() {
   // ----------------------------------------------------------------------
   const handleEventClick = useCallback(
     ({ event, el }: EventClickArg) => {
+      if (recentlyDraggedRef.current) return;
+
       setHoverMeeting(null);
+
       const targetEl = el as HTMLElement;
-      if (targetEl) {
-        const meeting = getMeetingById(event.id);
-        if (meeting) {
-          setSelectedMeeting(meeting);
-          setClickPopoverAnchor(targetEl);
-        }
+      const meeting = getMeetingById(event.id);
+
+      if (meeting) {
+        setSelectedMeeting(meeting);
+        setClickPopoverAnchor(targetEl);
       }
     },
     [getMeetingById],
   );
 
   // ----------------------------------------------------------------------
-  // Hover handlers – show quick tooltip with delay, hide with delay to avoid flicker
+  // Hover handlers – show quick tooltip, avoid while dragging
   // ----------------------------------------------------------------------
   const handleEventMouseEnter = useCallback(
     ({ event, el }: EventHoveringArg) => {
-      // Clear any pending hide timeout
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      if (isDraggingRef.current) return;
+
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
+
       const targetEl = el as HTMLElement;
-      if (targetEl) {
-        const meeting = getMeetingById(event.id);
-        if (meeting) {
-          setHoverMeeting(meeting);
-          setHoverPopoverAnchor(targetEl);
-        }
+      const meeting = getMeetingById(event.id);
+
+      if (targetEl && meeting) {
+        setHoverMeeting(meeting);
+        setHoverPopoverAnchor(targetEl);
       }
     },
     [getMeetingById],
   );
 
   const handleEventMouseLeave = useCallback(() => {
-    // Delay hiding to allow moving to the popover itself (popover has pointerEvents: none)
+    if (isDraggingRef.current) return;
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
     hoverTimeoutRef.current = setTimeout(() => {
       setHoverMeeting(null);
       setHoverPopoverAnchor(null);
@@ -151,33 +174,67 @@ export default function Calendar() {
   // ----------------------------------------------------------------------
   const handleEditMeeting = useCallback(() => {
     setHoverMeeting(null);
-    if (selectedMeeting) {
-      setMeetingFormState({
-        open: true,
-        mode: "edit",
-        formData: selectedMeeting,
-      });
-      setSelectedMeeting(null);
-      setClickPopoverAnchor(null);
-    }
+
+    if (!selectedMeeting) return;
+
+    setMeetingFormState({
+      open: true,
+      mode: "edit",
+      formData: selectedMeeting,
+    });
+
+    setSelectedMeeting(null);
+    setClickPopoverAnchor(null);
   }, [selectedMeeting]);
 
   const handleEventDragStart = useCallback(() => {
+    isDraggingRef.current = true;
+
     setHoverMeeting(null);
     setHoverPopoverAnchor(null);
+    setSelectedMeeting(null);
+    setClickPopoverAnchor(null);
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  }, []);
+
+  const handleEventDragStop = useCallback(() => {
+    isDraggingRef.current = false;
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
   }, []);
 
   const handleEventDragDrop = useCallback(
-    ({ event }: EventDropArg) => {
-      const updatedMeeting = {
-        ...getMeetingById(event.id),
-        start: event.start ? event.start.toISOString() : undefined,
-        end: event.end ? event.end.toISOString() : undefined,
-      };
-      updateMeeting(event.id, updatedMeeting);
+    (info: EventDropArg) => {
+      recentlyDraggedRef.current = true;
+
+      const meeting = getMeetingById(info.event.id);
+      if (!meeting) {
+        recentlyDraggedRef.current = false;
+        return;
+      }
+
+      updateMeeting(info.event.id, {
+        ...meeting,
+        start: info.event.start?.toISOString() ?? meeting.start,
+        end: info.event.end?.toISOString() ?? meeting.end,
+      });
+
+      window.setTimeout(() => {
+        recentlyDraggedRef.current = false;
+      }, 300);
     },
     [getMeetingById, updateMeeting],
   );
+
+  const eventMouseEnter = isTouchDevice ? undefined : handleEventMouseEnter;
+  const eventMouseLeave = isTouchDevice ? undefined : handleEventMouseLeave;
 
   return (
     <>
@@ -216,6 +273,7 @@ export default function Calendar() {
               className="p-2 sm:p-4 border border-gray-200 rounded-lg"
             >
               <FullCalendar
+                ref={calendarRef}
                 plugins={[
                   dayGridPlugin,
                   timeGridPlugin,
@@ -231,7 +289,7 @@ export default function Calendar() {
                 expandRows
                 navLinks
                 initialView="dayGridMonth"
-                events={meetingList}
+                events={calendarEvents}
                 eventContent={renderEventContent}
                 eventDisplay="block"
                 eventTimeFormat={{
@@ -259,71 +317,84 @@ export default function Calendar() {
                 eventOrderStrict
                 firstDay={1}
                 dayMaxEvents={3}
+                longPressDelay={300}
+                eventLongPressDelay={300}
+                eventDragMinDistance={8}
+                dragRevertDuration={0}
+                dragScroll
                 editable
                 selectable
                 selectMirror
                 weekends
                 eventClick={handleEventClick}
-                eventMouseEnter={handleEventMouseEnter}
-                eventMouseLeave={handleEventMouseLeave}
+                eventMouseEnter={eventMouseEnter}
+                eventMouseLeave={eventMouseLeave}
                 eventDragStart={handleEventDragStart}
                 eventDrop={handleEventDragDrop}
+                eventDragStop={handleEventDragStop}
               />
             </Paper>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }} gap={2} className="flex flex-col">
-            <BaseCard
-              title="Upcoming Meetings"
-              className="h-min"
-              contentClassName="p-0 h-full text-primary"
-            >
-              <Box className="p-3 space-y-2">
-                {upcomingMeetings.map((meeting) => (
-                  <Paper
-                    key={meeting.id}
-                    variant="outlined"
-                    className="
-						p-2 rounded-lg
-						shadow-lg
-						hover:bg-primary/10 hover:shadow-xl
-						transition-colors duration-150
-						border-2 border-primary/10"
-                  >
-                    <Box className="font-medium text-sm truncate">
-                      {meeting.title}
+          <Grid size={{ xs: 12, md: 3 }} gap={2}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6, md: 12 }}>
+                <BaseCard
+                  title="Upcoming Meetings"
+                  className="h-min"
+                  contentClassName="p-0 h-full text-primary"
+                >
+                  <Box className="p-3 space-y-2">
+                    {upcomingMeetings.map((meeting) => (
+                      <Paper
+                        key={meeting.id}
+                        variant="outlined"
+                        className="
+                          p-2 rounded-lg
+                          shadow-lg
+                          hover:bg-primary/10 hover:shadow-xl
+                          transition-colors duration-150
+                          border-2 border-primary/10"
+                      >
+                        <Box className="font-medium text-sm truncate">
+                          {meeting.title}
+                        </Box>
+
+                        <Box className="text-xs text-gray-500">
+                          {formatTime(meeting.start)} -{" "}
+                          {new Date(meeting.start).toLocaleDateString()}
+                        </Box>
+                      </Paper>
+                    ))}
+                  </Box>
+                </BaseCard>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6, md: 12 }}>
+                <BaseCard
+                  title="Quick Stats"
+                  className="h-min"
+                  contentClassName="p-0 h-full text-primary"
+                >
+                  <Box className="p-4 space-y-3 text-gray-500">
+                    <Box className="flex justify-between">
+                      <span>Today</span>
+                      <strong>{stats.today}</strong>
                     </Box>
 
-                    <Box className="text-xs text-gray-500">
-                      {formatTime(meeting.start)} -{" "}
-                      {new Date(meeting.start).toLocaleDateString()}
+                    <Box className="flex justify-between">
+                      <span>This Week</span>
+                      <strong>{stats.week}</strong>
                     </Box>
-                  </Paper>
-                ))}
-              </Box>
-            </BaseCard>
-            <BaseCard
-              title="Quick Stats"
-              className="h-min"
-              contentClassName="p-0 h-full text-primary"
-            >
-              <Box className="p-4 space-y-3 text-gray-500">
-                <Box className="flex justify-between">
-                  <span>Today</span>
-                  <strong>{stats.today}</strong>
-                </Box>
 
-                <Box className="flex justify-between">
-                  <span>This Week</span>
-                  <strong>{stats.week}</strong>
-                </Box>
-
-                <Box className="flex justify-between">
-                  <span>Total Meetings</span>
-                  <strong>{stats.month}</strong>
-                </Box>
-              </Box>
-            </BaseCard>
+                    <Box className="flex justify-between">
+                      <span>Total Meetings</span>
+                      <strong>{stats.month}</strong>
+                    </Box>
+                  </Box>
+                </BaseCard>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
@@ -336,18 +407,18 @@ export default function Calendar() {
         }
       />
 
-      {/* Hover Popover – quick tooltip (always mounted, content conditionally rendered) */}
-      {hoverMeeting && (
+      {/* Hover Popover */}
+      {!isTouchDevice && hoverMeeting && (
         <Popover
-          open={!!hoverMeeting}
+          open={Boolean(hoverMeeting)}
           anchorEl={hoverPopoverAnchor}
           onClose={() => setHoverMeeting(null)}
           sx={{ pointerEvents: "none" }}
           disableRestoreFocus
-          disableScrollLock={true}
+          disableScrollLock
           anchorOrigin={{
             vertical: "center",
-            horizontal: "center",
+            horizontal: "right",
           }}
           transformOrigin={{
             vertical: "center",
@@ -369,10 +440,10 @@ export default function Calendar() {
         </Popover>
       )}
 
-      {/* Click Popover – full meeting details */}
+      {/* Click Popover */}
       {selectedMeeting && (
         <MeetingPopover
-          open={!!selectedMeeting}
+          open={Boolean(selectedMeeting)}
           anchorEl={clickPopoverAnchor}
           meeting={selectedMeeting}
           onClose={() => {
