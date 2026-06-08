@@ -17,12 +17,29 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useAppContext } from "@/providers/AppProvider";
 import { formatTime } from "@/utils/date";
 import { MeetingForm } from "@/components/forms/MeetingForm";
-import { Meeting, MeetingFormValues } from "@/types/meeting";
+import { Meeting, MeetingFormValues, MeetingTypeKey } from "@/types/meeting";
 import { FormState } from "@/types/form";
 import { MeetingPopover } from "@/components/popover/MeetingPopover";
-import { BaseCard } from "@/components/card/BaseCard";
-import { CalendarStats } from "@/types/global";
+import { CalendarOverview } from "@/components/card/meeting/CalendarOverview";
+import { CalendarStats, MeetingTypeSummary } from "@/types/ui/card";
+import { UpcomingMeetingsCard } from "@/components/card/meeting/UpcomingMeetingsCard";
+import { MeetingTypesCard } from "@/components/card/meeting/MeetingTypesCard";
 
+// Helper to group meetings by type for the summary
+const getMeetingTypeSummary = (meetings: Meeting[]): MeetingTypeSummary[] => {
+  const summary: Partial<Record<MeetingTypeKey, number>> = {};
+  meetings.forEach((meeting) => {
+    const type = meeting.type;
+    summary[type] = (summary[type] || 0) + 1;
+  });
+  return (Object.entries(summary) as MeetingTypeSummary[])
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+};
+
+// ----------------------------------------------------------------------
+// Main Calendar Component
+// ----------------------------------------------------------------------
 export default function Calendar() {
   const { meetings } = useAppContext();
   const { meetings: meetingList, getMeetingById, updateMeeting } = meetings;
@@ -38,7 +55,6 @@ export default function Calendar() {
   const [hoverMeeting, setHoverMeeting] = useState<Meeting | null>(null);
   const [hoverPopoverAnchor, setHoverPopoverAnchor] =
     useState<HTMLElement | null>(null);
-
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Meeting form state
@@ -59,14 +75,13 @@ export default function Calendar() {
   }, []);
 
   // ----------------------------------------------------------------------
-  // Memoized event renderer
+  // Event renderer
   // ----------------------------------------------------------------------
   const renderEventContent = useCallback(({ event }: EventContentArg) => {
     const startTime = event.start ? formatTime(event.start.toISOString()) : "";
     const endTime = event.end ? formatTime(event.end.toISOString()) : "";
     const timeStr =
       startTime && endTime ? `${startTime} – ${endTime}` : startTime;
-
     return (
       <Box>
         <Box className="text-[0.65rem] font-semibold opacity-90! text-black/60">
@@ -77,9 +92,11 @@ export default function Calendar() {
     );
   }, []);
 
+  // ----------------------------------------------------------------------
+  // Sidebar data
+  // ----------------------------------------------------------------------
   const upcomingMeetings = useMemo(() => {
     const now = new Date();
-
     return [...meetingList]
       .filter((meeting) => new Date(meeting.start).getTime() >= now.getTime())
       .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
@@ -88,7 +105,6 @@ export default function Calendar() {
 
   const stats = useMemo<CalendarStats>(() => {
     const now = new Date();
-
     const today = meetingList.filter((meeting) => {
       const date = new Date(meeting.start);
       return (
@@ -97,15 +113,12 @@ export default function Calendar() {
         date.getFullYear() === now.getFullYear()
       );
     });
-
     const weekEnd = new Date(now);
     weekEnd.setDate(now.getDate() + 7);
-
     const thisWeek = meetingList.filter((meeting) => {
       const date = new Date(meeting.start);
       return date >= now && date <= weekEnd;
     });
-
     return {
       today: today.length,
       week: thisWeek.length,
@@ -113,18 +126,20 @@ export default function Calendar() {
     };
   }, [meetingList]);
 
+  const meetingTypeSummary = useMemo(
+    () => getMeetingTypeSummary(meetingList),
+    [meetingList],
+  );
+
   // ----------------------------------------------------------------------
-  // Click handler – opens full popover
+  // Click handler
   // ----------------------------------------------------------------------
   const handleEventClick = useCallback(
     ({ event, el }: EventClickArg) => {
       if (recentlyDraggedRef.current) return;
-
       setHoverMeeting(null);
-
       const targetEl = el as HTMLElement;
       const meeting = getMeetingById(event.id);
-
       if (meeting) {
         setSelectedMeeting(meeting);
         setClickPopoverAnchor(targetEl);
@@ -134,20 +149,14 @@ export default function Calendar() {
   );
 
   // ----------------------------------------------------------------------
-  // Hover handlers – show quick tooltip, avoid while dragging
+  // Hover handlers
   // ----------------------------------------------------------------------
   const handleEventMouseEnter = useCallback(
     ({ event, el }: EventHoveringArg) => {
       if (isDraggingRef.current) return;
-
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = null;
-      }
-
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
       const targetEl = el as HTMLElement;
       const meeting = getMeetingById(event.id);
-
       if (targetEl && meeting) {
         setHoverMeeting(meeting);
         setHoverPopoverAnchor(targetEl);
@@ -158,11 +167,6 @@ export default function Calendar() {
 
   const handleEventMouseLeave = useCallback(() => {
     if (isDraggingRef.current) return;
-
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-
     hoverTimeoutRef.current = setTimeout(() => {
       setHoverMeeting(null);
       setHoverPopoverAnchor(null);
@@ -170,62 +174,50 @@ export default function Calendar() {
   }, []);
 
   // ----------------------------------------------------------------------
-  // Edit meeting from click popover
+  // Edit meeting
   // ----------------------------------------------------------------------
   const handleEditMeeting = useCallback(() => {
     setHoverMeeting(null);
-
     if (!selectedMeeting) return;
-
     setMeetingFormState({
       open: true,
       mode: "edit",
       formData: selectedMeeting,
     });
-
     setSelectedMeeting(null);
     setClickPopoverAnchor(null);
   }, [selectedMeeting]);
 
+  // ----------------------------------------------------------------------
+  // Drag & drop
+  // ----------------------------------------------------------------------
   const handleEventDragStart = useCallback(() => {
     isDraggingRef.current = true;
-
     setHoverMeeting(null);
     setHoverPopoverAnchor(null);
     setSelectedMeeting(null);
     setClickPopoverAnchor(null);
-
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
   }, []);
 
   const handleEventDragStop = useCallback(() => {
     isDraggingRef.current = false;
-
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
   }, []);
 
-  const handleEventDragDrop = useCallback(
+  const handleEventDrop = useCallback(
     (info: EventDropArg) => {
       recentlyDraggedRef.current = true;
-
       const meeting = getMeetingById(info.event.id);
       if (!meeting) {
         recentlyDraggedRef.current = false;
         return;
       }
-
       updateMeeting(info.event.id, {
         ...meeting,
         start: info.event.start?.toISOString() ?? meeting.start,
         end: info.event.end?.toISOString() ?? meeting.end,
       });
-
       window.setTimeout(() => {
         recentlyDraggedRef.current = false;
       }, 300);
@@ -267,7 +259,7 @@ export default function Calendar() {
         </Grid>
 
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 9 }}>
+          <Grid size={{ xs: 12, lg: 9.5 }}>
             <Paper
               elevation={2}
               className="p-2 sm:p-4 border border-gray-200 rounded-lg"
@@ -330,69 +322,25 @@ export default function Calendar() {
                 eventMouseEnter={eventMouseEnter}
                 eventMouseLeave={eventMouseLeave}
                 eventDragStart={handleEventDragStart}
-                eventDrop={handleEventDragDrop}
+                eventDrop={handleEventDrop}
                 eventDragStop={handleEventDragStop}
               />
             </Paper>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 3 }} gap={2}>
+          <Grid size={{ xs: 12, lg: 2.5 }} gap={2}>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6, md: 12 }}>
-                <BaseCard
-                  title="Upcoming Meetings"
-                  className="h-min"
-                  contentClassName="p-0 h-full text-primary"
-                >
-                  <Box className="p-3 space-y-2">
-                    {upcomingMeetings.map((meeting) => (
-                      <Paper
-                        key={meeting.id}
-                        variant="outlined"
-                        className="
-                          p-2 rounded-lg
-                          shadow-lg
-                          hover:bg-primary/10 hover:shadow-xl
-                          transition-colors duration-150
-                          border-2 border-primary/10"
-                      >
-                        <Box className="font-medium text-sm truncate">
-                          {meeting.title}
-                        </Box>
-
-                        <Box className="text-xs text-gray-500">
-                          {formatTime(meeting.start)} -{" "}
-                          {new Date(meeting.start).toLocaleDateString()}
-                        </Box>
-                      </Paper>
-                    ))}
-                  </Box>
-                </BaseCard>
+              <Grid size={12}>
+                <CalendarOverview stats={stats} />
               </Grid>
-
-              <Grid size={{ xs: 12, sm: 6, md: 12 }}>
-                <BaseCard
-                  title="Quick Stats"
-                  className="h-min"
-                  contentClassName="p-0 h-full text-primary"
-                >
-                  <Box className="p-4 space-y-3 text-gray-500">
-                    <Box className="flex justify-between">
-                      <span>Today</span>
-                      <strong>{stats.today}</strong>
-                    </Box>
-
-                    <Box className="flex justify-between">
-                      <span>This Week</span>
-                      <strong>{stats.week}</strong>
-                    </Box>
-
-                    <Box className="flex justify-between">
-                      <span>Total Meetings</span>
-                      <strong>{stats.month}</strong>
-                    </Box>
-                  </Box>
-                </BaseCard>
+              <Grid size={12}>
+                <UpcomingMeetingsCard meetings={upcomingMeetings} />
+              </Grid>
+              <Grid size={12}>
+                <MeetingTypesCard
+                  summary={meetingTypeSummary}
+                  total={stats.month}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -416,14 +364,8 @@ export default function Calendar() {
           sx={{ pointerEvents: "none" }}
           disableRestoreFocus
           disableScrollLock
-          anchorOrigin={{
-            vertical: "center",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "center",
-            horizontal: "left",
-          }}
+          anchorOrigin={{ vertical: "center", horizontal: "right" }}
+          transformOrigin={{ vertical: "center", horizontal: "left" }}
           slotProps={{
             paper: {
               className:

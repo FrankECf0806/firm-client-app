@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { TypographyProps } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
+import { MeetingTypeKey } from "../meeting";
 
 export interface CardProps {
   linkTo?: string;
@@ -42,3 +43,22 @@ export interface PriorityCardProps extends CardProps {
   type: "warning" | "info" | "success";
   actionLabel?: string;
 }
+
+// Calendar Types
+export interface CalendarOverviewProps {
+  stats: CalendarStats;
+}
+
+export interface CalendarStats {
+  today: number;
+  week: number;
+  month: number;
+}
+
+// Meeting Types
+export interface MeetingTypesCardProps {
+  summary: MeetingTypeSummary[];
+  total: number;
+}
+
+export type MeetingTypeSummary = [MeetingTypeKey, number];

@@ -36,6 +36,7 @@ import { normalizeUrl } from "@/utils/helper/global";
 import { Meeting } from "@/types/meeting";
 import { user } from "@/mock_data";
 import {
+  MEETING_STATUS_CONFIG,
   MEETING_TYPE_CONFIG,
   MEETING_TYPE_ICONS,
 } from "@/utils/constant/meeting";
@@ -238,8 +239,19 @@ export function MeetingPopover({
             </Box>
           )}
 
-          {/* Meeting Type Chip */}
-          <Box className="flex items-center">
+          {/* Meeting Type & Status Chips */}
+          <Box className="flex flex-wrap items-center gap-2">
+            <Chip
+              label={
+                MEETING_STATUS_CONFIG[meeting.status]?.label ??
+                meeting.status.replace(/_/g, " ")
+              }
+              size="small"
+              color={
+                MEETING_STATUS_CONFIG[meeting.status]?.styling?.color ||
+                "default"
+              }
+            />
             <Chip
               icon={<TitleIcon className="text-white font-light" />}
               label={type.replace(/_/g, " ").toLowerCase()}
