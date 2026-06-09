@@ -255,3 +255,54 @@ body {
     @apply px-2 py-1 text-xs;
   }
 }
+
+/* ==========================================
+   KANBAN SCROLLBAR
+========================================== */
+
+.kanban-scroll {
+  scrollbar-gutter: stable;
+}
+
+/* Firefox */
+.kanban-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+/* Chrome / Edge / Safari */
+.kanban-scroll::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.kanban-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+/* Desktop Hover */
+@media (hover: hover) {
+  .kanban-scroll:hover {
+    scrollbar-color: var(--color-primary) transparent;
+  }
+
+  .kanban-scroll:hover::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+  }
+}
+
+/* Mobile / iPad */
+@media (hover: none) {
+  .kanban-scroll {
+    scrollbar-color: var(--color-primary) transparent;
+  }
+
+  .kanban-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+  }
+}

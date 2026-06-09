@@ -8,7 +8,6 @@ import {
 } from "@/utils/constant/case";
 import { useMemo, useState, useRef } from "react";
 import { useAppContext } from "@/providers/AppProvider";
-import { BaseCard } from "@/components/card/BaseCard";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { BusinessCenter } from "@mui/icons-material";
 import { CaseCard } from "@/components/card/cases/CaseCard";
@@ -24,9 +23,7 @@ export default function CasesPipelinePage() {
   const [draggedCaseId, setDraggedCaseId] = useState<string | null>(null);
   const { getThemeColor } = useHelperFunctions();
 
-  const statsScrollRef = useRef<HTMLDivElement>(null);
   const boardScrollRef = useRef<HTMLDivElement>(null);
-  const isSyncingRef = useRef(false);
 
   const { cases: casesList, updateCase } = cases;
   const { getClientById } = clients;
@@ -49,8 +46,10 @@ export default function CasesPipelinePage() {
       )
       .map((c) => {
         const client = getClientById(c.clientId);
-        const clientName = `${client?.firstName} ${client?.lastName}`;
-        return { ...c, clientName };
+        return {
+          ...c,
+          clientName: `${client?.firstName ?? ""} ${client?.lastName ?? ""}`,
+        };
       });
   }, [casesList, filterArea, getClientById]);
 
@@ -69,28 +68,6 @@ export default function CasesPipelinePage() {
     });
   };
 
-  const handleStatsScroll = () => {
-    if (isSyncingRef.current) return;
-    if (statsScrollRef.current && boardScrollRef.current) {
-      isSyncingRef.current = true;
-      boardScrollRef.current.scrollLeft = statsScrollRef.current.scrollLeft;
-      setTimeout(() => {
-        isSyncingRef.current = false;
-      }, 0);
-    }
-  };
-
-  const handleBoardScroll = () => {
-    if (isSyncingRef.current) return;
-    if (boardScrollRef.current && statsScrollRef.current) {
-      isSyncingRef.current = true;
-      statsScrollRef.current.scrollLeft = boardScrollRef.current.scrollLeft;
-      setTimeout(() => {
-        isSyncingRef.current = false;
-      }, 0);
-    }
-  };
-
   const validColumnStatuses = useMemo(() => {
     return new Set(CASE_STATUS_PIPELINE.map(([key]) => key));
   }, []);
@@ -102,27 +79,24 @@ export default function CasesPipelinePage() {
         setDraggedCaseId(null);
         const { operation } = event;
         if (!operation) return;
-
         const { source, target } = operation;
         if (!source || !target) return;
-
         const targetColumnId = String(target.id);
         if (!validColumnStatuses.has(targetColumnId)) return;
-
         const sourceCaseId = String(source.id);
         const draggedCase = pipelineCases.find((c) => c.id === sourceCaseId);
-        if (!draggedCase || draggedCase.status === targetColumnId) return;
-
+        if (!draggedCase) return;
+        if (draggedCase.status === targetColumnId) return;
         updateCase(sourceCaseId, { status: targetColumnId } as Partial<Case>);
       }}
     >
       <Grid
-        className="md:px-6 justify-end align-center"
         container
         spacing={2}
         direction="row"
+        className="justify-end items-start"
       >
-        <Grid size={{ xs: 6, sm: 5, md: 5, lg: 2 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <ResettableSelect
             className="input-rounded-firm w-full"
             label="Practice Area"
@@ -133,106 +107,129 @@ export default function CasesPipelinePage() {
             resetLabel="All Practice Area"
           />
         </Grid>
-      </Grid>
-      <Box className="p-4 md:p-6 space-y-4">
-        {/* Top stats cards */}
-        <Box
-          ref={statsScrollRef}
-          className="overflow-x-auto pb-2 -mx-2 px-2"
-          onScroll={handleStatsScroll}
-        >
-          <Grid
-            container
-            spacing={2}
-            className="min-w-350 md:min-w-0 flex-nowrap md:flex-wrap"
-          >
-            {CASE_STATUS_PIPELINE.map(([statusKey, config]) => {
-              const columnCases = sortCases(
-                pipelineCases.filter((c) => c.status === statusKey),
-              );
-              const borderColor = getThemeColor(config.styling?.color);
-              return (
-                <Grid size={2.4} key={statusKey}>
-                  <BaseCard
-                    className="flex items-center border-l-6 hover:shadow-md hover:-translate-y-0.5"
-                    style={{ borderLeftColor: borderColor }}
-                  >
-                    <Typography
-                      variant="h5"
-                      className="font-bold"
-                      style={{ color: borderColor }}
-                    >
-                      {columnCases.length}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      className="text-xs text-gray-500 font-medium"
-                    >
-                      {config.label}
-                    </Typography>
-                  </BaseCard>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Box>
 
-        {/* Kanban board */}
-        <Box
-          ref={boardScrollRef}
-          className="overflow-x-auto pb-2 -mx-2 px-2"
-          onScroll={handleBoardScroll}
-        >
-          <Grid
-            container
-            spacing={2}
-            className="min-w-350 md:min-w-0 flex-nowrap md:flex-wrap"
+        <Grid size={12}>
+          {/* Horizontal scroll container */}
+          <Box
+            ref={boardScrollRef}
+            className="
+				flex
+				gap-4
+				overflow-x-auto
+				overflow-y-hidden
+				pb-4
+				w-full
+				kanban-scroll
+			"
           >
             {CASE_STATUS_PIPELINE.map(([statusKey, config]) => {
               const columnCases = sortCases(
                 pipelineCases.filter((c) => c.status === statusKey),
               );
+              const urgentCount = columnCases.filter(
+                (c) => c.priority?.toUpperCase() === "URGENT",
+              ).length;
+              const borderColor = getThemeColor(config.styling?.color);
+
               return (
-                <Grid size={2.4} key={statusKey}>
+                <Box
+                  key={statusKey}
+                  className="
+					shrink-0
+					w-[90vw]
+					sm:w-[48%]
+					md:w-[32%]
+					lg:flex-1
+					lg:min-w-0
+				  "
+                >
                   <DroppableColumn
                     id={statusKey}
                     className={`
-                      rounded-xl p-2 transition-all duration-200 h-full
-                      ${
-                        draggedCaseId
-                          ? "border-2 border-dashed border-blue-400 bg-blue-50/30"
-                          : "border-2 border-dashed border-transparent bg-white/60"
-                      }
-                    `}
+                        h-full rounded-xl p-2 transition-all duration-200
+                        ${
+                          draggedCaseId
+                            ? "border-2 border-dashed border-blue-400 bg-blue-50/30"
+                            : "border border-dashed border-slate-200 bg-slate-50"
+                        }
+                      `}
                   >
-                    {columnCases.length > 0 ? (
-                      columnCases.map((c) => (
-                        <CaseCard key={c.id} caseItem={c} />
-                      ))
-                    ) : (
-                      <Box className="flex flex-col items-center justify-center py-8 md:py-12 text-gray-400">
-                        <BusinessCenter className="text-4xl mb-1 opacity-50" />
-                        <Typography
-                          variant="body2"
-                          className="text-xs md:text-sm font-medium mb-1"
+                    {/* Sticky header */}
+                    <Box className="sticky top-0 z-10 bg-white rounded-t-2xl border-b border-slate-200 px-4 py-3 backdrop-blur">
+                      <Box className="flex items-center justify-between">
+                        <Box className="flex items-center gap-2">
+                          <Box
+                            className="h-2.5 w-2.5 rounded-full"
+                            style={{ backgroundColor: borderColor }}
+                          />
+                          <Typography
+                            variant="subtitle1"
+                            className="font-semibold"
+                          >
+                            {config.label}
+                          </Typography>
+                        </Box>
+                        <Box
+                          className="min-w-8 h-6 px-2 rounded-full text-xs font-bold flex items-center justify-center"
+                          style={{
+                            backgroundColor: `${borderColor}20`,
+                            color: borderColor,
+                          }}
                         >
-                          No cases in {config.label.toLowerCase()}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          className="text-xs text-center"
-                        >
-                          Drag a case here to move it
-                        </Typography>
+                          {columnCases.length}
+                        </Box>
                       </Box>
-                    )}
+                      {urgentCount > 0 && (
+                        <Typography
+                          variant="caption"
+                          className="text-slate-500"
+                        >
+                          {urgentCount} urgent case
+                          {urgentCount > 1 ? "s" : ""}
+                        </Typography>
+                      )}
+                    </Box>
+
+                    {/* Scrollable cards area */}
+                    <Box
+                      className={`
+                          py-3 min-h-45
+                          md:h-[calc(100vh-420px)]
+                          overflow-y-auto overflow-x-hidden
+                          kanban-scroll overscroll-y-contain
+                          transition-all duration-200
+                          ${draggedCaseId ? "bg-blue-50/30" : ""}
+                        `}
+                    >
+                      {columnCases.length > 0 ? (
+                        columnCases.map((c) => (
+                          <CaseCard key={c.id} caseItem={c} />
+                        ))
+                      ) : (
+                        <Box className="flex flex-col items-center justify-start text-center h-full rounded-xl text-slate-400 py-8">
+                          <BusinessCenter
+                            fontSize="large"
+                            className="opacity-40 mb-2"
+                          />
+                          <Typography variant="body2" className="font-medium">
+                            No {config.label.toLowerCase()} cases
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            className="text-slate-500"
+                          >
+                            Drag a case here to move it
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
                   </DroppableColumn>
-                </Grid>
+                </Box>
               );
             })}
-          </Grid>
-        </Box>
-      </Box>
+          </Box>
+        </Grid>
+      </Grid>
     </DragDropProvider>
   );
 }

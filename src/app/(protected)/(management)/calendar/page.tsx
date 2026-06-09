@@ -230,7 +230,7 @@ export default function Calendar() {
 
   return (
     <>
-      <Box className="px-2 mb-6 py-0">
+      <Box className="mb-6 py-0">
         <Grid
           container
           spacing={2}
@@ -262,7 +262,7 @@ export default function Calendar() {
           <Grid size={{ xs: 12, lg: 9.5 }}>
             <Paper
               elevation={2}
-              className="p-2 sm:p-4 border border-gray-200 rounded-lg"
+              className="p-2 sm:p-4 border border-gray-200 rounded-lg shadow-sm"
             >
               <FullCalendar
                 ref={calendarRef}
