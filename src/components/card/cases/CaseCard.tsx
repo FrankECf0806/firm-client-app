@@ -15,7 +15,32 @@ interface CaseCardProps {
   caseItem: Case & { clientName: string };
 }
 
-export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
+function shallowEqualCase(
+  a: Case & { clientName: string },
+  b: Case & { clientName: string },
+): boolean {
+  if (Object.is(a, b)) return true;
+
+  if (!a || !b) return false;
+
+  // We explicitly compare only enumerable runtime fields
+  const aKeys = Object.keys(a) as (keyof typeof a)[];
+  const bKeys = Object.keys(b) as (keyof typeof b)[];
+
+  if (aKeys.length !== bKeys.length) return false;
+
+  for (let i = 0; i < aKeys.length; i++) {
+    const key = aKeys[i];
+
+    if (!Object.prototype.hasOwnProperty.call(b, key)) return false;
+
+    if (!Object.is(a[key], b[key])) return false;
+  }
+
+  return true;
+}
+
+function CaseCardComponent({ caseItem }: CaseCardProps) {
   const { getThemeColor } = useHelperFunctions();
   const now = new Date().getTime();
 
@@ -34,6 +59,7 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
   const priorityConfig = CASE_PRIORITY_CONFIG[caseItem.priority];
   const statusConfig = CASE_STATUS_CONFIG[caseItem.status];
   const typeConfig = CASE_TYPE_CONFIG[caseItem.practiceArea];
+
   const priorityColor = getThemeColor(priorityConfig?.styling?.color);
   const statusColor = getThemeColor(statusConfig?.styling?.color);
 
@@ -51,11 +77,11 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
   return (
     <Box ref={ref} style={style} className="mb-3">
       <BaseCard
-        className={`
+        className="
           border-l-3
           transition-all duration-200
           hover:border-blue-400! hover:shadow-lg hover:-translate-y-0.5
-        `}
+        "
         contentClassName="p-3 !pb-3"
         linkTo={`/cases/${caseItem.id}`}
       >
@@ -65,6 +91,7 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
         >
           {caseItem.title}
         </Typography>
+
         <Typography
           variant="body2"
           className="text-xs text-gray-500 mb-2 truncate"
@@ -72,7 +99,7 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
           {caseItem.clientName}
         </Typography>
 
-        {/* First row: practice area + deadline */}
+        {/* First row */}
         <Box className="flex flex-wrap items-center gap-2 mb-2">
           <Box
             component="span"
@@ -111,9 +138,9 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
 
         <Box className="flex items-center gap-1.5 mt-2">
           <span
-            className={`
+            className="
               inline-flex items-center border px-2 py-0.5 rounded text-xs font-medium capitalize
-            `}
+            "
             style={{
               color: statusColor,
               backgroundColor: statusColor + "20",
@@ -122,6 +149,7 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
           >
             {statusConfig.label}
           </span>
+
           {caseItem.priority && (
             <span
               className="px-2 py-0.5 border rounded text-xs font-semibold min-w-1.5 text-center"
@@ -138,4 +166,8 @@ export const CaseCard = memo(function CaseCard({ caseItem }: CaseCardProps) {
       </BaseCard>
     </Box>
   );
-});
+}
+
+export const CaseCard = memo(CaseCardComponent, (prev, next) =>
+  shallowEqualCase(prev.caseItem, next.caseItem),
+);

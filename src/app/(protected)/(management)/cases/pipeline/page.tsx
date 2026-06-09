@@ -6,7 +6,7 @@ import {
   CASE_PRIORITY_CONFIG,
   CASE_STATUS_PIPELINE,
 } from "@/utils/constant/case";
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useCallback } from "react";
 import { useAppContext } from "@/providers/AppProvider";
 import { ResettableSelect } from "@/components/ui/input/ResettableSelect";
 import { BusinessCenter } from "@mui/icons-material";
@@ -14,13 +14,13 @@ import { CaseCard } from "@/components/card/cases/CaseCard";
 import { DroppableColumn } from "@/components/card/cases/DroppableColumn";
 import { useHelperFunctions } from "@/utils/helper/global";
 import { Case } from "@/types/case";
-import { DragDropProvider } from "@dnd-kit/react";
+import { DragDropProvider, DragEndEvent } from "@dnd-kit/react";
 import { CasePracticeArea } from "@/enums/case";
 
 export default function CasesPipelinePage() {
   const [filterArea, setFilterArea] = useState(ALL_CASE_STATUS);
+
   const { cases, clients } = useAppContext();
-  const [draggedCaseId, setDraggedCaseId] = useState<string | null>(null);
   const { getThemeColor } = useHelperFunctions();
 
   const boardScrollRef = useRef<HTMLDivElement>(null);
@@ -28,68 +28,135 @@ export default function CasesPipelinePage() {
   const { cases: casesList, updateCase } = cases;
   const { getClientById } = clients;
 
-  const PRIORITY_ORDER = Object.keys(CASE_PRIORITY_CONFIG).filter(
-    (k) => k !== ALL_CASE_STATUS && k !== "ALL_CASE_PRIORITY",
-  );
-  const sortedPriorityKeys = [...PRIORITY_ORDER].reverse();
+  const [isDragging, setIsDragging] = useState(false);
 
-  const getPriorityRank = (priority?: string): number => {
-    if (!priority) return 999;
-    const idx = sortedPriorityKeys.indexOf(priority.toUpperCase());
-    return idx === -1 ? 999 : idx;
-  };
-
-  const pipelineCases = useMemo(() => {
-    return casesList
-      .filter(
-        (c) => filterArea === ALL_CASE_STATUS || c.practiceArea === filterArea,
-      )
-      .map((c) => {
-        const client = getClientById(c.clientId);
-        return {
-          ...c,
-          clientName: `${client?.firstName ?? ""} ${client?.lastName ?? ""}`,
-        };
-      });
-  }, [casesList, filterArea, getClientById]);
-
-  const sortCases = <T extends { nextDeadline?: string; priority?: string }>(
-    list: T[],
-  ): T[] => {
-    return [...list].sort((a, b) => {
-      const aTime = a.nextDeadline
-        ? new Date(a.nextDeadline).getTime()
-        : Infinity;
-      const bTime = b.nextDeadline
-        ? new Date(b.nextDeadline).getTime()
-        : Infinity;
-      if (aTime !== bTime) return aTime - bTime;
-      return getPriorityRank(a.priority) - getPriorityRank(b.priority);
-    });
-  };
-
-  const validColumnStatuses = useMemo(() => {
-    return new Set(CASE_STATUS_PIPELINE.map(([key]) => key));
+  /**
+   * Priority ranking
+   */
+  const PRIORITY_ORDER = useMemo(() => {
+    return Object.keys(CASE_PRIORITY_CONFIG).filter(
+      (k) => k !== ALL_CASE_STATUS && k !== "ALL_CASE_PRIORITY",
+    );
   }, []);
 
+  const sortedPriorityKeys = useMemo(
+    () => [...PRIORITY_ORDER].reverse(),
+    [PRIORITY_ORDER],
+  );
+
+  const getPriorityRank = useCallback(
+    (priority?: string): number => {
+      if (!priority) return 999;
+      const idx = sortedPriorityKeys.indexOf(priority.toUpperCase());
+      return idx === -1 ? 999 : idx;
+    },
+    [sortedPriorityKeys],
+  );
+
+  const filteredCases = useMemo(() => {
+    return casesList.filter(
+      (c) => filterArea === ALL_CASE_STATUS || c.practiceArea === filterArea,
+    );
+  }, [casesList, filterArea]);
+
+  const groupedCaseIds = useMemo(() => {
+    const groups: Record<string, string[]> = {};
+
+    for (const [status] of CASE_STATUS_PIPELINE) {
+      groups[status] = [];
+    }
+
+    for (const c of filteredCases) {
+      if (!groups[c.status]) continue;
+      groups[c.status].push(c.id);
+    }
+
+    return groups;
+  }, [filteredCases]);
+
+  const caseById = useMemo(() => {
+    const map = new Map<string, Case>();
+    for (const c of casesList) {
+      map.set(c.id, c);
+    }
+    return map;
+  }, [casesList]);
+
+  const getClientName = useCallback(
+    (clientId: string) => {
+      const client = getClientById(clientId);
+      return `${client?.firstName ?? ""} ${client?.lastName ?? ""}`;
+    },
+    [getClientById],
+  );
+
+  const sortCaseIds = useCallback(
+    (ids: string[]) => {
+      return [...ids].sort((aId, bId) => {
+        const a = caseById.get(aId)!;
+        const b = caseById.get(bId)!;
+
+        const aTime = a.nextDeadline
+          ? new Date(a.nextDeadline).getTime()
+          : Infinity;
+        const bTime = b.nextDeadline
+          ? new Date(b.nextDeadline).getTime()
+          : Infinity;
+
+        if (aTime !== bTime) return aTime - bTime;
+
+        return getPriorityRank(a.priority) - getPriorityRank(b.priority);
+      });
+    },
+    [caseById, getPriorityRank],
+  );
+
+  const sortedGroupedCaseIds = useMemo(() => {
+    const result: Record<string, string[]> = {};
+
+    for (const [status] of CASE_STATUS_PIPELINE) {
+      result[status] = sortCaseIds(groupedCaseIds[status] || []);
+    }
+
+    return result;
+  }, [groupedCaseIds, sortCaseIds]);
+
+  /**
+   * Drag state
+   */
+  const handleDragStart = useCallback(() => {
+    setIsDragging(true);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setIsDragging(false);
+
+      const { operation } = event;
+      if (!operation) return;
+
+      const { source, target } = operation;
+      if (!source || !target) return;
+
+      const targetColumnId = String(target.id);
+
+      const sourceCaseId = String(source.id);
+
+      const draggedCase = caseById.get(sourceCaseId);
+      if (!draggedCase) return;
+
+      if (draggedCase.status === targetColumnId) return;
+
+      updateCase(sourceCaseId, {
+        status: targetColumnId,
+        optimistic: true,
+      } as Partial<Case>);
+    },
+    [caseById, updateCase],
+  );
+
   return (
-    <DragDropProvider
-      onDragStart={() => setDraggedCaseId("dragging")}
-      onDragEnd={(event) => {
-        setDraggedCaseId(null);
-        const { operation } = event;
-        if (!operation) return;
-        const { source, target } = operation;
-        if (!source || !target) return;
-        const targetColumnId = String(target.id);
-        if (!validColumnStatuses.has(targetColumnId)) return;
-        const sourceCaseId = String(source.id);
-        const draggedCase = pipelineCases.find((c) => c.id === sourceCaseId);
-        if (!draggedCase) return;
-        if (draggedCase.status === targetColumnId) return;
-        updateCase(sourceCaseId, { status: targetColumnId } as Partial<Case>);
-      }}
-    >
+    <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <Grid
         container
         spacing={2}
@@ -109,33 +176,26 @@ export default function CasesPipelinePage() {
         </Grid>
 
         <Grid size={12}>
-          {/* Horizontal scroll container */}
           <Box
             ref={boardScrollRef}
-            className="
-				flex
-				gap-4
-				overflow-x-auto
-				overflow-y-hidden
-				pb-4
-				w-full
-				kanban-scroll
-			"
+            className="flex gap-4 overflow-x-auto overflow-y-hidden pb-4 w-full kanban-scroll"
           >
             {CASE_STATUS_PIPELINE.map(([statusKey, config]) => {
-              const columnCases = sortCases(
-                pipelineCases.filter((c) => c.status === statusKey),
-              );
+              const columnIds = sortedGroupedCaseIds[statusKey] ?? [];
+
+              const columnCases = columnIds.map((id) => caseById.get(id)!);
+
               const urgentCount = columnCases.filter(
                 (c) => c.priority?.toUpperCase() === "URGENT",
               ).length;
+
               const borderColor = getThemeColor(config.styling?.color);
 
               return (
                 <Box
                   key={statusKey}
                   className="
-					shrink-0
+				  	shrink-0
 					w-[90vw]
 					sm:w-[48%]
 					md:w-[32%]
@@ -146,16 +206,24 @@ export default function CasesPipelinePage() {
                   <DroppableColumn
                     id={statusKey}
                     className={`
-                        h-full rounded-xl p-2 transition-all duration-200
-                        ${
-                          draggedCaseId
-                            ? "border-2 border-dashed border-blue-400 bg-blue-50/30"
-                            : "border border-dashed border-slate-200 bg-slate-50"
-                        }
-                      `}
+                      h-full rounded-xl p-2 transition-colors duration-150
+                      ${
+                        isDragging
+                          ? "border-2 border-dashed border-blue-400 bg-blue-50/30"
+                          : "border border-dashed border-slate-200 bg-slate-50"
+                      }
+                    `}
                   >
-                    {/* Sticky header */}
-                    <Box className="sticky top-0 z-10 bg-white rounded-t-2xl border-b border-slate-200 px-4 py-3 backdrop-blur">
+                    <Box
+                      className="
+						sticky 
+						top-0 z-10
+						bg-white
+						rounded-t-2xl
+						border-b border-slate-200
+						px-4 py-3
+						backdrop-blur"
+                    >
                       <Box className="flex items-center justify-between">
                         <Box className="flex items-center gap-2">
                           <Box
@@ -169,6 +237,7 @@ export default function CasesPipelinePage() {
                             {config.label}
                           </Typography>
                         </Box>
+
                         <Box
                           className="min-w-8 h-6 px-2 rounded-full text-xs font-bold flex items-center justify-center"
                           style={{
@@ -179,6 +248,7 @@ export default function CasesPipelinePage() {
                           {columnCases.length}
                         </Box>
                       </Box>
+
                       {urgentCount > 0 && (
                         <Typography
                           variant="caption"
@@ -190,20 +260,22 @@ export default function CasesPipelinePage() {
                       )}
                     </Box>
 
-                    {/* Scrollable cards area */}
                     <Box
                       className={`
-                          py-3 min-h-45
-                          md:h-[calc(100vh-420px)]
-                          overflow-y-auto overflow-x-hidden
-                          kanban-scroll overscroll-y-contain
-                          transition-all duration-200
-                          ${draggedCaseId ? "bg-blue-50/30" : ""}
-                        `}
+                        py-3 min-h-45 md:h-[calc(100vh-420px)]
+                        overflow-y-auto overflow-x-hidden kanban-scroll
+                        ${isDragging ? "bg-blue-50/30" : ""}
+                      `}
                     >
                       {columnCases.length > 0 ? (
                         columnCases.map((c) => (
-                          <CaseCard key={c.id} caseItem={c} />
+                          <CaseCard
+                            key={c.id}
+                            caseItem={{
+                              ...c,
+                              clientName: getClientName(c.clientId),
+                            }}
+                          />
                         ))
                       ) : (
                         <Box className="flex flex-col items-center justify-start text-center h-full rounded-xl text-slate-400 py-8">
@@ -213,12 +285,6 @@ export default function CasesPipelinePage() {
                           />
                           <Typography variant="body2" className="font-medium">
                             No {config.label.toLowerCase()} cases
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            className="text-slate-500"
-                          >
-                            Drag a case here to move it
                           </Typography>
                         </Box>
                       )}
