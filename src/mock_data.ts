@@ -4783,8 +4783,6 @@ export const mockTasks: Task[] = [
     createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
     updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
-  // ============ Additional tasks for Case 49: Anderson vs. Neighbor (Mediation) ============
-  // At least 6 tasks per column: TODO, IN_PROGRESS, DONE
   {
     id: "t43",
     title: "Draft mediation position statement",

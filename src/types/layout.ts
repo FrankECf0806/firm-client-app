@@ -1,15 +1,5 @@
-import { NotificationType } from "@/enums/layout";
 import { SvgIconComponent } from "@mui/icons-material";
 import { ReactNode } from "react";
-
-export interface Notification {
-  id: number;
-  title: string;
-  description: string;
-  time: string;
-  type: NotificationType;
-  read: boolean;
-}
 
 export interface BreadcrumbItem {
   label: string;

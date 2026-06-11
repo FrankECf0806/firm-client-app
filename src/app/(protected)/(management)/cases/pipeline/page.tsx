@@ -163,7 +163,7 @@ export default function CasesPipelinePage() {
         direction="row"
         className="justify-end items-start"
       >
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+        <Grid size={{ xs: 6, sm: 4, lg: 2 }}>
           <ResettableSelect
             className="input-rounded-firm w-full"
             label="Practice Area"

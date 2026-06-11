@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Badge,
   Box,
@@ -5,104 +7,102 @@ import {
   IconButton,
   Menu,
   Typography,
+  Button,
 } from "@mui/material";
 import {
   ArticleOutlined,
   CalendarMonthOutlined,
+  ChatOutlined,
   Notifications as NotificationsIcon,
   ScheduleOutlined,
-  WorkOutlineOutlined,
+  Close as CloseIcon,
 } from "@mui/icons-material";
-import type { Notification } from "@/types/layout";
-import { NotificationType } from "@/enums/layout";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { Notification } from "@/types/notification";
+import { useNotifications } from "@/hooks/useNotifications";
+import { formatRelativeTimeFromNow, getDateGroup } from "@/utils/date";
 
-const { DEADLINE, CASE, DOCUMENT, REMINDER } = NotificationType;
-const initialNotifications: Notification[] = [
-  {
-    id: 1,
-    title: "Filing Deadline Tomorrow",
-    description: "Garcia Immigration case - Form I-130",
-    time: "2 hours ago",
-    type: DEADLINE,
-    read: false,
-  },
-  {
-    id: 2,
-    title: "New Document Uploaded",
-    description: "Contract Agreement added to Davis Corp Merger",
-    time: "4 hours ago",
-    type: DOCUMENT,
-    read: false,
-  },
-  {
-    id: 3,
-    title: "Hearing Reminder",
-    description: "Smith vs. Johnson - Courtroom 3A at 9:00 AM",
-    time: "Yesterday",
-    type: REMINDER,
-    read: false,
-  },
-  {
-    id: 4,
-    title: "Case Status Updated",
-    description: "Estate of Williams moved to Active",
-    time: "Yesterday",
-    type: CASE,
-    read: true,
-  },
-  {
-    id: 5,
-    title: "Time Entry Reminder",
-    description: "You have 3 unbilled hours from last week",
-    time: "2 days ago",
-    type: REMINDER,
-    read: true,
-  },
-];
-
-const getIcon = (type: Notification["type"]) => {
+function getNotificationIcon(type: string) {
   switch (type) {
-    case DEADLINE:
-      return <ScheduleOutlined className="w-4 h-4 text-red-600" />;
-    case CASE:
-      return <WorkOutlineOutlined className="w-4 h-4 text-blue-600" />;
-    case DOCUMENT:
-      return <ArticleOutlined className="w-4 h-4 text-blue-500" />;
-    case REMINDER:
-      return <CalendarMonthOutlined className="w-4 h-4 text-amber-600" />;
+    case "DEADLINE":
+      return <ScheduleOutlined className="text-red-500" />;
+    case "MEETING":
+      return <CalendarMonthOutlined className="text-amber-500" />;
+    case "DOCUMENT":
+      return <ArticleOutlined className="text-sky-500" />;
+    case "COMMUNICATION":
+      return <ChatOutlined className="text-violet-500" />;
+    default:
+      return <NotificationsIcon className="text-slate-500" />;
   }
-};
+}
 
 export function Notifications() {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(initialNotifications);
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const notificationList = useNotifications();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+  const [readNotifications, setReadNotifications] = useState<
+    Record<string, boolean>
+  >({});
   const open = Boolean(anchorEl);
 
-  const handleMarkAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
+  const notifications = useMemo(() => {
+    const severityRank: Record<string, number> = {
+      CRITICAL: 0,
+      HIGH: 1,
+      MEDIUM: 2,
+      LOW: 3,
+    };
 
-  const handleMarkNotificationAsRead = (notification: Notification) => () => {
-    if (!notification.read) {
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === notification.id ? { ...n, read: true } : n)),
-      );
-    }
-  };
+    return notificationList
+      .map((n) => ({ ...n, read: readNotifications[n.id] ?? n.read }))
+      .sort((a, b) => {
+        const severityDiff =
+          severityRank[a.severity] - severityRank[b.severity];
+        if (severityDiff !== 0) return severityDiff;
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+      .slice(0, 10);
+  }, [notificationList, readNotifications]);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const markAllAsRead = useCallback(() => {
+    const updated: Record<string, boolean> = {};
+    notifications.forEach((n) => {
+      updated[n.id] = true;
+    });
+    setReadNotifications(updated);
+  }, [notifications]);
+
+  const markAsRead = useCallback((id: string) => {
+    setReadNotifications((prev) => ({ ...prev, [id]: true }));
+  }, []);
+
+  const groupedNotifications = useMemo(() => {
+    return notifications.reduce(
+      (acc, n) => {
+        const group = getDateGroup(n.createdAt);
+        if (!acc[group]) acc[group] = [];
+        acc[group].push(n);
+        return acc;
+      },
+      {} as Record<string, Notification[]>,
+    );
+  }, [notifications]);
 
   return (
     <>
       <IconButton
-        className="text-primary"
-        size="large"
-        aria-label="notifications"
+        className="text-primary hover:bg-primary/10 transition-colors"
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
-        <Badge badgeContent={unreadCount} variant="dot" color="primary">
+        <Badge
+          badgeContent={unreadCount > 99 ? "99+" : unreadCount}
+          showZero={Boolean(unreadCount)}
+          color="primary"
+        >
           <NotificationsIcon className="w-6 h-6" />
         </Badge>
       </IconButton>
@@ -114,107 +114,196 @@ export function Notifications() {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         {/* Header */}
-        <Box className="flex items-center justify-between px-4 py-2 w-80 max-w-sm border-b border-primary">
-          <Typography variant="body2" className="font-semibold text-primary">
+        <Box
+          className="
+			flex
+			items-center
+			justify-between
+			px-2 pr-1 sm:px-4 
+			sm:py-2
+			w-80 max-w-sm
+			border-b border-gray-100
+		  "
+        >
+          <Typography
+            variant="subtitle2"
+            className="font-semibold text-primary"
+          >
             Notifications
           </Typography>
-
-          {unreadCount > 0 && (
-            <span
-              className="
-				text-xs 
-				hover:text-white
-				hover:font-semibold
-				hover:bg-primary
-				focus:bg-primary
-				active:bg-primary
-				active:text-white
-				px-2 
-				py-1 
-				rounded
-				cursor-pointer"
-              onClick={handleMarkAllAsRead}
-            >
-              Mark all as read
-            </span>
-          )}
-        </Box>
-        {/* Content List */}
-        <Box className="max-h-96 overflow-y-auto w-80 max-w-sm">
-          {notifications.length === 0 ? (
-            /* No notifications */
-            <Typography
-              variant="body2"
-              className="p-4 text-center text-gray-500"
-            >
-              <NotificationsIcon className="w-6 h-6 opacity-50" />
-              No notifications
-            </Typography>
-          ) : (
-            /* Notifications list */
-            notifications.map((notification) => (
-              <Box
-                key={notification.id}
-                className={`
-                                        p-3
-                                        transition-colors
-                                        hover:bg-muted/50
-                                        cursor-pointer
-                                        border-b
-                                        border-primary/15
-                                        ${!notification.read ? "bg-primary/5" : ""}
-                                    `}
-                onClick={handleMarkNotificationAsRead(notification)}
+          <Box className="flex items-center gap-2">
+            {unreadCount > 0 && (
+              <Button
+                size="small"
+                onClick={markAllAsRead}
+                className="text-xs text-primary hover:bg-primary/10 normal-case"
               >
-                <Box className="flex items-start gap-3">
-                  {/* Icon */}
-                  <Box className="mt-0.5">{getIcon(notification.type)}</Box>
-                  <Box className="flex-1 min-w-0">
-                    {/* Title */}
-                    <p
-                      className={`
-                                                font-medium
-                                                text-sm
-                                                ${!notification.read ? "text-gray-700" : "text-gray-400"}
-                                            `}
-                    >
-                      {notification.title}
-                    </p>
-                    {/* Description */}
-                    <p className="text-xs text-gray-500 truncate">
-                      {notification.description}
-                    </p>
-                    {/* Time */}
-                    <p className="text-xs text-gray-400 mt-1">
-                      {notification.time}
-                    </p>
-                  </Box>
+                Mark all read
+              </Button>
+            )}
+            <IconButton
+              size="small"
+              onClick={() => setAnchorEl(null)}
+              className="hover:bg-primary/10 block sm:hidden"
+            >
+              <CloseIcon fontSize="small" className="text-gray-500" />
+            </IconButton>
+          </Box>
+        </Box>
+
+        {/* Notifications list */}
+        <Box
+          className="
+		  	kanban-scroll
+			max-h-96
+			overflow-y-auto
+			w-80 max-w-sm
+		  "
+        >
+          {notifications.length === 0 ? (
+            <Box className="flex flex-col items-center justify-center py-12 px-6">
+              <NotificationsIcon className="text-gray-300 text-5xl" />
+              <Typography
+                variant="body2"
+                className="mt-3 text-gray-500 font-medium"
+              >
+                You&apos;re all caught up
+              </Typography>
+              <Typography variant="caption" className="text-gray-400">
+                No new notifications
+              </Typography>
+            </Box>
+          ) : (
+            Object.entries(groupedNotifications).map(([group, items]) => (
+              <Box key={group}>
+                {/* Group header */}
+                <Box
+                  className="
+					sticky
+					top-0
+					z-10
+					bg-gray-50
+					border-y
+					border-gray-100
+					px-4 py-2
+				"
+                >
+                  <Typography
+                    variant="caption"
+                    className="font-semibold text-slate-600"
+                  >
+                    {group}
+                  </Typography>
                 </Box>
+
+                {items.map((notification) => (
+                  <Box
+                    key={notification.id}
+                    onClick={() => markAsRead(notification.id)}
+                    className={`
+                      cursor-pointer
+					  border-b
+					  border-gray-100
+					  px-4
+					  py-1.5
+                      transition-all
+					  hover:bg-primary/15
+                      ${!notification.read ? "bg-primary/5" : ""}
+                    `}
+                  >
+                    <Box className="flex gap-3">
+                      {/* Icon */}
+                      <Box className="mt-0.5 shrink-0">
+                        {getNotificationIcon(notification.type)}
+                      </Box>
+
+                      {/* Content */}
+                      <Box className="flex-1 min-w-0">
+                        <Box
+                          className="
+							flex
+							items-start
+							justify-between
+							gap-1
+						  "
+                        >
+                          <Typography
+                            variant="body2"
+                            className={`
+								truncate
+                              ${
+                                notification.read
+                                  ? "font-medium text-gray-700"
+                                  : "font-semibold text-gray-900"
+                              }
+                            `}
+                          >
+                            {notification.title}
+                          </Typography>
+                          {!notification.read && (
+                            <Box
+                              className="
+								w-2
+								h-2
+								rounded-full
+								bg-primary
+								mt-1.5
+								shrink-0
+								"
+                            />
+                          )}
+                        </Box>
+                        <Typography
+                          variant="caption"
+                          className="
+						  	block
+							truncate
+							text-gray-600
+							line-clamp-2
+							"
+                        >
+                          {notification.subtitle}
+                        </Typography>
+                        {notification.showTimestamp && (
+                          <Typography
+                            variant="caption"
+                            className="
+							block
+							text-gray-400
+							"
+                          >
+                            {formatRelativeTimeFromNow(notification.createdAt)}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
+                ))}
               </Box>
             ))
           )}
         </Box>
+
         <Divider />
-        {/* Footer */}
-        <Box className="p-2 flex justify-center">
-          <span
+        <Box className="p-2">
+          <Button
+            fullWidth
+            size="small"
             className="
-                                w-full
-                                text-center
-                                text-sm
-                                hover:text-white
-                                hover:font-semibold
-                                hover:bg-primary
-                                focus:bg-primary
-                                active:bg-primary
-                                active:text-white
-                                px-2
-                                py-2
-                                rounded
-                                cursor-pointer"
+			font-semibold
+			text-center
+			text-primary
+			hover:bg-primary/10
+			normal-case
+			text-sm
+			"
+            onClick={() => {
+              setAnchorEl(null);
+              console.log("View all notifications");
+            }}
           >
-            View All Notifications
-          </span>
+            View all notifications
+          </Button>
         </Box>
       </Menu>
     </>
