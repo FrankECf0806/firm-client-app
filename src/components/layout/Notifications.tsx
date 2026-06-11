@@ -22,20 +22,45 @@ import { Notification } from "@/types/notification";
 import { useNotifications } from "@/hooks/useNotifications";
 import { formatRelativeTimeFromNow, getDateGroup } from "@/utils/date";
 
-function getNotificationIcon(type: string) {
+const getNotificationMeta = (type: string) => {
   switch (type) {
     case "DEADLINE":
-      return <ScheduleOutlined className="text-red-500" />;
+      return {
+        icon: ScheduleOutlined,
+        unreadColor: "text-red-600",
+        readColor: "text-red-200",
+        label: "Deadline",
+      };
     case "MEETING":
-      return <CalendarMonthOutlined className="text-amber-500" />;
+      return {
+        icon: CalendarMonthOutlined,
+        unreadColor: "text-amber-600",
+        readColor: "text-amber-200",
+        label: "Meeting",
+      };
     case "DOCUMENT":
-      return <ArticleOutlined className="text-sky-500" />;
+      return {
+        icon: ArticleOutlined,
+        unreadColor: "text-sky-600",
+        readColor: "text-sky-200",
+        label: "Document",
+      };
     case "COMMUNICATION":
-      return <ChatOutlined className="text-violet-500" />;
+      return {
+        icon: ChatOutlined,
+        unreadColor: "text-primary",
+        readColor: "text-primary/40",
+        label: "Message",
+      };
     default:
-      return <NotificationsIcon className="text-slate-500" />;
+      return {
+        icon: NotificationsIcon,
+        unreadColor: "text-gray-500",
+        readColor: "text-gray-300",
+        label: "Update",
+      };
   }
-}
+};
 
 export function Notifications() {
   const notificationList = useNotifications();
@@ -63,7 +88,7 @@ export function Notifications() {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       })
-      .slice(0, 10);
+      .slice(0, 20);
   }, [notificationList, readNotifications]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -106,24 +131,28 @@ export function Notifications() {
           <NotificationsIcon className="w-6 h-6" />
         </Badge>
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
+        slotProps={{
+          paper: {
+            className: "rounded-xl shadow-2lg mt-2",
+            sx: { width: 380, maxWidth: "calc(100vw - 32px)" },
+          },
+        }}
       >
         {/* Header */}
         <Box
           className="
-			flex
-			items-center
-			justify-between
-			px-2 pr-1 sm:px-4 
-			sm:py-2
-			w-80 max-w-sm
-			border-b border-gray-100
-		  "
+		  	sticky
+            flex items-center justify-between
+            px-2 pr-1 sm:px-4 sm:py-2
+            border-b border-primary
+          "
         >
           <Typography
             variant="subtitle2"
@@ -144,7 +173,7 @@ export function Notifications() {
             <IconButton
               size="small"
               onClick={() => setAnchorEl(null)}
-              className="hover:bg-primary/10 block sm:hidden"
+              className="hover:bg-gray-100 sm:hidden"
             >
               <CloseIcon fontSize="small" className="text-gray-500" />
             </IconButton>
@@ -154,14 +183,16 @@ export function Notifications() {
         {/* Notifications list */}
         <Box
           className="
-		  	kanban-scroll
-			max-h-96
+			kanban-scroll
+			flex-1
 			overflow-y-auto
-			w-80 max-w-sm
+			overflow-x-hidden
+			h-95
+			min-h-0
 		  "
         >
           {notifications.length === 0 ? (
-            <Box className="flex flex-col items-center justify-center py-12 px-6">
+            <Box className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <NotificationsIcon className="text-gray-300 text-5xl" />
               <Typography
                 variant="body2"
@@ -179,123 +210,109 @@ export function Notifications() {
                 {/* Group header */}
                 <Box
                   className="
-					sticky
-					top-0
-					z-10
-					bg-gray-50
-					border-y
-					border-gray-100
-					px-4 py-2
-				"
+                    sticky top-0 z-10 bg-gray-50
+                    border-y border-gray-100
+                    px-4 py-2
+                  "
                 >
                   <Typography
                     variant="caption"
-                    className="font-semibold text-slate-600"
+                    className="font-semibold text-gray-500"
                   >
                     {group}
                   </Typography>
                 </Box>
 
-                {items.map((notification) => (
-                  <Box
-                    key={notification.id}
-                    onClick={() => markAsRead(notification.id)}
-                    className={`
-                      cursor-pointer
-					  border-b
-					  border-gray-100
-					  px-4
-					  py-1.5
-                      transition-all
-					  hover:bg-primary/15
-                      ${!notification.read ? "bg-primary/5" : ""}
-                    `}
-                  >
-                    <Box className="flex gap-3">
-                      {/* Icon */}
-                      <Box className="mt-0.5 shrink-0">
-                        {getNotificationIcon(notification.type)}
-                      </Box>
-
-                      {/* Content */}
-                      <Box className="flex-1 min-w-0">
-                        <Box
-                          className="
-							flex
-							items-start
-							justify-between
-							gap-1
-						  "
-                        >
-                          <Typography
-                            variant="body2"
+                {items.map((notification) => {
+                  const { icon, unreadColor, readColor } = getNotificationMeta(
+                    notification.type,
+                  );
+                  const Icon = icon;
+                  return (
+                    <Box
+                      key={notification.id}
+                      onClick={() => markAsRead(notification.id)}
+                      className={`
+                        cursor-pointer
+                        border-y border-primary/14
+                        px-4 py-1
+                        transition-all hover:bg-primary/12
+                        ${!notification.read ? "bg-primary/5" : ""}
+                      `}
+                    >
+                      <Box className="flex gap-3">
+                        {/* Icon */}
+                        <Box className="flex items-center justify-center shrink-0">
+                          <Icon
                             className={`
-								truncate
-                              ${
-                                notification.read
-                                  ? "font-medium text-gray-700"
-                                  : "font-semibold text-gray-900"
-                              }
+                              w-5 h-5 rounded-full
+                              ${!notification.read ? unreadColor : readColor}
                             `}
-                          >
-                            {notification.title}
-                          </Typography>
-                          {!notification.read && (
-                            <Box
-                              className="
-								w-2
-								h-2
-								rounded-full
-								bg-primary
-								mt-1.5
-								shrink-0
-								"
-                            />
-                          )}
+                          />
                         </Box>
-                        <Typography
-                          variant="caption"
-                          className="
-						  	block
-							truncate
-							text-gray-600
-							line-clamp-2
-							"
-                        >
-                          {notification.subtitle}
-                        </Typography>
-                        {notification.showTimestamp && (
+
+                        {/* Content */}
+                        <Box className="flex-1 min-w-0">
+                          <Box className="flex items-start justify-between gap-2">
+                            <Typography
+                              className={`
+								text-sm
+                                font-medium
+								truncate
+                                ${!notification.read ? "text-gray-700" : "text-gray-400"}
+                              `}
+                            >
+                              {notification.title}
+                            </Typography>
+                            {!notification.read && (
+                              <Box className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
+                            )}
+                          </Box>
                           <Typography
-                            variant="caption"
-                            className="
-							block
-							text-gray-400
-							"
+                            className={`
+								text-xs
+								block line-clamp-2
+                                ${!notification.read ? "text-gray-500" : "text-gray-300"}
+							`}
+                          >
+                            {notification.subtitle}
+                          </Typography>
+                          <Typography
+                            className={`
+								text-xs block mt-1
+                                ${!notification.read ? "text-gray-500" : "text-gray-300"}
+							`}
                           >
                             {formatRelativeTimeFromNow(notification.createdAt)}
                           </Typography>
-                        )}
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                ))}
+                  );
+                })}
               </Box>
             ))
           )}
         </Box>
 
         <Divider />
-        <Box className="p-2">
+        <Box
+          className="
+			shrink-0
+			p-2
+			border-t
+			border-gray-100
+			bg-white
+		  "
+        >
           <Button
             fullWidth
             size="small"
             className="
-			font-semibold
-			text-center
-			text-primary
-			hover:bg-primary/10
-			normal-case
-			text-sm
+				text-primary
+				hover:bg-primary/10
+				normal-case
+				text-sm font-medium
 			"
             onClick={() => {
               setAnchorEl(null);
