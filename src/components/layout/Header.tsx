@@ -8,6 +8,7 @@ import {
   InputBase,
   Toolbar,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import {
@@ -114,27 +115,42 @@ export function Header() {
             <Notifications />
           </Box>
 
-          {/* Avatar */}
-          <Box className="flex items-center gap-2">
+          {/* Avatar*/}
+          <Box className="flex items-center gap-2 min-w-0">
             <Avatar
-              className="border w-15 h-15"
+              className="border w-15 h-15 shrink-0"
               alt={`${user.firstName} ${user.lastName}`}
-              src={`${user.avatar}`}
+              src={user.avatar}
             >
               {user.firstName.charAt(0)}
               {user.lastName.charAt(0)}
             </Avatar>
-            <Box className="flex-col leading-none hidden sm:block">
+            <Box
+              className="
+				flex-col
+				leading-none
+				hidden
+				sm:block
+				min-w-0
+				flex-1
+			  "
+            >
               <Typography
-                className="whitespace-nowrap font-semibold m-0 p-0"
+                className="whitespace-nowrap font-semibold m-0 p-0 truncate"
                 variant="body2"
               >
                 {user.firstName} {user.lastName}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {user.role.charAt(0) + user.role.slice(1).toLowerCase()} at{" "}
-                {firm.name}
-              </Typography>
+              <Tooltip title={firm.name} arrow>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  className="block truncate max-w-40"
+                >
+                  {user.role.charAt(0) + user.role.slice(1).toLowerCase()} at{" "}
+                  {firm.name}
+                </Typography>
+              </Tooltip>
             </Box>
           </Box>
         </Toolbar>

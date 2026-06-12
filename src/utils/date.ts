@@ -42,17 +42,31 @@ export function formatTime(date: string | Date) {
   });
 }
 
-export function formatRelativeTime(date: string | Date) {
-  const diff = Date.now() - new Date(date).getTime();
+export function formatRelativeTime(date: string | Date): string {
+  const target = new Date(date).getTime();
+  const now = Date.now();
 
-  const minutes = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
+  const diff = target - now;
 
-  if (minutes < 60) return `${minutes}m ago`;
-  if (hours < 24) return `${hours}h ago`;
+  const absDiff = Math.abs(diff);
 
-  return `${days}d ago`;
+  const minutes = Math.floor(absDiff / 60000);
+  const hours = Math.floor(absDiff / 3600000);
+  const days = Math.floor(absDiff / 86400000);
+
+  if (diff > 0) {
+    if (minutes < 1) return "Now";
+    if (minutes < 60) return `In ${minutes} min${minutes > 1 ? "s" : ""}`;
+    if (hours < 24) return `In ${hours} hour${hours > 1 ? "s" : ""}`;
+    return `In ${days} day${days > 1 ? "s" : ""}`;
+  }
+
+  // Past dates
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+
+  return `${days} day${days > 1 ? "s" : ""} ago`;
 }
 
 export function getDateGroup(dateString: string): string {
@@ -68,10 +82,11 @@ export function getDateGroup(dateString: string): string {
 
 export function formatRelativeTimeFromNow(date: string | Date): string {
   const now = Date.now();
+  const target = new Date(date).getTime();
+  const diff = Math.abs(now - target);
+  const isWithinWeek = diff < 7 * 24 * 60 * 60 * 1000;
 
-  const uploadTime = new Date(date).getTime();
-  const isRecent = now - uploadTime < 7 * 24 * 60 * 60 * 1000;
-  return isRecent ? formatRelativeTime(date) : formatDate(date);
+  return isWithinWeek ? formatRelativeTime(date) : formatDate(date);
 }
 
 export function toDateTimeLocal(value: string | Date): string {
