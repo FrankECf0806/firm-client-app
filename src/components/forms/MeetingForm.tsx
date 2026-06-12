@@ -71,10 +71,7 @@ export function MeetingForm({
       const now = new Date();
 
       const start = new Date(now);
-      start.setHours(10, 0, 0, 0);
-
-      const end = new Date(now);
-      end.setHours(11, 0, 0, 0);
+      const end = new Date(now.getTime() + 30 * 60000);
 
       reset({
         title: "",
