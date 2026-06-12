@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Avatar,
@@ -12,10 +15,24 @@ import {
   getLocalTimeBasedGreeting,
 } from "@/utils/time";
 import { Notifications } from "./Notifications";
-
+import { SearchModal } from "./SearchModal";
 import { user, firm } from "@/mock_data";
 
 export function Header() {
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Keyboard shortcut: ⌘K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <>
       <AppBar
@@ -47,7 +64,10 @@ export function Header() {
 
           {/* Desktop Search */}
           <Box className="flex items-center gap-2">
-            <Box className="relative hidden md:block">
+            <Box
+              className="relative hidden md:block cursor-pointer"
+              onClick={() => setSearchOpen(true)}
+            >
               <Box
                 className="
                   absolute
@@ -59,7 +79,8 @@ export function Header() {
                 <Search fontSize="small" />
               </Box>
               <InputBase
-                onClick={() => console.log("Open search modal")}
+                readOnly
+                placeholder="Search cases, clients… (⌘K)"
                 className="
                   rounded-lg
                   md:w-40
@@ -75,22 +96,21 @@ export function Header() {
                   hover:border-primary/75
                   hover:bg-primary/2
                   focus:border-primary"
-                placeholder="Search cases, clients… (⌘K)"
-                readOnly
               />
             </Box>
           </Box>
-          {/* Mobile Search */}
+
+          {/* Mobile Search Icon */}
           <Box className="inline-flex md:hidden">
             <Search
               fontSize="medium"
-              onClick={() => console.log("Open search modal")}
+              onClick={() => setSearchOpen(true)}
               className="cursor-pointer"
             />
           </Box>
 
           {/* Notifications */}
-          <Box className="flex items-center border-r-2">
+          <Box className="flex items-center border-r-2 pr-3">
             <Notifications />
           </Box>
 
@@ -119,6 +139,8 @@ export function Header() {
           </Box>
         </Toolbar>
       </AppBar>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

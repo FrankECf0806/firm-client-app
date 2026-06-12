@@ -187,8 +187,7 @@ export function Notifications() {
 			flex-1
 			overflow-y-auto
 			overflow-x-hidden
-			h-95
-			min-h-0
+			max-h-100
 		  "
         >
           {notifications.length === 0 ? (
