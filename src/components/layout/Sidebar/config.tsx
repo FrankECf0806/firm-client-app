@@ -10,40 +10,48 @@ import {
   AccountTree,
 } from "@mui/icons-material";
 
-export const navItems: NavItem[] = [
+const navItemsList = [
   {
-    icon: <Dashboard />,
+    icon: Dashboard,
     label: "Dashboard",
     path: "/dashboard",
     type: "exact",
   },
 
-  { icon: <Folder />, label: "Cases", path: "/cases", type: "prefix" },
+  { icon: Folder, label: "Cases", path: "/cases", type: "prefix" },
 
-  { icon: <People />, label: "Clients", path: "/clients", type: "prefix" },
+  { icon: People, label: "Clients", path: "/clients", type: "prefix" },
 
   {
-    icon: <AccountTree />,
+    icon: AccountTree,
     label: "Cases Pipeline",
     path: "/cases/pipeline",
     type: "exact",
   },
 
   {
-    icon: <CalendarToday />,
+    icon: CalendarToday,
     label: "Calendar",
     path: "/calendar",
     type: "exact",
   },
 
   {
-    icon: <Description />,
+    icon: Description,
     label: "Documents",
     path: "/documents",
     type: "prefix",
   },
 
-  { icon: <AttachMoney />, label: "Billing", path: "/billing", type: "exact" },
+  { icon: AttachMoney, label: "Billing", path: "/billing", type: "exact" },
 
-  { icon: <Settings />, label: "Settings", path: "/settings", type: "exact" },
+  { icon: Settings, label: "Settings", path: "/settings", type: "exact" },
 ];
+
+export const navItems: NavItem[] = navItemsList.map((item) => ({
+  ...item,
+  normalizedPath:
+    item.path.endsWith("/") && item.path !== "/"
+      ? item.path.slice(0, -1)
+      : item.path,
+}));

@@ -150,7 +150,7 @@ export function Notifications() {
           className="
 		  	sticky
             flex items-center justify-between
-            px-2 pr-1 sm:px-4 sm:py-2
+            pr-1 px-4 py-2
             border-b border-primary
           "
         >

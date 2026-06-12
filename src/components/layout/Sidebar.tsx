@@ -8,13 +8,17 @@ import SidebarFooter from "./Sidebar/SidebarFooter";
 import { SidebarProps } from "@/types/navbar";
 import { navItems } from "./Sidebar/config";
 import { getActiveNavPath } from "@/utils/helper/global";
+import { useMemo } from "react";
 
 export function Sidebar({
   sidebarExpanded = false,
   onToggleSidebar,
 }: SidebarProps) {
   const pathname = usePathname();
-  const activePath = getActiveNavPath(pathname, navItems);
+  const activePath = useMemo(
+    () => getActiveNavPath(pathname, navItems),
+    [pathname],
+  );
   const isActive = (itemPath: string) => activePath === itemPath;
 
   return (

@@ -5,10 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "./Sidebar/config";
 import { getActiveNavPath } from "@/utils/helper/global";
+import { useMemo } from "react";
 
 export function MobileSidebar() {
   const pathname = usePathname();
-  const activePath = getActiveNavPath(pathname, navItems);
+  const activePath = useMemo(
+    () => getActiveNavPath(pathname, navItems),
+    [pathname],
+  );
   const isActive = (itemPath: string) => activePath === itemPath;
 
   return (
@@ -22,6 +26,8 @@ export function MobileSidebar() {
     >
       {navItems.map((item) => {
         const active = isActive(item.path);
+        const Icon = item.icon;
+
         return (
           <Link key={item.path} href={item.path}>
             <Box
@@ -31,7 +37,7 @@ export function MobileSidebar() {
                 ${active ? "bg-primary text-white" : "text-primary"}
               `}
             >
-              {item.icon}
+              <Icon />
             </Box>
           </Link>
         );

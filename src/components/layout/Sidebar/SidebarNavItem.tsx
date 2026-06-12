@@ -28,6 +28,7 @@ export default function SidebarNavItem({
   const handleClick = () => {
     router.push(path);
   };
+  const Icon = icon;
 
   const content = (
     <Box
@@ -44,7 +45,7 @@ export default function SidebarNavItem({
       }}
     >
       <Box className="min-w-8 w-8 h-8 flex items-center justify-center">
-        {icon}
+        <Icon />
       </Box>
       {expanded && (
         <Typography

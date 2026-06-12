@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { SvgIconComponent } from "@mui/icons-material";
 
 export interface SidebarProps {
   sidebarExpanded?: boolean;
@@ -6,7 +6,7 @@ export interface SidebarProps {
 }
 
 export interface SidebarNavItemProps {
-  icon: ReactNode;
+  icon: SvgIconComponent;
   label: string;
   path: string;
   active: boolean;
@@ -14,10 +14,11 @@ export interface SidebarNavItemProps {
 }
 
 export interface NavItem {
-  icon: ReactNode;
+  icon: SvgIconComponent;
   label: string;
   path: string;
   type: string;
+  normalizedPath: string;
 }
 
 export interface SidebarNavProps {

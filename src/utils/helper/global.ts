@@ -43,7 +43,7 @@ const normalize = (path: string) =>
 
 export function getActiveNavPath(
   pathname: string,
-  items: NavItem[],
+  items: readonly NavItem[],
 ): string | null {
   const current = normalize(pathname);
 
@@ -51,20 +51,22 @@ export function getActiveNavPath(
   let bestScore = -1;
 
   for (const item of items) {
-    const target = normalize(item.path);
+    const target = item.normalizedPath;
 
     let score = -1;
 
     if (item.type === "exact") {
-      if (current === target) {
-        score = 1000 + target.length;
-      }
-    }
+      if (current !== target) continue;
 
-    if (item.type === "prefix") {
-      if (current === target || current.startsWith(target + "/")) {
-        score = target.length;
-      }
+      score = 1000 + target.length;
+    } else if (item.type === "prefix") {
+      const matches = current === target || current.startsWith(`${target}/`);
+
+      if (!matches) continue;
+
+      score = target.length;
+    } else {
+      continue;
     }
 
     if (score > bestScore) {
