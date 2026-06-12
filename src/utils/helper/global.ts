@@ -1,5 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import { Theme } from "@mui/material/styles";
+import { NavItem } from "@/types/navbar";
 
 const getThemeColorFromTheme = (theme: Theme, colorKey?: string): string => {
   const key = colorKey ?? "primary";
@@ -36,3 +37,41 @@ export const normalizeUrl = (url: string): string => {
     ? url
     : `https://${url}`;
 };
+
+const normalize = (path: string) =>
+  path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+
+export function getActiveNavPath(
+  pathname: string,
+  items: NavItem[],
+): string | null {
+  const current = normalize(pathname);
+
+  let bestMatch: string | null = null;
+  let bestScore = -1;
+
+  for (const item of items) {
+    const target = normalize(item.path);
+
+    let score = -1;
+
+    if (item.type === "exact") {
+      if (current === target) {
+        score = 1000 + target.length;
+      }
+    }
+
+    if (item.type === "prefix") {
+      if (current === target || current.startsWith(target + "/")) {
+        score = target.length;
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = item.path;
+    }
+  }
+
+  return bestMatch;
+}

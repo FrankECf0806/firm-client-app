@@ -7,26 +7,15 @@ import SidebarNav from "./Sidebar/SidebarNav";
 import SidebarFooter from "./Sidebar/SidebarFooter";
 import { SidebarProps } from "@/types/navbar";
 import { navItems } from "./Sidebar/config";
+import { getActiveNavPath } from "@/utils/helper/global";
 
 export function Sidebar({
   sidebarExpanded = false,
   onToggleSidebar,
 }: SidebarProps) {
   const pathname = usePathname();
-
-  const normalizePath = (path: string) => {
-    if (!path) return "/";
-    return path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
-  };
-
-  const isActive = (itemPath: string) => {
-    const current = normalizePath(pathname || "");
-    const target = normalizePath(itemPath);
-
-    if (target === "/") return current === "/";
-
-    return current === target || current.startsWith(target + "/");
-  };
+  const activePath = getActiveNavPath(pathname, navItems);
+  const isActive = (itemPath: string) => activePath === itemPath;
 
   return (
     <Box
@@ -48,7 +37,7 @@ export function Sidebar({
       <SidebarNav
         items={navItems}
         expanded={sidebarExpanded}
-        isActive={isActive}
+        isActive={(item) => isActive(item.path)}
       />
 
       <SidebarFooter sidebarExpanded={sidebarExpanded} />

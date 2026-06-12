@@ -15,7 +15,7 @@ export default function SidebarNav({
           icon={item.icon}
           label={item.label}
           path={item.path}
-          active={isActive(item.path)}
+          active={isActive(item)}
           expanded={expanded}
         />
       ))}

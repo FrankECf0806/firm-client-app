@@ -17,12 +17,13 @@ export interface NavItem {
   icon: ReactNode;
   label: string;
   path: string;
+  type: string;
 }
 
 export interface SidebarNavProps {
   items: NavItem[];
   expanded: boolean;
-  isActive: (path: string) => boolean;
+  isActive: (item: NavItem) => boolean;
 }
 
 export interface SidebarFooterProps {
